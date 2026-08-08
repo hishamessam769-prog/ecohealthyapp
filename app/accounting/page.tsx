@@ -1,87 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { CheckCircle2, CreditCard, ExternalLink, FileCheck2, ShieldAlert } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { CheckCircle2, FileDown, ReceiptText, ShieldCheck, WalletCards } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { isFinanciallyBlocked, useERP } from "@/components/erp-provider";
 import { HelpTip } from "@/components/help-tip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { exportElementToPdf, openPaymentProof } from "@/lib/export-tools";
+import { createClient } from "@/lib/supabase/client";
+import type { CancellationRow, OrderRow } from "@/lib/domain";
 
-export default function AccountingPage() {
-  const { clients, subscriptions, cancellations, notifications, verifyPayment, reviewCancellation, confirmTransfer } = useERP();
-  const [receipts, setReceipts] = useState<Record<string, string>>({});
-  const payOnFirst = subscriptions.filter((item) => item.paymentType === "PayOnFirstDelivery");
-  const blockedCount = payOnFirst.filter(isFinanciallyBlocked).length;
-  const cashAlerts = notifications.filter((item) => item.role === "accounting" && item.title.includes("تحصيل نقدي") && !item.read).length;
+type Financial={verified_client_funds:number;delivered_value:number;remaining_client_funds:number}; type Closing={delivery_date:string;expected_cash:number;actual_collected:number;variance:number}; type Payment={id:string;order_id:string;amount:number;method:string;source:string;status:string;collected_at:string;orders?:{order_number:string;clients?:{full_name:string}|null}|null};
+const today=()=>new Date().toISOString().slice(0,10);
 
-  return (
-    <AppShell title="الحسابات" subtitle="بوابة PayOnFirstDelivery، المصالحة، واعتماد Refund">
-      <div className="mb-4 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4"><p className="text-xs font-bold text-red-700">محظور ماليًا</p><p className="mt-1 text-3xl font-black text-red-900">{blockedCount}</p></div>
-        <div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">تنبيهات تحصيل Cash</p><p className="mt-1 text-3xl font-black">{cashAlerts}</p></div>
-        <div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">طلبات إلغاء مفتوحة</p><p className="mt-1 text-3xl font-black">{cancellations.filter((item) => item.status !== "Transferred").length}</p></div>
-      </div>
-
-      <Tabs defaultValue="gate">
-        <TabsList className="w-full sm:w-auto"><TabsTrigger value="gate" className="flex-1 sm:flex-none">بوابة الدفع</TabsTrigger><TabsTrigger value="refunds" className="flex-1 sm:flex-none">الإلغاءات وRefund</TabsTrigger></TabsList>
-
-        <TabsContent value="gate">
-          <div className="mb-3 flex items-center gap-1 text-sm font-bold text-[#536158]">PayOnFirstDelivery Gatekeeper <HelpTip text="بعد أول تسليم، أي اشتراك لم يعتمد Accounting دفعه يصبح BLOCKED تلقائيًا فلا يدخل إنتاج أو توصيل جديد." /></div>
-          <div className="space-y-3">
-            {payOnFirst.map((sub) => {
-              const client = clients.find((item) => item.id === sub.clientId);
-              const blocked = isFinanciallyBlocked(sub);
-              return (
-                <Card key={sub.id} className={blocked ? "border-red-200" : ""}>
-                  <CardContent className="pt-5">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-start gap-3">
-                        <div className={`flex size-11 shrink-0 items-center justify-center rounded-md ${blocked ? "bg-red-50 text-red-700" : "bg-[#e5f5ec] text-[#16794a]"}`}>{blocked ? <ShieldAlert size={23} /> : <CreditCard size={23} />}</div>
-                        <div><div className="flex flex-wrap items-center gap-2"><p className="font-bold">{client?.name}</p>{blocked ? <Badge variant="red">BLOCKED</Badge> : sub.paymentVerified ? <Badge>Verified</Badge> : <Badge variant="blue">First Delivery Pending</Badge>}</div><p className="mt-1 text-sm text-[#66736b]">{sub.program} · {sub.totalPrice.toLocaleString("ar-EG")} ج · {sub.paymentType}</p></div>
-                      </div>
-                      <Button onClick={() => verifyPayment(sub.id)} disabled={sub.paymentVerified}><CheckCircle2 size={18} /> {sub.paymentVerified ? "الدفع مؤكد" : "تأكيد استلام الدفع"}</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="refunds">
-          <div className="mb-3 flex items-center gap-1 text-sm font-bold text-[#536158]">معادلة الإلغاء الآلية <HelpTip text="Refund = Remaining Value − 20% من القيمة المستهلكة − 30 جنيهًا عن كل يوم توصيل مسجل. Accounting يراجع ثم يؤكد التحويل." /></div>
-          <div className="space-y-4">
-            {cancellations.map((request) => {
-              const client = clients.find((item) => item.id === request.clientId);
-              const receipt = receipts[request.id] ?? "";
-              return (
-                <Card key={request.id}>
-                  <CardHeader><div className="flex flex-wrap items-center justify-between gap-2"><CardTitle>{client?.name} · Refund</CardTitle><Badge variant={request.status === "Transferred" ? "default" : request.status === "Reviewed" ? "blue" : "orange"}>{request.status}</Badge></div></CardHeader>
-                  <CardContent>
-                    <div className="grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-5">
-                      <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">Remaining</p><p className="mt-1 font-bold">{request.remainingValue.toFixed(2)} ج</p></div>
-                      <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">Consumed</p><p className="mt-1 font-bold">{request.consumedValue.toFixed(2)} ج</p></div>
-                      <div className="rounded-md bg-red-50 p-3"><p className="text-xs text-red-700">20% Penalty</p><p className="mt-1 font-bold text-red-800">-{request.consumedPenalty.toFixed(2)} ج</p></div>
-                      <div className="rounded-md bg-red-50 p-3"><p className="text-xs text-red-700">Delivery Penalty</p><p className="mt-1 font-bold text-red-800">-{request.deliveryPenalty.toFixed(2)} ج</p></div>
-                      <div className="rounded-md bg-[#e5f5ec] p-3"><p className="text-xs text-[#0f603a]">Refund</p><p className="mt-1 text-lg font-black text-[#0f603a]">{request.refundAmount.toFixed(2)} ج</p></div>
-                    </div>
-
-                    <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                      {request.status === "Requested" ? <Button onClick={() => reviewCancellation(request.id)}><FileCheck2 size={18} /> مراجعة واعتماد الحساب</Button> : null}
-                      {request.status === "Reviewed" ? <><Input value={receipt} onChange={(event) => setReceipts((current) => ({ ...current, [request.id]: event.target.value }))} placeholder="رابط إيصال التحويل https://..." dir="ltr" /><Button onClick={() => confirmTransfer(request.id, receipt)} disabled={!receipt.trim()}><CheckCircle2 size={18} /> تأكيد التحويل</Button></> : null}
-                      {request.status === "Transferred" && request.receiptUrl ? <a href={request.receiptUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#e5f5ec] px-4 text-sm font-bold text-[#0f603a]">فتح إيصال التحويل <ExternalLink size={17} /></a> : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </AppShell>
-  );
+export default function AccountingPage(){
+  const supabase=useMemo(()=>createClient(),[]); const [orders,setOrders]=useState<OrderRow[]>([]); const [financial,setFinancial]=useState<Financial|null>(null); const [closing,setClosing]=useState<Closing|null>(null); const [cashPayments,setCashPayments]=useState<Payment[]>([]); const [cancellations,setCancellations]=useState<CancellationRow[]>([]); const [date,setDate]=useState(today()); const [receipts,setReceipts]=useState<Record<string,string>>({}); const [message,setMessage]=useState("");
+  const load=useCallback(async()=>{const [o,f,c,p,cr]=await Promise.all([supabase.from("orders").select("id,order_number,client_id,order_type,total_price,payment_method,payment_reference,payment_proof_path,status,accounting_verified_at,created_at,clients(full_name,phone)").eq("status","pending_accounting").order("created_at"),supabase.from("system_financial_summary").select("*").single(),supabase.from("daily_cash_closing").select("*").eq("delivery_date",date).maybeSingle(),supabase.from("payments").select("id,order_id,amount,method,source,status,collected_at,orders(order_number,clients(full_name))").eq("source","rider").eq("status","pending").order("collected_at",{ascending:false}),supabase.from("cancellation_requests").select("*,clients(full_name,phone)").order("requested_at",{ascending:false})]);setOrders((o.data??[]) as unknown as OrderRow[]);setFinancial(f.data as Financial|null);setClosing(c.data as Closing|null);setCashPayments((p.data??[]) as unknown as Payment[]);setCancellations((cr.data??[]) as unknown as CancellationRow[])},[date,supabase]); useEffect(()=>{void load()},[load]);
+  async function confirm(id:string){const {error}=await supabase.rpc("accounting_confirm_order",{p_order_id:id});setMessage(error?.message??"تم اعتماد الـOrder. أصبح مسموحًا له بدخول Kitchen.");if(!error)await load()}
+  async function reject(id:string){const reason=window.prompt("سبب الرفض")||"Rejected by Accounting";const {error}=await supabase.from("orders").update({status:"rejected",rejection_reason:reason}).eq("id",id);setMessage(error?.message??"تم رفض الطلب");if(!error)await load()}
+  async function verifyCash(id:string){const {error}=await supabase.rpc("verify_cash_payment",{p_payment_id:id});setMessage(error?.message??"تمت مطابقة التحصيل النقدي");if(!error)await load()}
+  async function approveCancel(id:string){const {error}=await supabase.from("cancellation_requests").update({status:"approved",reviewed_at:new Date().toISOString()}).eq("id",id);setMessage(error?.message??"تمت مراجعة واعتماد Refund");if(!error)await load()}
+  async function transfer(id:string){const receipt=receipts[id]?.trim();if(!receipt){setMessage("أدخل رابط إيصال التحويل أولاً");return}const {error}=await supabase.rpc("finalize_cancellation",{p_cancellation_id:id,p_receipt_url:receipt});setMessage(error?.message??"تم تأكيد التحويل وإغلاق الاشتراك");if(!error)await load()}
+  return <AppShell title="Accounting & Gatekeeper" subtitle="لا Kitchen قبل الاعتماد + Financial Visibility + Daily Closing">
+    {message?<div className="mb-4 rounded-md bg-blue-50 p-3 text-sm font-bold text-blue-900">{message}</div>:null}
+    <div className="mb-4 grid gap-3 sm:grid-cols-3"><div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">Verified Client Funds</p><p className="mt-1 text-2xl font-black">{Number(financial?.verified_client_funds??0).toLocaleString()} ج</p></div><div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">Delivered Value</p><p className="mt-1 text-2xl font-black">{Number(financial?.delivered_value??0).toLocaleString()} ج</p></div><div className="rounded-lg bg-[#17211b] p-4 text-white"><p className="text-xs text-white/70">Remaining Client Funds</p><p className="mt-1 text-2xl font-black">{Number(financial?.remaining_client_funds??0).toLocaleString()} ج</p></div></div>
+    <Tabs defaultValue="gate"><TabsList className="w-full sm:w-auto"><TabsTrigger value="gate" className="flex-1">Pending Accounting ({orders.length})</TabsTrigger><TabsTrigger value="closing" className="flex-1">Daily Closing</TabsTrigger><TabsTrigger value="cancel" className="flex-1">Cancellations</TabsTrigger></TabsList>
+      <TabsContent value="gate"><div className="mb-3 flex items-center gap-1 text-sm font-black"><ShieldCheck size={19}/>Gatekeeper Protocol <HelpTip text="هذه ليست حالة شكلية: RPC المطبخ نفسها تشترط أن يكون Order = confirmed، لذلك لا يمكن تجاوزه من Sales أو CS." /></div><div className="space-y-3">{orders.map(o=><Card key={o.id}><CardContent className="pt-5"><div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"><div><div className="flex flex-wrap items-center gap-2"><h2 className="font-black">{o.order_number}</h2><Badge variant="orange">Pending Accounting</Badge><Badge variant="gray">{o.payment_method}</Badge></div><p className="mt-1 text-sm text-[#66736b]">{o.clients?.full_name} · {o.order_type} · {Number(o.total_price).toLocaleString()} ج</p>{o.payment_reference?<p className="mt-1 text-sm"><b>Ref:</b> {o.payment_reference}</p>:null}</div><div className="flex flex-wrap gap-2">{o.payment_proof_path?<Button variant="outline" onClick={()=>openPaymentProof(o.payment_proof_path!)}>عرض إثبات الدفع</Button>:null}<Button variant="outline" className="text-red-700" onClick={()=>reject(o.id)}>رفض</Button><Button onClick={()=>confirm(o.id)}><CheckCircle2 size={18}/>Confirm Payment / Order</Button></div></div></CardContent></Card>)}</div>{orders.length===0?<p className="rounded-md bg-white p-8 text-center text-sm text-[#66736b]">لا توجد طلبات معلقة.</p>:null}</TabsContent>
+      <TabsContent value="closing"><div className="mb-4 flex items-center gap-2"><Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="w-44"/><HelpTip text="Expected يأتي من Queue التوصيل النقدية، Actual يأتي مما سجله Riders فعليًا." /></div><div className="grid gap-3 sm:grid-cols-3"><Card><CardContent className="pt-5"><p className="text-xs text-[#66736b]">Expected Cash</p><p className="mt-1 text-2xl font-black">{Number(closing?.expected_cash??0).toLocaleString()} ج</p></CardContent></Card><Card><CardContent className="pt-5"><p className="text-xs text-[#66736b]">Actual Collected</p><p className="mt-1 text-2xl font-black text-[#16794a]">{Number(closing?.actual_collected??0).toLocaleString()} ج</p></CardContent></Card><Card><CardContent className="pt-5"><p className="text-xs text-[#66736b]">Variance</p><p className={`mt-1 text-2xl font-black ${Number(closing?.variance??0)>0?"text-red-700":"text-[#16794a]"}`}>{Number(closing?.variance??0).toLocaleString()} ج</p></CardContent></Card></div><Card className="mt-4"><CardHeader><CardTitle className="flex items-center gap-2"><WalletCards size={20}/>Rider Collections To Verify</CardTitle></CardHeader><CardContent className="space-y-2">{cashPayments.map(p=><div key={p.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-[#e3eae5] p-3"><div><b>{p.orders?.order_number}</b><p className="text-sm text-[#66736b]">{p.orders?.clients?.full_name} · {Number(p.amount).toLocaleString()} ج · {p.method}</p></div><Button size="sm" onClick={()=>verifyCash(p.id)}>مطابقة التحصيل</Button></div>)}</CardContent></Card></TabsContent>
+      <TabsContent value="cancel"><div className="space-y-4">{cancellations.map(c=><Card key={c.id}><CardContent className="pt-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="font-black">{c.clients?.full_name} · Cancellation</h2><p className="mt-1 text-sm text-[#66736b]">Requested {new Date(c.requested_at).toLocaleDateString("ar-EG")}</p></div><Badge variant={c.status==="transferred"?"default":"blue"}>{c.status}</Badge></div><div id={`cancel-pdf-${c.id}`} className="mt-4 rounded-md bg-white p-5"><div className="mb-4 flex items-center justify-between border-b border-[#dce5df] pb-4"><div className="flex size-14 items-center justify-center rounded-md bg-[#16794a] font-black text-white">LOGO</div><div className="text-left" dir="ltr"><b>ECO Healthy</b><p className="text-xs">CANCELLATION STATEMENT</p></div></div><p className="mb-3 font-black">Client: {c.clients?.full_name}</p><div className="grid gap-2 text-sm sm:grid-cols-2"><p>Remaining Value: <b>{Number(c.remaining_value).toFixed(2)} EGP</b></p><p>Consumed Value: <b>{Number(c.consumed_value).toFixed(2)} EGP</b></p><p>20% Consumed Penalty: <b>-{Number(c.consumed_penalty).toFixed(2)} EGP</b></p><p>Delivery Day Fees: <b>-{Number(c.delivery_penalty).toFixed(2)} EGP</b></p></div><p className="mt-4 border-t border-[#dce5df] pt-3 text-xl font-black">Final Refund: {Number(c.refund_amount).toFixed(2)} EGP</p></div><div className="mt-3 flex flex-wrap gap-2"><Button variant="outline" onClick={()=>exportElementToPdf(`cancel-pdf-${c.id}`,`ECO-Cancellation-${c.id.slice(0,8)}.pdf`)}><FileDown size={17}/>PDF Cancellation Statement</Button>{c.status==="requested"?<Button onClick={()=>approveCancel(c.id)}>Review & Approve</Button>:null}{c.status==="approved"?<><Input value={receipts[c.id]??""} onChange={e=>setReceipts(r=>({...r,[c.id]:e.target.value}))} placeholder="Bank transfer receipt URL" className="max-w-md"/><Button onClick={()=>transfer(c.id)}>Confirm Transfer</Button></>:null}</div></CardContent></Card>)}</div></TabsContent>
+    </Tabs>
+  </AppShell>
 }

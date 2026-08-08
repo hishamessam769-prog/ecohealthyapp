@@ -1,144 +1,36 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { CirclePause, CirclePlay, RefreshCw, XCircle } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { CalendarOff, ChefHat, RefreshCw, SlidersHorizontal } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { calculateCancellation, isFinanciallyBlocked, useERP } from "@/components/erp-provider";
 import { HelpTip } from "@/components/help-tip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import type { MealType } from "@/lib/erp-types";
+import { createClient } from "@/lib/supabase/client";
+import type { MealRow, SubscriptionRow } from "@/lib/domain";
 
-type ModalMode = "swap" | "cancel" | null;
+const nextDate=()=>new Date().toISOString().slice(0,10);
+type Action="pause"|"custom"|null;
 
-export default function SubscriptionsPage() {
-  const { clients, subscriptions, fulfillmentDays, togglePause, swapMeal, requestCancellation, cancellations } = useERP();
-  const [filter, setFilter] = useState("All");
-  const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
-  const [mode, setMode] = useState<ModalMode>(null);
-  const [selectedDayId, setSelectedDayId] = useState("");
-  const [meal, setMeal] = useState("");
-  const [mealType, setMealType] = useState<MealType>("LC");
-  const [message, setMessage] = useState("");
+export default function SubscriptionsPage(){
+  const supabase=useMemo(()=>createClient(),[]); const [subs,setSubs]=useState<SubscriptionRow[]>([]); const [meals,setMeals]=useState<MealRow[]>([]); const [selected,setSelected]=useState<string[]>([]); const [serviceDate,setServiceDate]=useState(nextDate()); const [message,setMessage]=useState(""); const [action,setAction]=useState<Action>(null); const [activeId,setActiveId]=useState<string|null>(null);
+  const [pauseUntil,setPauseUntil]=useState(""); const [pauseReason,setPauseReason]=useState(""); const [customDate,setCustomDate]=useState(nextDate()); const [customMeal,setCustomMeal]=useState(""); const [customQty,setCustomQty]=useState("1"); const [priceDelta,setPriceDelta]=useState("0"); const [customReason,setCustomReason]=useState("");
+  const load=useCallback(async()=>{const [s,m]=await Promise.all([supabase.from("subscriptions").select("id,client_id,order_id,package_id,status,start_date,delivery_frequency,weekly_delivery_day,total_days,consumed_days,remaining_days,pause_until,clients(full_name,delivery_zone),packages(name,size_name,price),orders(order_number,status,total_price)").order("created_at",{ascending:false}),supabase.from("meals").select("id,name,meal_type,active").eq("active",true).order("name")]);setSubs((s.data??[]) as unknown as SubscriptionRow[]);setMeals((m.data??[]) as MealRow[])},[supabase]); useEffect(()=>{void load()},[load]);
+  const active=subs.filter(s=>s.status==="active"); const allSelected=active.length>0&&active.every(s=>selected.includes(s.id)); const current=subs.find(s=>s.id===activeId);
+  function toggleAll(){setSelected(allSelected?[]:active.map(s=>s.id))}
+  async function sendBulk(){if(selected.length===0){setMessage("اختر اشتراكًا واحدًا على الأقل");return}const {data,error}=await supabase.rpc("bulk_send_to_kitchen",{p_subscription_ids:selected,p_service_date:serviceDate});setMessage(error?.message??`تم إرسال ${data} سطر إنتاج للمطبخ من منيو الشهر`);if(!error)setSelected([])}
+  async function pause(){if(!activeId)return;const {error}=await supabase.rpc("pause_subscription",{p_subscription_id:activeId,p_pause_until:pauseUntil||null,p_reason:pauseReason||null});setMessage(error?.message??(pauseUntil?`تم الإيقاف حتى ${pauseUntil}`:"تم الإيقاف إلى أجل غير محدد"));if(!error){setAction(null);await load()}}
+  async function resume(id:string){const {error}=await supabase.rpc("resume_subscription",{p_subscription_id:id});setMessage(error?.message??"تم استئناف الاشتراك");if(!error)await load()}
+  async function customMenu(){if(!activeId||!customMeal)return;const {error}=await supabase.from("subscription_menu_overrides").insert({subscription_id:activeId,service_date:customDate,meal_id:customMeal,quantity:Number(customQty),custom_price_delta:Number(priceDelta),reason:customReason||null});setMessage(error?.message??"تم حفظ Custom Menu. في هذا التاريخ سيستخدم النظام هذا الاختيار بدل منيو الشهر.");if(!error)setAction(null)}
 
-  const shown = useMemo(() => subscriptions.filter((item) => filter === "All" || item.status === filter), [subscriptions, filter]);
-  const selectedSub = subscriptions.find((item) => item.id === selectedSubId);
-  const selectedClient = clients.find((item) => item.id === selectedSub?.clientId);
-  const selectedDays = fulfillmentDays.filter((item) => item.subscriptionId === selectedSubId).sort((a, b) => a.date.localeCompare(b.date));
-  const cancellation = selectedSub ? calculateCancellation(selectedSub) : null;
-
-  function openSwap(id: string) {
-    const days = fulfillmentDays.filter((item) => item.subscriptionId === id);
-    setSelectedSubId(id);
-    setMode("swap");
-    setSelectedDayId(days[0]?.id ?? "");
-    setMeal(days[0]?.meal ?? "");
-    setMealType(days[0]?.mealType ?? "LC");
-    setMessage("");
-  }
-
-  function closeModal() {
-    setMode(null);
-    setSelectedSubId(null);
-    setMessage("");
-  }
-
-  function handleSwap() {
-    if (!selectedDayId || !meal.trim()) return;
-    swapMeal(selectedDayId, meal.trim(), mealType);
-    setMessage("تم تعديل يوم التنفيذ فقط. قيمة الفاتورة الأصلية لم تتغير.");
-  }
-
-  function handleCancel() {
-    if (!selectedSubId) return;
-    const result = requestCancellation(selectedSubId);
-    setMessage(result ? "تم إرسال طلب الإلغاء للحسابات للمراجعة." : "يوجد طلب إلغاء مفتوح بالفعل لهذا الاشتراك.");
-  }
-
-  return (
-    <AppShell title="الاشتراكات" subtitle="إدارة الأيام والتوقف والوجبات بدون تغيير العقد المالي">
-      <div className="mb-4 flex flex-wrap gap-2">
-        {["All", "Active", "Paused", "Finished", "Canceled"].map((item) => <Button key={item} size="sm" variant={filter === item ? "default" : "outline"} onClick={() => setFilter(item)}>{item === "All" ? "الكل" : item}</Button>)}
-      </div>
-
-      <div className="space-y-4">
-        {shown.map((sub) => {
-          const client = clients.find((item) => item.id === sub.clientId);
-          const remaining = Math.max(sub.totalDays - sub.consumedDays, 0);
-          const blocked = isFinanciallyBlocked(sub);
-          const hasOpenCancellation = cancellations.some((item) => item.subscriptionId === sub.id && item.status !== "Transferred");
-          return (
-            <Card key={sub.id}>
-              <CardContent className="pt-5">
-                <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-lg font-bold">{client?.name}</h2>
-                      <Badge variant={sub.status === "Active" ? "default" : sub.status === "Paused" ? "orange" : "gray"}>{sub.status}</Badge>
-                      {blocked ? <Badge variant="red">BLOCKED</Badge> : null}
-                    </div>
-                    <p className="mt-1 text-sm font-semibold text-[#536158]">{sub.program} · #{sub.id.toUpperCase()}</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {(sub.status === "Active" || sub.status === "Paused") ? (
-                      <Button variant="outline" size="sm" onClick={() => togglePause(sub.id)}>{sub.status === "Paused" ? <CirclePlay size={16} /> : <CirclePause size={16} />}{sub.status === "Paused" ? "استئناف" : "إيقاف مؤقت"}<HelpTip text="الإيقاف المؤقت يوقف أيام التنفيذ المستقبلية ولا يحذف الاشتراك أو الفاتورة." /></Button>
-                    ) : null}
-                    {sub.status === "Active" && !blocked ? <Button variant="outline" size="sm" onClick={() => openSwap(sub.id)}><RefreshCw size={16} /> Meal Swap <HelpTip text="غيّر وجبة يوم مستقبلي فقط. التعديل يذهب لسجل التنفيذ ولا يغيّر فاتورة البيع." /></Button> : null}
-                    {(sub.status === "Active" || sub.status === "Paused") ? <Button variant="destructive" size="sm" onClick={() => { setSelectedSubId(sub.id); setMode("cancel"); setMessage(""); }}><XCircle size={16} /> طلب إلغاء <HelpTip text="يحسِب المبلغ المسترد تلقائيًا ثم يرسل الطلب للحسابات. لا يتم الإلغاء النهائي قبل التحويل." /></Button> : null}
-                  </div>
-                </div>
-
-                <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-                  <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">الأيام</p><p className="mt-1 font-bold">{sub.consumedDays} مستهلك / {sub.totalDays}</p></div>
-                  <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">المتبقي</p><p className="mt-1 font-bold text-[#16794a]">{remaining} يوم</p></div>
-                  <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">التوصيل</p><p className="mt-1 font-bold">{sub.deliveryType}{sub.weeklyDay ? ` · ${sub.weeklyDay}` : ""}</p></div>
-                  <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">الدفع</p><p className="mt-1 font-bold">{sub.paymentType}</p></div>
-                  <div className="rounded-md bg-[#f5f8f6] p-3"><p className="text-xs text-[#7a867e]">قيمة العقد</p><p className="mt-1 font-bold">{sub.totalPrice.toLocaleString("ar-EG")} ج</p></div>
-                </div>
-                {blocked ? <p className="mt-3 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800">استلم أول طلب ولم يؤكد Accounting الدفع؛ لن يدخل أي طلب جديد للمطبخ أو التوصيل.</p> : null}
-                {hasOpenCancellation ? <p className="mt-3 rounded-md bg-blue-50 p-3 text-sm font-semibold text-blue-800">يوجد طلب إلغاء مفتوح بانتظار الحسابات.</p> : null}
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      <Dialog open={mode === "swap"} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>Meal Swap — {selectedClient?.name}</DialogTitle><DialogDescription>اختر يومًا مستقبليًا وعدّل وجبته فقط.</DialogDescription></DialogHeader>
-          {selectedDays.length > 0 ? (
-            <>
-              <label className="mb-2 block text-sm font-bold">يوم التنفيذ</label>
-              <select value={selectedDayId} onChange={(event) => { const next = selectedDays.find((day) => day.id === event.target.value); setSelectedDayId(event.target.value); setMeal(next?.meal ?? ""); setMealType(next?.mealType ?? "LC"); }} className="min-h-11 w-full rounded-md border border-[#cfdad3] bg-white px-3 text-sm">
-                {selectedDays.map((day) => <option key={day.id} value={day.id}>{day.date} · Day {day.dayNumber} · {day.meal}</option>)}
-              </select>
-              <label className="mb-2 mt-4 block text-sm font-bold">الوجبة الجديدة</label>
-              <Input value={meal} onChange={(event) => setMeal(event.target.value)} />
-              <label className="mb-2 mt-4 block text-sm font-bold">نوع الوجبة</label>
-              <select value={mealType} onChange={(event) => setMealType(event.target.value as MealType)} className="min-h-11 w-full rounded-md border border-[#cfdad3] bg-white px-3 text-sm"><option>Standard</option><option>LC</option><option>High Protein</option></select>
-              <Button className="mt-5 w-full" onClick={handleSwap}>حفظ التبديل</Button>
-            </>
-          ) : <p className="rounded-md bg-[#f5f8f6] p-4 text-sm text-[#66736b]">لا يوجد يوم تنفيذ مستقبلي متاح لهذا الاشتراك في بيانات الـDemo.</p>}
-          {message ? <p className="mt-3 rounded-md bg-[#e5f5ec] p-3 text-sm font-semibold text-[#0f603a]">{message}</p> : null}
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={mode === "cancel"} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent>
-          <DialogHeader><DialogTitle>حاسبة الإلغاء — {selectedClient?.name}</DialogTitle><DialogDescription>المعادلة تطبق آليًا قبل إرسال الطلب إلى Accounting.</DialogDescription></DialogHeader>
-          {cancellation ? <div className="space-y-2 text-sm">
-            <div className="flex justify-between rounded-md bg-[#f5f8f6] p-3"><span>Remaining Value</span><strong>{cancellation.remainingValue.toFixed(2)} ج</strong></div>
-            <div className="flex justify-between rounded-md bg-[#f5f8f6] p-3"><span>20% من القيمة المستهلكة</span><strong>- {cancellation.consumedPenalty.toFixed(2)} ج</strong></div>
-            <div className="flex justify-between rounded-md bg-[#f5f8f6] p-3"><span>30 ج × أيام التوصيل</span><strong>- {cancellation.deliveryPenalty.toFixed(2)} ج</strong></div>
-            <div className="flex justify-between rounded-md bg-[#e5f5ec] p-4 text-base text-[#0f603a]"><span className="font-bold">Refund النهائي</span><strong>{cancellation.refundAmount.toFixed(2)} ج</strong></div>
-          </div> : null}
-          <Button className="mt-5 w-full" variant="destructive" onClick={handleCancel}>إرسال طلب الإلغاء للحسابات</Button>
-          {message ? <p className="mt-3 rounded-md bg-blue-50 p-3 text-sm font-semibold text-blue-800">{message}</p> : null}
-        </DialogContent>
-      </Dialog>
-    </AppShell>
-  );
+  return <AppShell title="Advanced Subscriptions" subtitle="Bulk Kitchen، Pause بتاريخ، وCustom Menu لكل عميل">
+    {message?<div className="mb-4 rounded-md bg-blue-50 p-3 text-sm font-bold text-blue-900">{message}</div>:null}
+    <Card className="mb-4"><CardContent className="pt-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between"><div><div className="flex items-center gap-1 text-sm font-black">Bulk Action <HelpTip text="يقرأ النظام منيو الشهر المنشور أو Custom Menu للعميل، ثم ينشئ Queue فعلية. أي Order غير معتمد من Accounting يتم استبعاده من قاعدة البيانات." /></div><p className="mt-1 text-xs text-[#66736b]">حدد العملاء النشطين المطلوب تجهيزهم في التاريخ.</p></div><div className="flex flex-wrap gap-2"><Input type="date" value={serviceDate} onChange={e=>setServiceDate(e.target.value)} className="w-40"/><Button variant="outline" onClick={toggleAll}>{allSelected?"إلغاء تحديد الكل":"تحديد كل Active"}</Button><Button onClick={sendBulk}><ChefHat size={18}/>Send to Kitchen Queue ({selected.length})</Button></div></div></CardContent></Card>
+    <div className="space-y-3">{subs.map(s=><Card key={s.id}><CardContent className="pt-5"><div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between"><div className="flex items-start gap-3">{s.status==="active"?<input type="checkbox" className="mt-1 size-5 accent-[#16794a]" checked={selected.includes(s.id)} onChange={e=>setSelected(c=>e.target.checked?[...c,s.id]:c.filter(x=>x!==s.id))}/>:<span className="mt-1 size-5"/>}<div><div className="flex flex-wrap items-center gap-2"><h2 className="font-black">{s.clients?.full_name}</h2><Badge variant={s.status==="active"?"default":s.status==="paused"?"orange":"gray"}>{s.status}</Badge><Badge variant="gray">Zone {s.clients?.delivery_zone}</Badge></div><p className="mt-1 text-sm font-semibold text-[#536158]">{s.packages?.name} · {s.packages?.size_name} · {s.orders?.order_number}</p><p className="mt-1 text-sm text-[#66736b]">مستهلك {s.consumed_days}/{s.total_days} · باقي {s.remaining_days} يوم · {s.delivery_frequency}{s.pause_until?` · Pause حتى ${s.pause_until}`:""}</p></div></div><div className="flex flex-wrap gap-2">{s.status==="active"?<Button variant="outline" onClick={()=>{setActiveId(s.id);setPauseUntil("");setPauseReason("");setAction("pause")}}><CalendarOff size={17}/>Pause <HelpTip text="يمكن تحديد تاريخ نهاية. عند أول Queue بعد هذا التاريخ يعيد النظام الاشتراك Active تلقائيًا. اترك التاريخ فارغًا للإيقاف المفتوح." /></Button>:null}{s.status==="paused"?<Button onClick={()=>resume(s.id)}><RefreshCw size={17}/>Resume</Button>:null}{["active","paused"].includes(s.status)?<Button variant="outline" onClick={()=>{setActiveId(s.id);setCustomDate(serviceDate);setAction("custom")}}><SlidersHorizontal size={17}/>Custom Menu / Pricing <HelpTip text="يستبدل منيو الشهر لهذا العميل في التاريخ المختار، ويمكن تسجيل فرق سعر خاص بدون تعديل الباكدج الأصلية." /></Button>:null}</div></div></CardContent></Card>)}</div>
+    <Dialog open={action==="pause"} onOpenChange={o=>!o&&setAction(null)}><DialogContent><DialogHeader><DialogTitle>Pause — {current?.clients?.full_name}</DialogTitle><DialogDescription>حدد نهاية، أو اتركها فارغة لإيقاف غير محدد.</DialogDescription></DialogHeader><label className="text-sm font-bold">Pause Until (اختياري)</label><Input type="date" value={pauseUntil} onChange={e=>setPauseUntil(e.target.value)}/><label className="mt-3 text-sm font-bold">السبب</label><Input value={pauseReason} onChange={e=>setPauseReason(e.target.value)} placeholder="سفر / طلب العميل..."/><Button className="mt-4 w-full" onClick={pause}>تأكيد الإيقاف</Button></DialogContent></Dialog>
+    <Dialog open={action==="custom"} onOpenChange={o=>!o&&setAction(null)}><DialogContent><DialogHeader><DialogTitle>Custom Menu — {current?.clients?.full_name}</DialogTitle><DialogDescription>هذا التعديل خاص بالعميل فقط ولا يغير منيو باقي المشتركين.</DialogDescription></DialogHeader><div className="grid gap-3 sm:grid-cols-2"><div><label className="mb-2 block text-sm font-bold">التاريخ</label><Input type="date" value={customDate} onChange={e=>setCustomDate(e.target.value)}/></div><div><label className="mb-2 block text-sm font-bold">الوجبة</label><select value={customMeal} onChange={e=>setCustomMeal(e.target.value)} className="min-h-11 w-full rounded-md border border-[#cfdad3] bg-white px-3"><option value="">اختر</option>{meals.map(m=><option key={m.id} value={m.id}>{m.name} · {m.meal_type}</option>)}</select></div><div><label className="mb-2 block text-sm font-bold">الكمية</label><Input type="number" min="1" value={customQty} onChange={e=>setCustomQty(e.target.value)}/></div><div><label className="mb-2 block text-sm font-bold">فرق السعر EGP</label><Input type="number" value={priceDelta} onChange={e=>setPriceDelta(e.target.value)}/></div></div><Input className="mt-3" value={customReason} onChange={e=>setCustomReason(e.target.value)} placeholder="سبب التخصيص"/><Button className="mt-4 w-full" onClick={customMenu}>حفظ Custom Menu</Button></DialogContent></Dialog>
+  </AppShell>
 }

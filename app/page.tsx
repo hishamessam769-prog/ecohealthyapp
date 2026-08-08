@@ -1,73 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, Bike, ChefHat, CircleDollarSign, Salad, Users } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Bike, ChefHat, ClipboardList, ReceiptText, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useERP, isFinanciallyBlocked } from "@/components/erp-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createClient } from "@/lib/supabase/client";
 
-const modules = [
-  { href: "/clients", label: "العملاء", description: "البيانات والشكاوى", icon: Users },
-  { href: "/subscriptions", label: "الاشتراكات", description: "الأيام والتوقف وMeal Swap", icon: Salad },
-  { href: "/kitchen", label: "المطبخ", description: "قائمة إنتاج الغد", icon: ChefHat },
-  { href: "/delivery", label: "التوصيل", description: "Zones والتحصيل", icon: Bike },
-  { href: "/accounting", label: "الحسابات", description: "الدفع والإلغاءات", icon: CircleDollarSign },
-];
-
-export default function DashboardPage() {
-  const { clients, subscriptions, fulfillmentDays, deliveries, notifications } = useERP();
-  const active = subscriptions.filter((item) => item.status === "Active").length;
-  const blocked = subscriptions.filter(isFinanciallyBlocked).length;
-  const delivered = deliveries.filter((item) => item.status === "Delivered").length;
-  const unread = notifications.filter((item) => !item.read).length;
-
-  return (
-    <AppShell title="لوحة التشغيل" subtitle="صورة سريعة وواضحة عن اليوم">
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {[
-          ["عملاء", clients.length, "إجمالي العملاء"],
-          ["اشتراكات نشطة", active, "تعمل الآن"],
-          ["وجبات بكرة", fulfillmentDays.length, "في سجل التنفيذ"],
-          ["تنبيهات", unread, "تحتاج متابعة"],
-        ].map(([label, value, note]) => (
-          <Card key={label}>
-            <CardContent className="pt-5">
-              <p className="text-sm font-semibold text-[#66736b]">{label}</p>
-              <p className="mt-2 text-3xl font-black text-[#17211b]">{value}</p>
-              <p className="mt-1 text-xs text-[#8a958e]">{note}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {blocked > 0 ? (
-        <Link href="/accounting" className="mt-5 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-          <AlertTriangle className="mt-0.5 shrink-0" size={22} />
-          <div><p className="font-bold">{blocked} اشتراك محظور ماليًا</p><p className="mt-1 text-sm">مطلوب تأكيد PayOnFirstDelivery قبل إنتاج أي يوم جديد.</p></div>
-        </Link>
-      ) : null}
-
-      <Card className="mt-5">
-        <CardHeader><CardTitle>ابدأ من هنا</CardTitle></CardHeader>
-        <CardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-          {modules.map(({ href, label, description, icon: Icon }) => (
-            <Link key={href} href={href} className="rounded-lg border border-[#dce5df] bg-white p-4 transition-colors hover:bg-[#f5faf7]">
-              <Icon size={25} className="text-[#16794a]" />
-              <p className="mt-3 font-bold text-[#17211b]">{label}</p>
-              <p className="mt-1 text-xs leading-5 text-[#66736b]">{description}</p>
-            </Link>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card className="mt-5">
-        <CardHeader><CardTitle>حالة التشغيل اليوم</CardTitle></CardHeader>
-        <CardContent className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">توصيلات مكتملة</p><p className="mt-1 text-2xl font-bold">{delivered}/{deliveries.length}</p></div>
-          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">قائمة المطبخ</p><p className="mt-1 text-2xl font-bold">مقفولة</p></div>
-          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">موعد Cut-off</p><p className="mt-1 text-2xl font-bold">17:00</p></div>
-        </CardContent>
-      </Card>
-    </AppShell>
-  );
-}
+type Stats={clients:number;activeSubs:number;pendingOrders:number;kitchen:number;deliveries:number;remainingFunds:number};
+export default function DashboardPage(){const supabase=useMemo(()=>createClient(),[]);const [stats,setStats]=useState<Stats>({clients:0,activeSubs:0,pendingOrders:0,kitchen:0,deliveries:0,remainingFunds:0});useEffect(()=>{void(async()=>{const today=new Date().toISOString().slice(0,10);const [c,s,o,k,d,f]=await Promise.all([supabase.from("clients").select("id",{count:"exact",head:true}).eq("active",true),supabase.from("subscriptions").select("id",{count:"exact",head:true}).eq("status","active"),supabase.from("orders").select("id",{count:"exact",head:true}).eq("status","pending_accounting"),supabase.from("production_queue").select("id",{count:"exact",head:true}).eq("production_date",today).neq("status","approved_done"),supabase.from("deliveries").select("id",{count:"exact",head:true}).eq("delivery_date",today).neq("status","delivered"),supabase.from("system_financial_summary").select("remaining_client_funds").maybeSingle()]);setStats({clients:c.count??0,activeSubs:s.count??0,pendingOrders:o.count??0,kitchen:k.count??0,deliveries:d.count??0,remainingFunds:Number((f.data as any)?.remaining_client_funds??0)})})()},[supabase]);const links=[{href:"/orders",label:"إنشاء Order",icon:ClipboardList},{href:"/clients",label:"Client 360",icon:Users},{href:"/kitchen",label:"Kitchen",icon:ChefHat},{href:"/delivery",label:"Delivery",icon:Bike},{href:"/accounting",label:"Accounting",icon:ReceiptText}];return <AppShell title="ECO Healthy ERP" subtitle="الأرقام المهمة فقط — بدون Dashboard معقدة"><div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">{[["العملاء",stats.clients],["Active Subs",stats.activeSubs],["Pending Accounting",stats.pendingOrders],["Kitchen Today",stats.kitchen],["Delivery Today",stats.deliveries]].map(([l,v])=><Card key={l}><CardContent className="pt-5"><p className="text-xs font-bold text-[#66736b]">{l}</p><p className="mt-2 text-3xl font-black">{v}</p></CardContent></Card>)}</div><Card className="mt-4"><CardContent className="flex flex-wrap items-center justify-between gap-3 pt-5"><div><p className="text-xs text-[#66736b]">Remaining Client Funds in System</p><p className="mt-1 text-2xl font-black text-[#16794a]">{stats.remainingFunds.toLocaleString()} ج</p></div><Link href="/accounting" className="text-sm font-black text-[#16794a]">فتح Financial Visibility ←</Link></CardContent></Card><Card className="mt-4"><CardHeader><CardTitle>أسرع طريق للشغل</CardTitle></CardHeader><CardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">{links.map(({href,label,icon:Icon})=><Link key={href} href={href} className="rounded-md border border-[#dce5df] p-4 hover:bg-[#f5faf7]"><Icon size={23} className="text-[#16794a]"/><p className="mt-3 font-black">{label}</p></Link>)}</CardContent></Card></AppShell>}

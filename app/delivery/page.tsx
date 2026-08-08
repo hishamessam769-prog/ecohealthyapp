@@ -1,85 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { Banknote, CheckCircle2, MapPin, Navigation, ShieldAlert } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Banknote, CheckCircle2, Download, MapPin, Navigation } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { isFinanciallyBlocked, useERP } from "@/components/erp-provider";
 import { HelpTip } from "@/components/help-tip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { exportCsv } from "@/lib/export-tools";
+import { createClient } from "@/lib/supabase/client";
+import type { DeliveryRow } from "@/lib/domain";
 
-const riders = ["كابتن أحمد", "كابتن سارة", "كابتن محمود"];
-
-export default function DeliveryPage() {
-  const { clients, subscriptions, fulfillmentDays, deliveries, assignRider, logCashCollection, markDelivered } = useERP();
-  const [zone, setZone] = useState<number | "all">("all");
-  const [collectionMethod, setCollectionMethod] = useState<Record<string, string>>({});
-  const visible = deliveries.filter((item) => item.status !== "Delivered" && (zone === "all" || item.zone === zone));
-  const cashTotal = visible.reduce((sum, item) => sum + (item.collectionLogged ? 0 : item.cashExpected), 0);
-
-  return (
-    <AppShell title="التوصيل" subtitle="Route بسيطة حسب Zone، والتحصيل ظاهر بوضوح للكابتن">
-      <div className="mb-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-lg bg-[#17211b] p-4 text-white"><p className="text-xs text-white/70">مطلوب تحصيله الآن</p><p className="mt-1 text-3xl font-black">{cashTotal.toLocaleString("ar-EG")} ج</p></div>
-        <div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">Stops المتبقية</p><p className="mt-1 text-3xl font-black">{visible.length}</p></div>
-      </div>
-
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-        {["all", 1, 2, 3, 4].map((item) => <Button key={item} variant={zone === item ? "default" : "outline"} onClick={() => setZone(item as number | "all")} className="shrink-0">{item === "all" ? "كل المناطق" : `Zone ${item}`}</Button>)}
-        <HelpTip text="الطلبات المعتمدة من المطبخ تتوزع حسب Zone 1–4. يمكن للكابتن التركيز على منطقته فقط." />
-      </div>
-
-      <div className="space-y-4">
-        {visible.map((delivery, index) => {
-          const client = clients.find((item) => item.id === delivery.clientId);
-          const sub = subscriptions.find((item) => item.id === delivery.subscriptionId);
-          const day = fulfillmentDays.find((item) => item.id === delivery.fulfillmentDayId);
-          const blocked = sub ? isFinanciallyBlocked(sub) : false;
-          const kitchenReady = day?.kitchenStatus === "Approved/Done";
-          return (
-            <Card key={delivery.id} className={blocked ? "border-red-200" : ""}>
-              <CardContent className="pt-5">
-                <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
-                  <div className="flex min-w-0 gap-3">
-                    <div className="flex size-12 shrink-0 items-center justify-center rounded-md bg-[#e5f5ec] font-black text-[#16794a]">{index + 1}</div>
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2"><h2 className="text-lg font-bold">{client?.name}</h2><Badge>Zone {delivery.zone}</Badge>{blocked ? <Badge variant="red">BLOCKED</Badge> : null}</div>
-                      <p className="mt-1 text-sm font-semibold">{day?.meal ?? "وجبة جاهزة"} · {sub?.program}</p>
-                      <p className="mt-1 text-sm text-[#66736b]">{client?.dietaryNotes}</p>
-                      <a href={client?.locationUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-md bg-[#eef4f0] px-3 text-sm font-bold text-[#16794a]"><Navigation size={17} /> فتح الموقع</a>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[500px]">
-                    <div className="rounded-md border border-[#dce5df] p-3">
-                      <label className="mb-2 block text-xs font-bold text-[#66736b]">الكابتن</label>
-                      <select value={delivery.rider} onChange={(event) => assignRider(delivery.id, event.target.value)} className="min-h-11 w-full rounded-md border border-[#cfdad3] bg-white px-3 text-sm font-bold">
-                        {riders.map((rider) => <option key={rider}>{rider}</option>)}
-                      </select>
-                    </div>
-                    <div className={`rounded-md p-3 ${delivery.cashExpected > 0 ? "bg-blue-50" : "bg-[#f5f8f6]"}`}>
-                      <div className="flex items-center gap-1 text-xs font-bold text-[#66736b]">التحصيل المطلوب <HelpTip text="في PayOnFirstDelivery يظهر كامل المبلغ المطلوب للكابتن في أول توصيل. تسجيل التحصيل يرسل تنبيهًا للحسابات." /></div>
-                      <p className="mt-1 text-2xl font-black">{delivery.cashExpected.toLocaleString("ar-EG")} ج</p>
-                      {delivery.cashExpected > 0 ? (
-                        <div className="mt-2 flex gap-2">
-                          <select value={collectionMethod[delivery.id] ?? "Cash"} onChange={(event) => setCollectionMethod((current) => ({ ...current, [delivery.id]: event.target.value }))} className="min-h-11 min-w-0 flex-1 rounded-md border border-blue-200 bg-white px-2 text-xs font-bold"><option>Cash</option><option>Card</option><option>InstaPay</option></select>
-                          <Button onClick={() => logCashCollection(delivery.id)} disabled={delivery.collectionLogged}>{delivery.collectionLogged ? "تم التسجيل" : <><Banknote size={17} /> سجل التحصيل</>}</Button>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-
-                {blocked ? <div className="mt-4 flex items-start gap-2 rounded-md bg-red-50 p-3 text-sm font-semibold text-red-800"><ShieldAlert size={19} className="shrink-0" /> متوقف حتى يؤكد Accounting الدفع.</div> : null}
-                {!blocked && !kitchenReady ? <div className="mt-4 flex items-start gap-2 rounded-md bg-slate-100 p-3 text-sm font-semibold text-slate-700"><MapPin size={19} className="shrink-0" /> المطبخ لم يعتمد الوجبة بعد.</div> : null}
-                <Button size="lg" className="mt-4 w-full min-h-14 text-base" disabled={blocked || !kitchenReady || delivery.status === "Delivered"} onClick={() => markDelivered(delivery.id)}><CheckCircle2 size={21} /> تم التسليم — خصم يوم من الاشتراك <HelpTip text="اضغط بعد التسليم الحقيقي فقط. سيزيد عدد الأيام المستهلكة يومًا واحدًا بشكل دائم في بيانات الـDemo." /></Button>
-              </CardContent>
-            </Card>
-          );
-        })}
-        {visible.length === 0 ? <div className="rounded-lg border border-[#dce5df] bg-white p-8 text-center text-[#66736b]">لا توجد Stops متبقية في الاختيار الحالي.</div> : null}
-      </div>
-    </AppShell>
-  );
+const today=()=>new Date().toISOString().slice(0,10);
+export default function DeliveryPage(){
+  const supabase=useMemo(()=>createClient(),[]); const [date,setDate]=useState(today()); const [zone,setZone]=useState<number|"all">("all"); const [rows,setRows]=useState<DeliveryRow[]>([]); const [amounts,setAmounts]=useState<Record<string,string>>({}); const [methods,setMethods]=useState<Record<string,"cash"|"instapay"|"website_app">>({}); const [message,setMessage]=useState("");
+  const load=useCallback(async()=>{let q=supabase.from("deliveries").select("id,subscription_id,order_id,client_id,delivery_date,zone,rider_user_id,status,cash_expected,amount_collected,collection_method,collection_logged_at,clients(full_name,phone,address_text,location_url)").eq("delivery_date",date).order("zone");if(zone!=="all")q=q.eq("zone",zone);const {data,error}=await q;if(error)setMessage(error.message);else setRows((data??[]) as unknown as DeliveryRow[])},[date,zone,supabase]); useEffect(()=>{void load()},[load]);
+  const pending=rows.filter(r=>r.status!=="delivered"); const expected=pending.reduce((s,r)=>s+Number(r.cash_expected),0); const actual=rows.reduce((s,r)=>s+Number(r.amount_collected),0);
+  async function collect(r:DeliveryRow){const value=Number(amounts[r.id]??r.cash_expected);const {error}=await supabase.rpc("record_delivery_collection",{p_delivery_id:r.id,p_amount:value,p_method:methods[r.id]??"cash"});setMessage(error?.message??`تم تسجيل تحصيل ${value.toLocaleString()} ج وإبلاغ Accounting`);if(!error)await load()}
+  async function delivered(id:string){const {error}=await supabase.rpc("complete_delivery",{p_delivery_id:id});setMessage(error?.message??"تم التسليم. تم خصم يوم واحد من الاشتراك وتسجيل التاريخ.");if(!error)await load()}
+  function exportQueue(){const sorted=[...rows].sort((a,b)=>a.zone-b.zone);exportCsv(`ECO-Delivery-${date}.csv`,[["Zone","Client","Phone","Address","Location URL","Cash Expected","Status"],...sorted.map(r=>[r.zone,r.clients?.full_name??"",r.clients?.phone??"",r.clients?.address_text??"",r.clients?.location_url??"",r.cash_expected,r.status])])}
+  return <AppShell title="Delivery & Logistics" subtitle="Queue حسب Zone + Cash Collection + CSV Routing Export">
+    {message?<div className="mb-4 rounded-md bg-blue-50 p-3 text-sm font-bold text-blue-900">{message}</div>:null}
+    <div className="mb-4 grid gap-3 sm:grid-cols-3"><div className="rounded-lg bg-[#17211b] p-4 text-white"><p className="text-xs text-white/70">Expected Cash</p><p className="mt-1 text-3xl font-black">{expected.toLocaleString()} ج</p></div><div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">Actual Collected</p><p className="mt-1 text-3xl font-black text-[#16794a]">{actual.toLocaleString()} ج</p></div><div className="rounded-lg border border-[#dce5df] bg-white p-4"><p className="text-xs text-[#66736b]">Stops</p><p className="mt-1 text-3xl font-black">{pending.length}</p></div></div>
+    <div className="mb-4 flex flex-wrap gap-2"><Input type="date" value={date} onChange={e=>setDate(e.target.value)} className="w-44"/>{(["all",1,2,3,4] as const).map(z=><Button key={z} variant={zone===z?"default":"outline"} onClick={()=>setZone(z)}>{z==="all"?"كل Zones":`Zone ${z}`}</Button>)}<Button variant="outline" onClick={exportQueue}><Download size={17}/>Export CSV <HelpTip text="يصدر Queue مرتبة حسب Zone وبها الاسم والموبايل والعنوان والموقع والمبلغ المطلوب، جاهزة لأي Routing Software خارجي." /></Button></div>
+    <div className="space-y-3">{rows.map((r,index)=><Card key={r.id} className={r.status==="delivered"?"opacity-70":""}><CardContent className="pt-5"><div className="grid gap-4 xl:grid-cols-[1fr_520px]"><div className="flex gap-3"><span className="flex size-11 shrink-0 items-center justify-center rounded-md bg-[#e5f5ec] font-black text-[#16794a]">{index+1}</span><div><div className="flex flex-wrap items-center gap-2"><h2 className="font-black">{r.clients?.full_name}</h2><Badge>Zone {r.zone}</Badge><Badge variant={r.status==="delivered"?"default":"gray"}>{r.status}</Badge></div><p className="mt-1 text-sm text-[#66736b]">{r.clients?.phone} · {r.clients?.address_text||"بدون عنوان نصي"}</p>{r.clients?.location_url?<a href={r.clients.location_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-sm font-bold text-[#16794a]"><Navigation size={16}/>فتح Google Maps</a>:null}</div></div><div className="grid gap-2 sm:grid-cols-[1fr_120px_auto]"><div className={`rounded-md p-3 ${Number(r.cash_expected)>0?"bg-blue-50":"bg-[#f5f8f6]"}`}><div className="flex items-center gap-1 text-xs font-bold text-[#66736b]">Cash to collect <HelpTip text="هذا الرقم يأتي من الرصيد غير المحصل على Order النقدي. لا يحتاج Rider للتخمين أو سؤال Sales." /></div><p className="mt-1 text-xl font-black">{Number(r.cash_expected).toLocaleString()} ج</p></div>{Number(r.cash_expected)>0&&!r.collection_logged_at?<Input type="number" value={amounts[r.id]??String(r.cash_expected)} onChange={e=>setAmounts(c=>({...c,[r.id]:e.target.value}))}/>:<div className="flex items-center justify-center rounded-md bg-[#eef4f0] text-sm font-bold">{r.collection_logged_at?"Cash Logged":"Prepaid"}</div>}{Number(r.cash_expected)>0&&!r.collection_logged_at?<Button onClick={()=>collect(r)}><Banknote size={17}/>تحصيل</Button>:<Button onClick={()=>delivered(r.id)} disabled={r.status==="delivered"}><CheckCircle2 size={17}/>تم التسليم</Button>}</div></div>{Number(r.cash_expected)>0&&!r.collection_logged_at?<div className="mt-3 flex gap-2"><span className="text-xs font-bold text-[#66736b]">طريقة التحصيل:</span>{(["cash","instapay","website_app"] as const).map(m=><button key={m} onClick={()=>setMethods(c=>({...c,[r.id]:m}))} className={`rounded px-2 py-1 text-xs font-bold ${(methods[r.id]??"cash")===m?"bg-[#16794a] text-white":"bg-[#eef4f0]"}`}>{m}</button>)}</div>:null}{r.collection_logged_at&&r.status!=="delivered"?<Button size="lg" className="mt-3 w-full" onClick={()=>delivered(r.id)}><CheckCircle2 size={18}/>تم التسليم — خصم يوم وتسجيل Delivery History</Button>:null}</CardContent></Card>)}</div>
+    {rows.length===0?<div className="rounded-lg border border-[#dce5df] bg-white p-8 text-center text-sm text-[#66736b]"><MapPin className="mx-auto mb-2"/>لا توجد Stops في هذا التاريخ/Zone.</div>:null}
+  </AppShell>
 }

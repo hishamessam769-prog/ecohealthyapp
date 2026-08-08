@@ -1,4 +1,7 @@
 import type { Metadata, Viewport } from "next";
+import { ERPProvider } from "@/components/erp-provider";
+import { PwaRegister } from "@/components/pwa-register";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,8 +21,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <TooltipProvider>
+          <ERPProvider>
+            <PwaRegister />
+            {children}
+          </ERPProvider>
+        </TooltipProvider>
+      </body>
     </html>
   );
 }
-

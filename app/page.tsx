@@ -1,127 +1,73 @@
+"use client";
+
 import Link from "next/link";
-import {
-  AlertCircle,
-  ArrowLeft,
-  ClipboardList,
-  Clock3,
-  Users,
-  Utensils,
-} from "lucide-react";
+import { AlertTriangle, Bike, ChefHat, CircleDollarSign, Salad, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { StatCard } from "@/components/stat-card";
-import { cairoDate, getDashboardStats } from "@/lib/data";
+import { useERP, isFinanciallyBlocked } from "@/components/erp-provider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const dynamic = "force-dynamic";
+const modules = [
+  { href: "/clients", label: "العملاء", description: "البيانات والشكاوى", icon: Users },
+  { href: "/subscriptions", label: "الاشتراكات", description: "الأيام والتوقف وMeal Swap", icon: Salad },
+  { href: "/kitchen", label: "المطبخ", description: "قائمة إنتاج الغد", icon: ChefHat },
+  { href: "/delivery", label: "التوصيل", description: "Zones والتحصيل", icon: Bike },
+  { href: "/accounting", label: "الحسابات", description: "الدفع والإلغاءات", icon: CircleDollarSign },
+];
 
-function formatArabicDate(dateValue: string) {
-  return new Intl.DateTimeFormat("ar-EG", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    timeZone: "Africa/Cairo",
-  }).format(new Date(`${dateValue}T12:00:00Z`));
-}
-
-export default async function DashboardPage() {
-  const stats = await getDashboardStats();
-  const tomorrow = cairoDate(1);
+export default function DashboardPage() {
+  const { clients, subscriptions, fulfillmentDays, deliveries, notifications } = useERP();
+  const active = subscriptions.filter((item) => item.status === "Active").length;
+  const blocked = subscriptions.filter(isFinanciallyBlocked).length;
+  const delivered = deliveries.filter((item) => item.status === "Delivered").length;
+  const unread = notifications.filter((item) => !item.read).length;
 
   return (
-    <AppShell
-      active="dashboard"
-      title="الرئيسية"
-      subtitle="نظرة سريعة على تشغيل ECO Healthy"
-    >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          title="إجمالي العملاء"
-          value={stats.clients}
-          note="العملاء المسجلون على النظام"
-          icon={Users}
-          tone="gray"
-        />
-        <StatCard
-          title="اشتراكات فعالة"
-          value={stats.activeSubscriptions}
-          note="اشتراكات حالتها Active الآن"
-          icon={Utensils}
-          tone="green"
-        />
-        <StatCard
-          title="إنتاج بكرة"
-          value={stats.kitchenTomorrow}
-          note={formatArabicDate(tomorrow)}
-          icon={ClipboardList}
-          tone="blue"
-        />
-        <StatCard
-          title="قربت تخلص"
-          value={stats.endingSoon}
-          note="3 أيام أو أقل متبقية"
-          icon={Clock3}
-          tone="orange"
-        />
-      </section>
+    <AppShell title="لوحة التشغيل" subtitle="صورة سريعة وواضحة عن اليوم">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {[
+          ["عملاء", clients.length, "إجمالي العملاء"],
+          ["اشتراكات نشطة", active, "تعمل الآن"],
+          ["وجبات بكرة", fulfillmentDays.length, "في سجل التنفيذ"],
+          ["تنبيهات", unread, "تحتاج متابعة"],
+        ].map(([label, value, note]) => (
+          <Card key={label}>
+            <CardContent className="pt-5">
+              <p className="text-sm font-semibold text-[#66736b]">{label}</p>
+              <p className="mt-2 text-3xl font-black text-[#17211b]">{value}</p>
+              <p className="mt-1 text-xs text-[#8a958e]">{note}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-      <section className="mt-6 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="border border-[#dce5df] bg-white p-5 sm:p-6">
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-bold text-[#16794a]">التشغيل القادم</p>
-              <h2 className="mt-1 text-lg font-bold text-[#17211b]">طابور مطبخ بكرة</h2>
-            </div>
-            <div className="bg-[#e5f5ec] px-3 py-2 text-xs font-bold text-[#0f603a]">
-              {stats.kitchenTomorrow.toLocaleString("ar-EG")} بند
-            </div>
-          </div>
+      {blocked > 0 ? (
+        <Link href="/accounting" className="mt-5 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          <AlertTriangle className="mt-0.5 shrink-0" size={22} />
+          <div><p className="font-bold">{blocked} اشتراك محظور ماليًا</p><p className="mt-1 text-sm">مطلوب تأكيد PayOnFirstDelivery قبل إنتاج أي يوم جديد.</p></div>
+        </Link>
+      ) : null}
 
-          <div className="border border-[#dce5df] bg-[#f8faf9] p-4 sm:flex sm:items-center sm:justify-between sm:gap-5">
-            <div className="flex gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-white text-[#16794a]">
-                <ClipboardList size={21} aria-hidden="true" />
-              </div>
-              <div>
-                <p className="font-bold text-[#223028]">{formatArabicDate(tomorrow)}</p>
-                <p className="mt-1 text-sm leading-6 text-[#66736b]">
-                  افتح القائمة المقفولة للمطبخ وشوف العملاء والوجبات والكميات.
-                </p>
-              </div>
-            </div>
-
-            <Link
-              href="/kitchen"
-              className="mt-4 flex min-h-11 items-center justify-center gap-2 bg-[#16794a] px-4 text-sm font-bold text-white hover:bg-[#0f603a] sm:mt-0"
-            >
-              فتح الطابور
-              <ArrowLeft size={18} aria-hidden="true" />
+      <Card className="mt-5">
+        <CardHeader><CardTitle>ابدأ من هنا</CardTitle></CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          {modules.map(({ href, label, description, icon: Icon }) => (
+            <Link key={href} href={href} className="rounded-lg border border-[#dce5df] bg-white p-4 transition-colors hover:bg-[#f5faf7]">
+              <Icon size={25} className="text-[#16794a]" />
+              <p className="mt-3 font-bold text-[#17211b]">{label}</p>
+              <p className="mt-1 text-xs leading-5 text-[#66736b]">{description}</p>
             </Link>
-          </div>
-        </div>
+          ))}
+        </CardContent>
+      </Card>
 
-        <div className="border border-[#dce5df] bg-white p-5 sm:p-6">
-          <div className="mb-5 flex items-center gap-3">
-            <AlertCircle size={21} className="text-[#b76b13]" aria-hidden="true" />
-            <h2 className="text-lg font-bold text-[#17211b]">محتاج متابعة</h2>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-[#edf1ee] pb-3 text-sm">
-              <span className="text-[#59665e]">اشتراكات قربت تخلص</span>
-              <strong className="text-[#17211b]">{stats.endingSoon.toLocaleString("ar-EG")}</strong>
-            </div>
-            <div className="flex items-center justify-between border-b border-[#edf1ee] pb-3 text-sm">
-              <span className="text-[#59665e]">إنتاج بكرة</span>
-              <strong className="text-[#17211b]">{stats.kitchenTomorrow.toLocaleString("ar-EG")}</strong>
-            </div>
-            <p className="pt-1 text-xs leading-6 text-[#7b867f]">
-              هنضيف تنبيهات الدفع والتوصيل والإلغاء في المرحلة التالية بدون تغيير الهيكل الأساسي.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <div className="h-20 lg:hidden" />
+      <Card className="mt-5">
+        <CardHeader><CardTitle>حالة التشغيل اليوم</CardTitle></CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">توصيلات مكتملة</p><p className="mt-1 text-2xl font-bold">{delivered}/{deliveries.length}</p></div>
+          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">قائمة المطبخ</p><p className="mt-1 text-2xl font-bold">مقفولة</p></div>
+          <div className="rounded-md bg-[#eef4f0] p-4"><p className="text-sm text-[#66736b]">موعد Cut-off</p><p className="mt-1 text-2xl font-bold">17:00</p></div>
+        </CardContent>
+      </Card>
     </AppShell>
   );
 }
-

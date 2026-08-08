@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bike, ChefHat, ClipboardList, LayoutDashboard, LogOut, PackageOpen, ReceiptText, Salad, Users } from "lucide-react";
+import { Bell, Bike, ChefHat, ClipboardList, LayoutDashboard, LogOut, PackageOpen, ReceiptText, Salad, Users } from "lucide-react";
 import { useAuthProfile } from "@/components/auth-provider";
 import { createClient } from "@/lib/supabase/client";
 import type { Role } from "@/lib/domain";
@@ -18,6 +18,7 @@ const nav = [
   { href: "/kitchen", label: "المطبخ", icon: ChefHat, roles: ["admin","kitchen"] },
   { href: "/delivery", label: "التوصيل", icon: Bike, roles: ["admin","delivery"] },
   { href: "/accounting", label: "الحسابات", icon: ReceiptText, roles: ["admin","accounting"] },
+  { href: "/notifications", label: "التنبيهات", icon: Bell, roles: ["admin","sales","cs","kitchen","delivery","accounting"] },
 ] as const;
 
 export function AppShell({ title, subtitle, children }: Props) {

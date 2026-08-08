@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7f5;
+  --surface: #ffffff;
+  --surface-muted: #eef4f0;
+  --text: #17211b;
+  --muted: #66736b;
+  --border: #dce5df;
+  --green: #16794a;
+  --green-dark: #0f603a;
+  --green-soft: #e5f5ec;
+  --blue: #2563eb;
+  --red: #c63c3c;
+  --amber: #b76b13;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, "Segoe UI", Tahoma, sans-serif;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+::selection {
+  background: #cdebd9;
+  color: #10281b;
+}
+

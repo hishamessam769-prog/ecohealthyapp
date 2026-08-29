@@ -17,7 +17,7 @@ export default function LoginPage() {
         <LoginForm />
 
         <p className="mt-6 border-t border-[#edf1ee] pt-5 text-xs leading-5 text-[#7a847e]">
-          أول حساب يتم إنشاؤه يصبح Admin تلقائيًا. الحسابات التالية يحدد Admin صلاحياتها.
+          الحسابات تُنشأ بالدعوة من مسؤول النظام. الأدوار المالية والإدارية تتطلب MFA.
         </p>
       </section>
     </main>

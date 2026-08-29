@@ -1,0 +1,10 @@
+"use client";
+
+type QueuedCommand = { id: string; command: string; payload: Record<string, unknown>; queuedAt: string; attempts: number };
+const DB = "eco-rider-offline-v1"; const STORE = "commands";
+function database(){return new Promise<IDBDatabase>((resolve,reject)=>{const request=indexedDB.open(DB,1);request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(STORE))request.result.createObjectStore(STORE,{keyPath:"id"})};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+export async function queueCommand(command:string,payload:Record<string,unknown>){const db=await database();return new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put({id:String(payload.client_event_id??crypto.randomUUID()),command,payload,queuedAt:new Date().toISOString(),attempts:0} satisfies QueuedCommand);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+export async function pendingCount(){const db=await database();return new Promise<number>((resolve,reject)=>{const request=db.transaction(STORE).objectStore(STORE).count();request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+async function all(){const db=await database();return new Promise<QueuedCommand[]>((resolve,reject)=>{const request=db.transaction(STORE).objectStore(STORE).getAll();request.onsuccess=()=>resolve(request.result as QueuedCommand[]);request.onerror=()=>reject(request.error)})}
+async function remove(id:string){const db=await database();return new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+export async function syncPending(){if(!navigator.onLine)return 0;let synced=0;for(const item of await all()){const response=await fetch(`/api/v1/commands/${item.command}`,{method:"POST",headers:{"content-type":"application/json","x-offline-replay":"1"},body:JSON.stringify(item.payload)});if(response.ok||response.status===409){await remove(item.id);synced++}else break}return synced}

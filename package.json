@@ -1,11 +1,17 @@
 {
   "name": "eco-healthy-erp",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:sql": "node scripts/test-schema.mjs",
+    "test:all": "npm run typecheck && npm run test && npm run test:sql && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.23",
@@ -15,22 +21,25 @@
     "@supabase/supabase-js": "2.112.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "decimal.js": "10.6.0",
     "lucide-react": "1.30.0",
-    "html2canvas": "1.4.1",
-    "jspdf": "3.0.4",
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "xlsx": "0.18.5",
-    "tailwind-merge": "3.6.0"
+    "tailwind-merge": "3.6.0",
+    "zod": "4.5.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.3.3",
+    "@playwright/test": "1.55.0",
+    "@electric-sql/pglite": "0.3.14",
     "@types/node": "26.2.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.3",
+    "fast-check": "4.3.0",
     "postcss": "8.5.6",
     "tailwindcss": "4.3.3",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
   }
 }

@@ -1,0 +1,12 @@
+import { z } from "zod";
+
+export const uuid = z.string().uuid();
+export const moneyString = z.union([z.string(), z.number()]).transform(String).pipe(z.string().regex(/^\d{1,12}(\.\d{1,2})?$/));
+export const idempotencyKey = z.string().min(8).max(120);
+
+export const createLeadSchema = z.object({ full_name: z.string().min(2).max(160), phone: z.string().min(10).max(20), source_code: z.string().min(2).max(50), campaign_id: uuid.optional(), notes: z.string().max(2000).optional() });
+export const createCustomerSchema = z.object({ full_name: z.string().min(2).max(160), phone: z.string().min(10).max(20), email: z.string().email().optional().or(z.literal("")), zone_id: uuid.optional(), address_line: z.string().min(5).max(500), sales_owner_id: uuid.optional(), dietary_notes: z.string().max(3000).optional() });
+export const createInvoiceSchema = z.object({ customer_id: uuid, order_type: z.enum(["SUBSCRIPTION", "A_LA_CARTE", "RENEWAL", "REACTIVATION", "CORPORATE"]), package_version_id: uuid.optional(), start_date: z.string().date(), address_id: uuid, delivery_window_id: uuid, payment_method: z.string().min(2).max(40), promotion_code: z.string().max(60).optional(), notes: z.string().max(2000).optional(), proof_path: z.string().max(500).optional(), payment_reference: z.string().max(160).optional(), idempotency_key: idempotencyKey });
+export const verifyPaymentSchema = z.object({ payment_id: uuid, amount_received: moneyString, currency: z.string().length(3).default("EGP"), account_id: uuid, reference: z.string().min(3).max(160), payer: z.string().min(2).max(160), receipt_date: z.string().date(), exception_note: z.string().max(2000).optional(), idempotency_key: idempotencyKey });
+export const subscriptionChangeSchema = z.object({ subscription_id: uuid, change_type: z.enum(["PAUSE", "RESUME", "SKIP", "SWAP", "UPGRADE", "DOWNGRADE", "ADDRESS_CHANGE", "WINDOW_CHANGE", "CANCEL"]), effective_from: z.string().date(), effective_to: z.string().date().optional(), payload: z.record(z.string(), z.unknown()).default({}), reason: z.string().min(3).max(1000), idempotency_key: idempotencyKey });
+export const deliveryEventSchema = z.object({ route_stop_id: uuid, event_type: z.enum(["ARRIVED", "DELIVERED", "FAILED"]), client_event_id: uuid, device_time: z.string().datetime(), failure_reason: z.string().max(500).optional(), otp: z.string().max(12).optional(), pod_path: z.string().max(500).optional(), latitude: z.number().optional(), longitude: z.number().optional(), cash_amount: moneyString.optional() });

@@ -1,0 +1,4624 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="المانيفستو التنفيذي لإعادة هيكلة وتوسّع وتخارج شركة إيكو هيلثي 2027-2029">
+  <meta name="author" content="ECO Healthy">
+  <title>مانيفستو إيكو هيلثي 2027-2029</title>
+  <style>
+    :root {
+      --navy: #17324d;
+      --teal: #075e54;
+      --teal-2: #167d7f;
+      --green: #2e7d32;
+      --ink: #1a1a1a;
+      --muted: #667085;
+      --paper: #ffffff;
+      --canvas: #f8f9fa;
+      --line: #dee2e6;
+      --soft-teal: #e7f4f4;
+      --soft-blue: #eaf1f7;
+      --soft-amber: #fff4d6;
+      --soft-red: #fdecec;
+      --red: #b42318;
+      --amber: #9a6700;
+      --radius: 12px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--canvas);
+    }
+
+    body {
+      direction: rtl;
+      text-align: right;
+      font-family: 'Cairo', 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      line-height: 1.8;
+      color: var(--ink);
+      background-color: var(--canvas);
+      padding: 40px;
+      margin: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* لضمان فصل اتجاه المصطلحات الإنجليزية والأرقام داخل السطر */
+    span.en, code, .num, bdi, [dir="ltr"] {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+    }
+
+    a {
+      color: var(--teal);
+      text-underline-offset: 3px;
+    }
+
+    a:hover { color: var(--navy); }
+
+    .page-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .document-cover {
+      position: relative;
+      overflow: hidden;
+      min-height: 620px;
+      padding: 72px 70px 58px;
+      margin-bottom: 34px;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(22,125,127,.18), transparent 30%),
+        linear-gradient(145deg, #102a42 0%, #17324d 58%, #075e54 100%);
+      color: white;
+      box-shadow: 0 24px 70px rgba(23,50,77,.18);
+    }
+
+    .document-cover::after {
+      content: "";
+      position: absolute;
+      inset: auto -90px -120px auto;
+      width: 360px;
+      height: 360px;
+      border: 48px solid rgba(255,255,255,.06);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .document-cover > p {
+      max-width: 880px;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+      color: rgba(255,255,255,.86);
+    }
+
+    .document-cover > p:first-child {
+      margin-top: 16px;
+      margin-bottom: 34px;
+      color: #86ded2;
+      font-size: 1.05rem;
+      letter-spacing: .16em;
+    }
+
+    .document-cover > p:nth-child(2) {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: white;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .document-cover > p:nth-child(3) {
+      margin-top: 0;
+      margin-bottom: 34px;
+      color: #b9e8e2;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 600;
+    }
+
+    .document-cover .table-wrap {
+      max-width: 980px;
+      margin: 26px auto;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 14px;
+      background: rgba(255,255,255,.09);
+      backdrop-filter: blur(8px);
+      box-shadow: none;
+    }
+
+    .document-cover table,
+    .document-cover th {
+      background: transparent;
+      color: white;
+      border: 0;
+    }
+
+    .document-cover th { padding: 22px 24px; }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 22px;
+      padding: 13px 18px;
+      border: 1px solid #d7e9e7;
+      border-radius: 12px;
+      background: #f5fbfa;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .toc {
+      position: relative;
+      margin: 0 0 34px;
+      padding: 28px 30px;
+      border: 1px solid #dce4ea;
+      border-right: 6px solid var(--teal);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .toc h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 1.35rem;
+    }
+
+    .toc ul {
+      columns: 2;
+      column-gap: 42px;
+      margin: 0;
+      padding-right: 20px;
+    }
+
+    .toc li {
+      break-inside: avoid;
+      margin: 5px 0;
+    }
+
+    .toc ul ul {
+      columns: 1;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .toc a { text-decoration: none; }
+
+    main#report {
+      unicode-bidi: plaintext;
+    }
+
+    h1, h2, h3, h4 {
+      scroll-margin-top: 20px;
+      break-after: avoid;
+    }
+
+    h1 {
+      margin: 44px 0 22px;
+      padding: 22px 26px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--navy), #254f70);
+      color: white;
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.45;
+      box-shadow: 0 10px 30px rgba(23,50,77,.12);
+    }
+
+    h2 {
+      margin: 36px 0 14px;
+      padding-right: 14px;
+      border-right: 5px solid var(--teal-2);
+      color: var(--teal);
+      font-size: clamp(1.25rem, 2.3vw, 1.65rem);
+      line-height: 1.5;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      color: var(--navy);
+      font-size: 1.16rem;
+    }
+
+    p { margin: 9px 0 14px; }
+
+    strong { color: var(--navy); }
+
+    ul, ol {
+      margin: 9px 0 18px;
+      padding-right: 24px;
+      padding-left: 0;
+    }
+
+    li { margin-bottom: 7px; }
+
+    li::marker { color: var(--teal-2); font-weight: 700; }
+
+    .card {
+      background: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 20px 0 28px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      box-shadow: var(--shadow);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+      margin: 0;
+      direction: rtl;
+      font-size: .93rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: right;
+      vertical-align: top;
+      unicode-bidi: plaintext;
+    }
+
+    th {
+      background-color: #075e54;
+      color: white;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    th strong { color: inherit; }
+    tbody tr:nth-child(even) { background: #fafbfc; }
+    tbody tr:hover { background: #f0f8f7; }
+
+    table.callout-table {
+      min-width: 0;
+      border: 0;
+    }
+
+    table.callout-table th {
+      padding: 20px 22px;
+      border: 0;
+      background: var(--soft-blue);
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    table.callout-table th strong {
+      color: var(--navy);
+      font-size: 1.02rem;
+    }
+
+    .table-wrap.callout-wrap {
+      border: 0;
+      border-right: 6px solid var(--teal-2);
+      box-shadow: none;
+    }
+
+    .formula {
+      direction: ltr;
+      unicode-bidi: isolate;
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 18px auto;
+      padding: 15px 18px;
+      border: 1px solid #d8e2ec;
+      border-radius: 10px;
+      background: #f4f7fa;
+      color: var(--navy);
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    code {
+      max-width: 100%;
+      padding: .1rem .35rem;
+      border-radius: 5px;
+      background: #eef3f6;
+      color: #12344d;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+      font-size: .92em;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    pre {
+      direction: ltr;
+      unicode-bidi: isolate;
+      overflow-x: auto;
+      padding: 20px;
+      border-radius: 12px;
+      background: #102a42;
+      color: #eef7f7;
+      text-align: left;
+    }
+
+    .back-to-top {
+      position: fixed;
+      left: 24px;
+      bottom: 24px;
+      z-index: 20;
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(7,94,84,.28);
+      font-size: 1.25rem;
+    }
+
+    .back-to-top:hover { background: var(--navy); }
+
+    .footer-note {
+      margin-top: 45px;
+      padding: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      font-size: .88rem;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 18px; }
+      .document-cover { min-height: auto; padding: 52px 26px 42px; }
+      .toc ul { columns: 1; }
+      .topline { align-items: flex-start; flex-direction: column; }
+      table { font-size: .88rem; }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px; font-size: 15px; }
+      .document-cover { border-radius: 12px; padding: 40px 16px 32px; }
+      .document-cover > p:nth-child(2) { font-size: 2rem; }
+      h1 { margin-top: 30px; padding: 17px 16px; border-radius: 10px; }
+      h2 { margin-top: 27px; }
+      .toc { padding: 22px 18px; }
+      th, td { padding: 10px; }
+      .back-to-top { left: 14px; bottom: 14px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 15mm 12mm; }
+      html, body { background: white; }
+      body { padding: 0; font-size: 10pt; color: black; }
+      .page-shell { max-width: none; }
+      .topline, .toc, .back-to-top { display: none !important; }
+      .document-cover {
+        min-height: 245mm;
+        margin: 0;
+        padding: 45mm 18mm 20mm;
+        border-radius: 0;
+        box-shadow: none;
+        break-after: page;
+      }
+      h1 { break-before: page; box-shadow: none; }
+      h1:first-of-type { break-before: auto; }
+      h2, h3 { break-after: avoid; }
+      p, li { orphans: 3; widows: 3; }
+      .table-wrap { overflow: visible; box-shadow: none; break-inside: avoid; }
+      table { min-width: 0; font-size: 7.5pt; }
+      th, td { padding: 6px; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body id="top">
+  <div class="page-shell">
+    <div class="topline" aria-label="بيانات الوثيقة">
+      <span><strong>ECO Healthy</strong> | وثيقة تنفيذية داخلية</span>
+      <span>نسخة مجلس الإدارة | <bdi dir="ltr">29 August 2026</bdi></span>
+    </div>
+        <nav class="toc" aria-label="فهرس المحتويات">
+      <h2>فهرس المحتويات</h2>
+      <ul>
+      <li><a href="#قرار-مجلس-الإدارة-قبل-قراءة-الدليل" id="toc-قرار-مجلس-الإدارة-قبل-قراءة-الدليل">قرار مجلس الإدارة قبل قراءة الدليل</a>
+      <ul>
+      <li><a href="#الافتراضات-المستخدمة" id="toc-الافتراضات-المستخدمة">الافتراضات المستخدمة</a></li>
+      <li><a href="#فهرس-تنفيذي" id="toc-فهرس-تنفيذي">فهرس تنفيذي</a></li>
+      </ul></li>
+      <li><a href="#الجزء-الأول-زبدة-الكتب-الأربعة-وتطبيقها-على-إيكو-هيلثي" id="toc-الجزء-الأول-زبدة-الكتب-الأربعة-وتطبيقها-على-إيكو-هيلثي">الجزء الأول: زبدة الكتب الأربعة وتطبيقها على إيكو هيلثي</a>
+      <ul>
+      <li><a href="#traction-eos-من-النوايا-إلى-إيقاع-تشغيل" id="toc-traction-eos-من-النوايا-إلى-إيقاع-تشغيل">1. Traction / EOS: من النوايا إلى إيقاع تشغيل</a></li>
+      <li><a href="#built-to-sell-تحويل-الخدمة-إلى-منتج-قابل-للشراء" id="toc-built-to-sell-تحويل-الخدمة-إلى-منتج-قابل-للشراء">2. Built to Sell: تحويل الخدمة إلى منتج قابل للشراء</a></li>
+      <li><a href="#high-output-management-الرافعة-في-وقت-هشام" id="toc-high-output-management-الرافعة-في-وقت-هشام">3. High Output Management: الرافعة في وقت هشام</a></li>
+      <li><a href="#e-myth-الشركة-كنظام-من-الأنظمة" id="toc-e-myth-الشركة-كنظام-من-الأنظمة">4. E-Myth: الشركة كنظام من الأنظمة</a></li>
+      </ul></li>
+      <li><a href="#الجزء-الثاني-خطة-الأربعة-أشهر-الانتقالية---سبتمبر-إلى-ديسمبر-2026" id="toc-الجزء-الثاني-خطة-الأربعة-أشهر-الانتقالية---سبتمبر-إلى-ديسمبر-2026">الجزء الثاني: خطة الأربعة أشهر الانتقالية - سبتمبر إلى ديسمبر 2026</a>
+      <ul>
+      <li><a href="#مخرجات-31-ديسمبر-2026" id="toc-مخرجات-31-ديسمبر-2026">مخرجات 31 ديسمبر 2026</a></li>
+      <li><a href="#الخطة-الشهرية" id="toc-الخطة-الشهرية">الخطة الشهرية</a></li>
+      <li><a href="#خطة-17-أسبوعا" id="toc-خطة-17-أسبوعا">خطة 17 أسبوعاً</a></li>
+      <li><a href="#جدول-هشام-كـceo---ساعة-بساعة" id="toc-جدول-هشام-كـceo---ساعة-بساعة">جدول هشام كـCEO - ساعة بساعة</a></li>
+      <li><a href="#سيستم-التقفيل-اليومي-daily-close" id="toc-سيستم-التقفيل-اليومي-daily-close">سيستم التقفيل اليومي Daily Close</a></li>
+      </ul></li>
+      <li><a href="#الجزء-الثالث-الهيكل-التنظيمي-ومصفوفة-التفويض" id="toc-الجزء-الثالث-الهيكل-التنظيمي-ومصفوفة-التفويض">الجزء الثالث: الهيكل التنظيمي ومصفوفة التفويض</a>
+      <ul>
+      <li><a href="#شجرة-المسؤولية-المقترحة" id="toc-شجرة-المسؤولية-المقترحة">شجرة المسؤولية المقترحة</a></li>
+      <li><a href="#التوصيف-التنفيذي-لكل-رئيس-قسم" id="toc-التوصيف-التنفيذي-لكل-رئيس-قسم">التوصيف التنفيذي لكل رئيس قسم</a></li>
+      <li><a href="#مصفوفة-الصلاحيات-المالية-والتشغيلية" id="toc-مصفوفة-الصلاحيات-المالية-والتشغيلية">مصفوفة الصلاحيات المالية والتشغيلية</a></li>
+      <li><a href="#raci---كتالوج-القرارات" id="toc-raci---كتالوج-القرارات">RACI - كتالوج القرارات</a></li>
+      </ul></li>
+      <li><a href="#الجزء-الرابع-المواصفات-الفنية-للتطبيق-والـerp-ومحرك-الذكاء-الاصطناعي" id="toc-الجزء-الرابع-المواصفات-الفنية-للتطبيق-والـerp-ومحرك-الذكاء-الاصطناعي">الجزء الرابع: المواصفات الفنية للتطبيق والـERP ومحرك الذكاء الاصطناعي</a>
+      <ul>
+      <li><a href="#نطاق-المنتج-الرقمي" id="toc-نطاق-المنتج-الرقمي">1. نطاق المنتج الرقمي</a></li>
+      <li><a href="#المعمارية-المقترحة" id="toc-المعمارية-المقترحة">2. المعمارية المقترحة</a></li>
+      <li><a href="#النموذج-البياني-الأساسي-data-model" id="toc-النموذج-البياني-الأساسي-data-model">3. النموذج البياني الأساسي Data Model</a></li>
+      <li><a href="#event-taxonomy-الإلزامية" id="toc-event-taxonomy-الإلزامية">4. Event Taxonomy الإلزامية</a></li>
+      <li><a href="#محرك-cac-ltv" id="toc-محرك-cac-ltv">5. محرك CAC &amp; LTV</a></li>
+      <li><a href="#delivery-sla-tracker" id="toc-delivery-sla-tracker">6. Delivery SLA Tracker</a></li>
+      <li><a href="#إدارة-subscriptions-مقابل-a-la-carte" id="toc-إدارة-subscriptions-مقابل-a-la-carte">7. إدارة Subscriptions مقابل A-la-Carte</a></li>
+      <li><a href="#ai-predictive-analytics" id="toc-ai-predictive-analytics">8. AI Predictive Analytics</a></li>
+      <li><a href="#الصلاحيات-والأمن-والامتثال" id="toc-الصلاحيات-والأمن-والامتثال">9. الصلاحيات والأمن والامتثال</a></li>
+      <li><a href="#المتطلبات-غير-الوظيفية-وdefinition-of-done" id="toc-المتطلبات-غير-الوظيفية-وdefinition-of-done">10. المتطلبات غير الوظيفية وDefinition of Done</a></li>
+      <li><a href="#خطة-البناء-على-مراحل" id="toc-خطة-البناء-على-مراحل">11. خطة البناء على مراحل</a></li>
+      <li><a href="#البرومبت-التنفيذي-الجاهز-للمبرمجالفريق" id="toc-البرومبت-التنفيذي-الجاهز-للمبرمجالفريق">12. البرومبت التنفيذي الجاهز للمبرمج/الفريق</a></li>
+      </ul></li>
+      <li><a href="#الجزء-الخامس-الخطة-الاستراتيجية-لعام-2027-وتفكيك-الأرباع" id="toc-الجزء-الخامس-الخطة-الاستراتيجية-لعام-2027-وتفكيك-الأرباع">الجزء الخامس: الخطة الاستراتيجية لعام 2027 وتفكيك الأرباع</a>
+      <ul>
+      <li><a href="#أولا-حل-التعارض-بين-arr-والإيراد-السنوي" id="toc-أولا-حل-التعارض-بين-arr-والإيراد-السنوي">أولاً: حل التعارض بين ARR والإيراد السنوي</a></li>
+      <li><a href="#الخطة-الموصى-بها-exit-arr-25.2-مليون-في-ديسمبر-2027" id="toc-الخطة-الموصى-بها-exit-arr-25.2-مليون-في-ديسمبر-2027">الخطة الموصى بها: Exit ARR 25.2 مليون في ديسمبر 2027</a></li>
+      <li><a href="#تفكيك-الأرباع---base-plan" id="toc-تفكيك-الأرباع---base-plan">تفكيك الأرباع - Base Plan</a></li>
+      <li><a href="#stretch-plan-25-مليون-إيراد-محاسبي-خلال-2027" id="toc-stretch-plan-25-مليون-إيراد-محاسبي-خلال-2027">Stretch Plan: 25 مليون إيراد محاسبي خلال 2027</a></li>
+      <li><a href="#أهداف-q1-2027-كـeos-rocks" id="toc-أهداف-q1-2027-كـeos-rocks">أهداف Q1 2027 كـEOS Rocks</a></li>
+      <li><a href="#كشف-فجوات-الطاقة-الاستيعابية-قبل-وقوعها" id="toc-كشف-فجوات-الطاقة-الاستيعابية-قبل-وقوعها">كشف فجوات الطاقة الاستيعابية قبل وقوعها</a></li>
+      <li><a href="#خطة-المبيعات-والتسويق-المباشر" id="toc-خطة-المبيعات-والتسويق-المباشر">خطة المبيعات والتسويق المباشر</a></li>
+      <li><a href="#خطة-الاحتفاظ-والتجديد" id="toc-خطة-الاحتفاظ-والتجديد">خطة الاحتفاظ والتجديد</a></li>
+      <li><a href="#استراتيجية-التوصيل-واللوجستيات" id="toc-استراتيجية-التوصيل-واللوجستيات">استراتيجية التوصيل واللوجستيات</a></li>
+      </ul></li>
+      <li><a href="#الجزء-السادس-لوحة-تحكم-الـceo-والمعادلات-الحاكمة" id="toc-الجزء-السادس-لوحة-تحكم-الـceo-والمعادلات-الحاكمة">الجزء السادس: لوحة تحكم الـCEO والمعادلات الحاكمة</a>
+      <ul>
+      <li><a href="#customer-acquisition-cost---cac" id="toc-customer-acquisition-cost---cac">1. Customer Acquisition Cost - CAC</a></li>
+      <li><a href="#customer-lifetime-value---ltv" id="toc-customer-lifetime-value---ltv">2. Customer Lifetime Value - LTV</a></li>
+      <li><a href="#churn-rate" id="toc-churn-rate">3. Churn Rate</a></li>
+      <li><a href="#retention-rate" id="toc-retention-rate">4. Retention Rate</a></li>
+      <li><a href="#gross-margin-وcontribution-margin-وpbtnet-margin" id="toc-gross-margin-وcontribution-margin-وpbtnet-margin">5. Gross Margin وContribution Margin وPBT/Net Margin</a></li>
+      <li><a href="#delivery-sla" id="toc-delivery-sla">6. Delivery SLA</a></li>
+      <li><a href="#مقاييس-إضافية-لا-غنى-عنها" id="toc-مقاييس-إضافية-لا-غنى-عنها">7. مقاييس إضافية لا غنى عنها</a></li>
+      <li><a href="#شكل-الداشبورد-اليومية" id="toc-شكل-الداشبورد-اليومية">8. شكل الداشبورد اليومية</a></li>
+      <li><a href="#الداشبورد-الأسبوعية---l10-scorecard" id="toc-الداشبورد-الأسبوعية---l10-scorecard">9. الداشبورد الأسبوعية - L10 Scorecard</a></li>
+      <li><a href="#الداشبورد-الشهرية---board-pack" id="toc-الداشبورد-الشهرية---board-pack">10. الداشبورد الشهرية - Board Pack</a></li>
+      <li><a href="#metric-definition-card---نموذج-إلزامي" id="toc-metric-definition-card---نموذج-إلزامي">Metric Definition Card - نموذج إلزامي</a></li>
+      </ul></li>
+      <li><a href="#الجزء-السابع-خارطة-التقييم-2-مليون-دولار-والتوسعالتخارج" id="toc-الجزء-السابع-خارطة-التقييم-2-مليون-دولار-والتوسعالتخارج">الجزء السابع: خارطة التقييم 2 مليون دولار والتوسع/التخارج</a>
+      <ul>
+      <li><a href="#ميكانيكا-التقييم-من-enterprise-value-إلى-ما-يستلمه-المالك" id="toc-ميكانيكا-التقييم-من-enterprise-value-إلى-ما-يستلمه-المالك">1. ميكانيكا التقييم: من Enterprise Value إلى ما يستلمه المالك</a></li>
+      <li><a href="#حسبة-هدف-100-مليون-جنيه" id="toc-حسبة-هدف-100-مليون-جنيه">2. حسبة هدف 100 مليون جنيه</a></li>
+      <li><a href="#خارطة-2027-2029" id="toc-خارطة-2027-2029">3. خارطة 2027-2029</a></li>
+      <li><a href="#حساب-tam-sam-som-لمصر-والسعودية" id="toc-حساب-tam-sam-som-لمصر-والسعودية">4. حساب TAM / SAM / SOM لمصر والسعودية</a></li>
+      <li><a href="#متى-نفتح-الحديث-مع-المستثمرين" id="toc-متى-نفتح-الحديث-مع-المستثمرين">5. متى نفتح الحديث مع المستثمرين؟</a></li>
+      <li><a href="#ma-data-room---هيكل-الملفات" id="toc-ma-data-room---هيكل-الملفات">6. M&amp;A Data Room - هيكل الملفات</a></li>
+      <li><a href="#بناء-brand-equity-وproprietary-tech" id="toc-بناء-brand-equity-وproprietary-tech">7. بناء Brand Equity وProprietary Tech</a></li>
+      <li><a href="#بوابات-التوسع-السعودي" id="toc-بوابات-التوسع-السعودي">8. بوابات التوسع السعودي</a></li>
+      </ul></li>
+      <li><a href="#الملاحق-التنفيذية" id="toc-الملاحق-التنفيذية">الملاحق التنفيذية</a>
+      <ul>
+      <li><a href="#الملحق-a-كتالوج-30-sop-يجب-امتلاكها" id="toc-الملحق-a-كتالوج-30-sop-يجب-امتلاكها">الملحق A: كتالوج 30 SOP يجب امتلاكها</a></li>
+      <li><a href="#الملحق-b-قالب-sop-قابل-للنسخ" id="toc-الملحق-b-قالب-sop-قابل-للنسخ">الملحق B: قالب SOP قابل للنسخ</a></li>
+      <li><a href="#الملحق-c-أربع-sops-نموذجية-مختصرة-قابلة-للتفعيل" id="toc-الملحق-c-أربع-sops-نموذجية-مختصرة-قابلة-للتفعيل">الملحق C: أربع SOPs نموذجية مختصرة قابلة للتفعيل</a></li>
+      <li><a href="#الملحق-d-نموذج-l10-أسبوعي" id="toc-الملحق-d-نموذج-l10-أسبوعي">الملحق D: نموذج L10 أسبوعي</a></li>
+      <li><a href="#الملحق-e-نموذج-ceo-daily-flash" id="toc-الملحق-e-نموذج-ceo-daily-flash">الملحق E: نموذج CEO Daily Flash</a></li>
+      <li><a href="#الملحق-f-قائمة-gono-go-قبل-أي-growth-spend" id="toc-الملحق-f-قائمة-gono-go-قبل-أي-growth-spend">الملحق F: قائمة Go/No-Go قبل أي Growth Spend</a></li>
+      <li><a href="#الملحق-g-قائمة-القرارات-التي-يجب-على-هشام-اتخاذها-في-أول-14-يوما" id="toc-الملحق-g-قائمة-القرارات-التي-يجب-على-هشام-اتخاذها-في-أول-14-يوما">الملحق G: قائمة القرارات التي يجب على هشام اتخاذها في أول 14 يوماً</a></li>
+      <li><a href="#الملحق-h-ما-لا-نفعله" id="toc-الملحق-h-ما-لا-نفعله">الملحق H: ما لا نفعله</a></li>
+      </ul></li>
+      <li><a href="#المصادر-والمنهجية" id="toc-المصادر-والمنهجية">المصادر والمنهجية</a>
+      <ul>
+      <li><a href="#تنبيه-مهني" id="toc-تنبيه-مهني">تنبيه مهني</a></li>
+      <li><a href="#الجملة-التي-تحكم-التنفيذ" id="toc-الجملة-التي-تحكم-التنفيذ">الجملة التي تحكم التنفيذ</a></li>
+      </ul></li>
+      </ul>
+    </nav>
+        <main id="report">
+<p><strong>ECO HEALTHY</strong></p>
+<p><strong>مانيفستو إعادة الهيكلة والتوسع والتخارج</strong></p>
+<p>دليل تنفيذي 2027-2029 لشركة اشتراكات وجبات صحية قابلة للبيع والتوسع</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الهدف الاستراتيجي<br />
+</strong>تحويل إيكو هيلثي من شركة يديرها المؤسس يومياً إلى نظام اشتراكات غذائية قابل للتكرار والقياس، ثم تجهيزها لشريك استراتيجي أو تخارج مستهدف بقيمة 100 مليون جنيه - مع الفصل الصريح بين الطموح، والفرضيات، والأدلة المطلوبة لإثبات التقييم.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><strong>إعداد تنفيذي لهشام عصام - المؤسس والرئيس التنفيذي</strong></p>
+<p>نسخة مجلس الإدارة | 29 أغسطس 2026</p>
+<p>منهج العمل: EOS + Built to Sell + High Output Management + E-Myth</p>
+<h1 id="قرار-مجلس-الإدارة-قبل-قراءة-الدليل">قرار مجلس الإدارة قبل قراءة الدليل</h1>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الخلاصة المالية غير القابلة للتجميل<br />
+</strong>25 مليون جنيه ARR تعني 2.083 مليون جنيه MRR. تقييم 100 مليون جنيه عند هذا المستوى يعني 4.0x الإيراد. هذا ليس مضاعفاً تلقائياً لشركة مطبخ؛ بل يحتاج مزيجاً نادراً من نمو مرتفع، إيراد متكرر مثبت، احتفاظ قوي، هامش مساهمة واضح، تقنية مملوكة، إدارة مستقلة، ومسار سعودي قابل للتنفيذ. البديل الأكثر واقعية هو رفع الإيراد إلى 45-60 مليون جنيه مع EBITDA طبيعي 12%-15% ثم البحث عن علاوة استراتيجية.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>بالتالي، هذه الوثيقة لا تعد بأن الشركة ستباع بـ2 مليون دولار. هي تصمم الشروط التي تجعل الحديث عن الرقم مهنياً، وتضع بوابات تمنع إهدار المال في التطبيق أو التوسع قبل إصلاح البيانات والوحدة الاقتصادية.</p>
+<h2 id="الافتراضات-المستخدمة">الافتراضات المستخدمة</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>البند</strong></th>
+<th><strong>التعريف المعتمد</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>الإيراد الحالي</strong></td>
+<td>800 ألف إلى مليون جنيه شهرياً؛ استخدمنا 900 ألف كنقطة منتصف للتشخيص، وليس كرقم محاسبي نهائي.</td>
+</tr>
+<tr class="even">
+<td><strong>الربحية</strong></td>
+<td>8%-10% قبل الضرائب؛ سنسميها هامش ربح قبل الضريبة PBT Margin، لأن Net Margin اصطلاحاً يكون عادة بعد الضرائب.</td>
+</tr>
+<tr class="odd">
+<td><strong>الاشتراك النشط</strong></td>
+<td>عميل دفع وله دورة خدمة مفتوحة خلال الشهر. الوقف المؤقت Pause لا يُحسب Churn ما دام موعد العودة محدداً.</td>
+</tr>
+<tr class="even">
+<td><strong>ARR</strong></td>
+<td>الإيراد الشهري المتكرر المؤهل في آخر شهر × 12. لا تُضمّن طلبات فردية أو إيراداً موسميّاً في ARR.</td>
+</tr>
+<tr class="odd">
+<td><strong>سعر الصرف</strong></td>
+<td>50 جنيه/دولار هو افتراض تخطيطي من طلب المؤسس، وليس توقعاً لسعر الصرف في تاريخ الصفقة.</td>
+</tr>
+<tr class="even">
+<td><strong>الإطار القانوني</strong></td>
+<td>المقترحات التشغيلية والتقنية ليست بديلاً عن رأي محاسب قانوني أو محامي مرخص في مصر والسعودية.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="فهرس-تنفيذي">فهرس تنفيذي</h2>
+<ul>
+<li><p>1. زبدة الكتب الأربعة والتطبيق المباشر على إيكو هيلثي.</p></li>
+<li><p>2. خطة الانتقال من سبتمبر إلى ديسمبر 2026: 17 أسبوعاً بمعايير قبول.</p></li>
+<li><p>3. الهيكل التنظيمي، التوصيفات الوظيفية، والصلاحيات وRACI.</p></li>
+<li><p>4. المواصفات الفنية للتطبيق والـERP ومحرك الذكاء الاصطناعي.</p></li>
+<li><p>5. استراتيجية 2027: الخطة الموصى بها وخطة الـ25 مليون إيراد السنوية البديلة.</p></li>
+<li><p>6. لوحة تحكم الرئيس التنفيذي والمعادلات الحاكمة.</p></li>
+<li><p>7. خارطة التقييم 100 مليون، TAM/SAM/SOM، غرفة البيانات، والتوسع السعودي.</p></li>
+<li><p>الملاحق: SOP Template، كتالوج 30 إجراء، L10 Agenda، Daily Close، وبرومبت المبرمج.</p></li>
+</ul>
+<h1 id="الجزء-الأول-زبدة-الكتب-الأربعة-وتطبيقها-على-إيكو-هيلثي">الجزء الأول: زبدة الكتب الأربعة وتطبيقها على إيكو هيلثي</h1>
+<p>الكتب الأربعة لا تقدم أربع فلسفات منفصلة. عند تركيبها معاً تصبح منظومة واحدة: EOS يحدد الإيقاع والأولويات، Built to Sell يحدد شكل الشركة التي يمكن شراؤها، High Output Management يرفع عائد ساعة المدير، وE-Myth يحول المعرفة إلى نظام يمكن تكراره وتدريبه ومراجعته.</p>
+<h2 id="traction-eos-من-النوايا-إلى-إيقاع-تشغيل">1. Traction / EOS: من النوايا إلى إيقاع تشغيل</h2>
+<h3 id="أ.-الـrocks-أولويات-90-يوما">أ. الـRocks: أولويات 90 يوماً</h3>
+<p>الـRock ليس قائمة مهام ولا مشروعاً فضفاضاً. هو نتيجة واحدة كبيرة لها مالك واحد، تاريخ نهاية، ومقياس قبول ثنائي: Done / Not Done. تستخدم إيكو 3-7 Company Rocks فقط كل ربع، ثم 1-3 Rocks لكل رئيس قسم. كل Rock يجب أن يعالج عنق زجاجة أو يبني قدرة دائمة.</p>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 19%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Rock</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>تعريف الاكتمال</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>R1 - إغلاق مالي موثوق</strong></td>
+<td>Finance Controller</td>
+<td>تقفيل شهري خلال 7 أيام + P&amp;L حسب الباقة والقناة والمنطقة + تطابق البنك/بوابة الدفع/الطلبات بنسبة 100%.</td>
+</tr>
+<tr class="even">
+<td><strong>R2 - خط أساس للعميل</strong></td>
+<td>Growth + Finance</td>
+<td>تعريفات CAC/LTV/Churn مع 12 شهراً بيانات منظفة ولو جزئياً، وتقرير Cohort شهري.</td>
+</tr>
+<tr class="odd">
+<td><strong>R3 - استقلال التشغيل</strong></td>
+<td>داليا</td>
+<td>توثيق واعتماد 15 SOP حرجة وتدريب بديل لكل نقطة تشغيل حرجة.</td>
+</tr>
+<tr class="even">
+<td><strong>R4 - نظام الاحتفاظ</strong></td>
+<td>Retention Lead</td>
+<td>لوحة تجديد D-7/D-3/D-1، أسباب ترك موحدة، وتجربة إنقاذ موثقة.</td>
+</tr>
+<tr class="odd">
+<td><strong>R5 - تصميم ERP قابل للبناء</strong></td>
+<td>Product Owner</td>
+<td>PRD، Data Dictionary، صلاحيات، Prototype، وعقد مورد بمراحل Acceptance واضحة.</td>
+</tr>
+<tr class="even">
+<td><strong>R6 - خريطة الطاقة والسعة</strong></td>
+<td>داليا + Logistics</td>
+<td>طاقة كل محطة وكل Route، عتبات 75/85/90%، وخطة Capex/Staffing قبل الطلب.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>قاعدة منع تمييع الأولويات<br />
+</strong>أي مبادرة جديدة خلال الربع لا تدخل فوراً. توضع في Issues List. إذا كانت أهم من Rock قائم، يجب أن يعلن هشام صراحة: ما الـRock الذي سنوقفه؟ لا توجد أولوية سابعة مخفية.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h3 id="ب.-اجتماع-l10-الأسبوعي---90-دقيقة">ب. اجتماع L10 الأسبوعي - 90 دقيقة</h3>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 19%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الوقت</strong></th>
+<th><strong>البند</strong></th>
+<th><strong>طريقة إيكو</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>5 دقائق</strong></td>
+<td>Segue</td>
+<td>خبر جيد شخصي/مهني لكل عضو؛ دخول ذهني موحد.</td>
+</tr>
+<tr class="even">
+<td><strong>5 دقائق</strong></td>
+<td>Scorecard</td>
+<td>كل رقم أخضر/أحمر. الأحمر ينزل إلى Issues؛ لا تبرير طويل.</td>
+</tr>
+<tr class="odd">
+<td><strong>5 دقائق</strong></td>
+<td>Rocks</td>
+<td>On Track / Off Track فقط. المتعثر يصبح Issue.</td>
+</tr>
+<tr class="even">
+<td><strong>5 دقائق</strong></td>
+<td>Headlines</td>
+<td>عميل/موظف يستحق انتباهاً، بلا غرق في التفاصيل.</td>
+</tr>
+<tr class="odd">
+<td><strong>5 دقائق</strong></td>
+<td>To-dos</td>
+<td>مراجعة مهام الأسبوع الماضي؛ المطلوب 90% إنجاز فأعلى.</td>
+</tr>
+<tr class="even">
+<td><strong>60 دقيقة</strong></td>
+<td>IDS</td>
+<td>Identify السبب الحقيقي، Discuss فقط ما يلزم، Solve بقرار ومالك وموعد.</td>
+</tr>
+<tr class="odd">
+<td><strong>5 دقائق</strong></td>
+<td>Conclude</td>
+<td>تلخيص القرارات والرسائل المطلوب نشرها وتقييم الاجتماع من 10.</td>
+</tr>
+</tbody>
+</table>
+<p>التوقيت المقترح: السبت 10:30-12:00 بتوقيت القاهرة. الحضور: هشام، داليا، المبيعات، Retention، اللوجستيات، المالية، Growth/Product حسب القضايا. يظل الاجتماع في نفس الموعد كل أسبوع. لا تستخدمه لقراءة تقارير يمكن قراءتها مسبقاً.</p>
+<h3 id="ج.-scorecard-أسبوعي-من-12-رقما">ج. Scorecard أسبوعي من 12 رقماً</h3>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 14%" />
+<col style="width: 11%" />
+<col style="width: 33%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المقياس</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>الدورية</strong></th>
+<th><strong>الهدف الأولي</strong></th>
+<th><strong>المصدر</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Leads مؤهلة</strong></td>
+<td>Sales Lead</td>
+<td>أسبوعي</td>
+<td>حسب هدف القناة</td>
+<td>CRM</td>
+</tr>
+<tr class="even">
+<td><strong>عملاء دافعون جدد</strong></td>
+<td>Sales Lead</td>
+<td>أسبوعي</td>
+<td>الخطة الشهرية/4.33</td>
+<td>Orders</td>
+</tr>
+<tr class="odd">
+<td><strong>Conversion %</strong></td>
+<td>Sales Lead</td>
+<td>أسبوعي</td>
+<td>&gt;= 20% كبداية ثم حسب القناة</td>
+<td>CRM</td>
+</tr>
+<tr class="even">
+<td><strong>تجديدات مستحقة/منجزة</strong></td>
+<td>Retention</td>
+<td>أسبوعي</td>
+<td>&gt;= 85% وصول، ثم &gt;=70% تجديد مبدئي</td>
+<td>Subscriptions</td>
+</tr>
+<tr class="odd">
+<td><strong>Churn إنذاري</strong></td>
+<td>Retention</td>
+<td>أسبوعي</td>
+<td>اتجاه هابط؛ هدف 6%-8% شهرياً بنهاية 2027</td>
+<td>Cohorts</td>
+</tr>
+<tr class="even">
+<td><strong>إيراد محصل</strong></td>
+<td>Finance</td>
+<td>أسبوعي</td>
+<td>&gt;= 98% من المستحق</td>
+<td>Bank/PSP</td>
+</tr>
+<tr class="odd">
+<td><strong>Gross Margin %</strong></td>
+<td>Finance</td>
+<td>أسبوعي</td>
+<td>&gt;= حد الباقة المعتمد</td>
+<td>P&amp;L</td>
+</tr>
+<tr class="even">
+<td><strong>Waste %</strong></td>
+<td>داليا</td>
+<td>يومي/أسبوعي</td>
+<td>&lt;= 3% وزن/تكلفة كبداية</td>
+<td>Kitchen</td>
+</tr>
+<tr class="odd">
+<td><strong>Meals First-Pass Yield</strong></td>
+<td>داليا</td>
+<td>أسبوعي</td>
+<td>&gt;= 98% بلا إعادة تجهيز</td>
+<td>QA</td>
+</tr>
+<tr class="even">
+<td><strong>On-Time Delivery %</strong></td>
+<td>Logistics</td>
+<td>يومي/أسبوعي</td>
+<td>&gt;= 92% ثم 95%</td>
+<td>SLA Events</td>
+</tr>
+<tr class="odd">
+<td><strong>Complaint Rate</strong></td>
+<td>CX</td>
+<td>أسبوعي</td>
+<td>&lt; 1.5% من الوجبات</td>
+<td>Tickets</td>
+</tr>
+<tr class="even">
+<td><strong>Cash runway / 13-week forecast</strong></td>
+<td>Finance</td>
+<td>أسبوعي</td>
+<td>لا مفاجآت؛ حد نقدي معتمد</td>
+<td>Treasury</td>
+</tr>
+</tbody>
+</table>
+<p>مرجعية EOS الرسمية: Level 10 Meeting هو اجتماع أسبوعي ثابت 90 دقيقة بسبعة بنود؛ والـRocks تراجع On Track/Off Track. الروابط في قسم المصادر.</p>
+<h2 id="built-to-sell-تحويل-الخدمة-إلى-منتج-قابل-للشراء">2. Built to Sell: تحويل الخدمة إلى منتج قابل للشراء</h2>
+<p>المشتري لا يشتري قدرة هشام على حل المشاكل؛ يشتري ماكينة يمكن توقع مدخلاتها ومخرجاتها. الخطر الحالي هو Hub-and-Spoke: القرار والمعلومة والعلاقة الحساسة تمر عبر المؤسس. العلاج هو Productization ثم توثيق ثم تقنية ثم إدارة مستقلة.</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>عنصر المنتج</strong></th>
+<th><strong>التطبيق في إيكو</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>العرض</strong></td>
+<td>3 باقات أساسية فقط: خسارة وزن، توازن يومي، أداء/Hero. الطلب الفردي Funnel تجريبي لا يسمح بتفجير التعقيد.</td>
+</tr>
+<tr class="even">
+<td><strong>التخصيص</strong></td>
+<td>مصفوفة مسموحة ومحدودة: حجم البروتين/الكارب، محظورات، نافذة توصيل، وليس وصفة جديدة لكل عميل.</td>
+</tr>
+<tr class="odd">
+<td><strong>الأسعار</strong></td>
+<td>Price Book واحد بتاريخ سريان. الخصومات أكواد لها مالك وسبب وميزانية وهامش أدنى.</td>
+</tr>
+<tr class="even">
+<td><strong>التسليم</strong></td>
+<td>نوافذ ومناطق ثابتة، مناطق بعيدة بتسليم أسبوعي، الجمعة إجازة وحمولة الخميس المزدوجة مخططة في السعة.</td>
+</tr>
+<tr class="odd">
+<td><strong>الجودة</strong></td>
+<td>مواصفات وزن بعد التسوية، Yield، صورة مرجعية، درجة حرارة، وتوقيع QA لكل Batch.</td>
+</tr>
+<tr class="even">
+<td><strong>التجديد</strong></td>
+<td>مسار ثابت D-7/D-3/D-1 وانتهاء/إعادة تنشيط؛ لا يعتمد على ذاكرة موظف.</td>
+</tr>
+<tr class="odd">
+<td><strong>الاعتماد على المؤسس</strong></td>
+<td>اختبار غياب 14 يوماً في 2027 ثم 30 يوماً في 2028 دون هبوط SLA أو تقفيل مالي.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="اختبار-built-to-sell-الشهري">اختبار Built-to-Sell الشهري</h3>
+<ul>
+<li><p>هل يستطيع موظف جديد تنفيذ البيع والتشغيل من الكتالوج دون سؤال هشام؟</p></li>
+<li><p>هل يستطيع المشتري فصل الإيراد المتكرر الحقيقي عن الطلب الفردي والموسمي؟</p></li>
+<li><p>هل كل مطور وقّع نقل ملكية الكود والـIP للشركة، والحسابات التقنية باسم الشركة؟</p></li>
+<li><p>هل أكبر عميل أقل من 10% من الإيراد؟ وهل أكبر قناة أقل من 35%؟</p></li>
+<li><p>هل لكل مورد حرج بديل معتمد؟ وهل وصفات الـYield والمواصفات مملوكة للشركة؟</p></li>
+<li><p>هل يمكن إعادة إنتاج تجربة العميل في مدينة جديدة من SOP + Training + Data، لا من حضور هشام؟</p></li>
+</ul>
+<h2 id="high-output-management-الرافعة-في-وقت-هشام">3. High Output Management: الرافعة في وقت هشام</h2>
+<p><strong>Managerial Output = Output of the manager's organization + Output of adjacent organizations influenced</strong></p>
+<p>المعنى العملي: قيمة هشام ليست عدد المهام التي ينفذها بنفسه، بل جودة وسرعة نتائج الفرق التي يصمم نظامها ويطور مديريها.</p>
+<p><strong>Leverage of an activity = Expected organizational impact / CEO hours consumed</strong></p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الرافعة</strong></th>
+<th><strong>أمثلة لإيكو</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>مرتفع جداً</strong></td>
+<td>تعيين/تطوير رئيس قسم قوي؛ تصميم Scorecard؛ قرار تسعير/منتج؛ إزالة عنق سعة؛ بناء نظام تجديد.</td>
+</tr>
+<tr class="even">
+<td><strong>مرتفع</strong></td>
+<td>One-on-One مع مدير، مراجعة Cohort، قرار Capex، تفاوض مورد استراتيجي، مراجعة تصميم ERP.</td>
+</tr>
+<tr class="odd">
+<td><strong>متوسط</strong></td>
+<td>مراجعة أسبوعية للتشغيل، اجتماع عميل كبير، تحليل حملة، اعتماد سياسة.</td>
+</tr>
+<tr class="even">
+<td><strong>منخفض</strong></td>
+<td>متابعة كل شكوى، تصحيح جدول مندوب، إدخال طلب، مطاردة فاتورة صغيرة، تعديل منشور.</td>
+</tr>
+<tr class="odd">
+<td><strong>سلبي</strong></td>
+<td>تغيير قرار مدير أمام فريقه بلا سبب؛ قبول استثناءات غير موثقة؛ اجتماعات بلا قرار؛ بناء تطبيق قبل تعريف البيانات.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>قانون تقويم هشام<br />
+</strong>يُحجز أول ساعتين من يوم العمل للقرار عالي الرافعة قبل واتساب والمشاكل. كل طلب موافقة يتكرر 3 مرات خلال شهر يتحول إلى سياسة وصلاحية أو يُلغى. المؤسس لا يصبح Help Desk للشركة.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="e-myth-الشركة-كنظام-من-الأنظمة">4. E-Myth: الشركة كنظام من الأنظمة</h2>
+<p>الـSOP الجيد ليس ملفاً طويلاً يخافه الموظف. هو أقصر وثيقة تمنع الخطأ، وتحدد الدليل المطلوب لإثبات التنفيذ، وتشرح الاستثناء. كل إجراء في إيكو يجب أن يحمل نسخة وتاريخاً ومالكاً وKPI، ويُختبر مع شخص لم يكتبه.</p>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 22%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>#</strong></th>
+<th><strong>حقل SOP</strong></th>
+<th><strong>المطلوب</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1</strong></td>
+<td>اسم الإجراء وكوده</td>
+<td>مثال OPS-KIT-004 تجهيز Batch الدجاج المشوي.</td>
+</tr>
+<tr class="even">
+<td><strong>2</strong></td>
+<td>الهدف والنطاق</td>
+<td>ما المشكلة التي يمنعها؟ متى يبدأ وينتهي؟</td>
+</tr>
+<tr class="odd">
+<td><strong>3</strong></td>
+<td>المالك والبديل</td>
+<td>من accountable؟ ومن ينفذ عند غيابه؟</td>
+</tr>
+<tr class="even">
+<td><strong>4</strong></td>
+<td>المدخلات</td>
+<td>Production Queue، Recipe Version، خامات، أدوات، درجة حرارة.</td>
+</tr>
+<tr class="odd">
+<td><strong>5</strong></td>
+<td>الخطوات</td>
+<td>أفعال مرقمة، زمن معياري، صورة/فيديو عند الحاجة.</td>
+</tr>
+<tr class="even">
+<td><strong>6</strong></td>
+<td>نقاط التحكم</td>
+<td>وزن، حرارة، توقيع، فصل مهام، Barcode/Batch ID.</td>
+</tr>
+<tr class="odd">
+<td><strong>7</strong></td>
+<td>الاستثناءات</td>
+<td>ماذا يحدث عند نقص خامة أو فشل حرارة أو تأخر Route؟</td>
+</tr>
+<tr class="even">
+<td><strong>8</strong></td>
+<td>المخرجات والدليل</td>
+<td>سجل Batch، صورة، Quantity، Waste Reason، اسم المنفذ.</td>
+</tr>
+<tr class="odd">
+<td><strong>9</strong></td>
+<td>KPI</td>
+<td>First-pass yield، وقت الدورة، Waste، شكاوى مرتبطة.</td>
+</tr>
+<tr class="even">
+<td><strong>10</strong></td>
+<td>الإصدار</td>
+<td>Version، تاريخ، سبب تغيير، موافقات، تدريب المتأثرين.</td>
+</tr>
+</tbody>
+</table>
+<p>دورة بناء الإجراء: Observe الواقع -&gt; Map الخطوات -&gt; Simplify -&gt; Document -&gt; Train -&gt; Test -&gt; Measure -&gt; Improve. ممنوع كتابة SOP من المكتب دون ملاحظة التنفيذ الفعلي.</p>
+<h1 id="الجزء-الثاني-خطة-الأربعة-أشهر-الانتقالية---سبتمبر-إلى-ديسمبر-2026">الجزء الثاني: خطة الأربعة أشهر الانتقالية - سبتمبر إلى ديسمبر 2026</h1>
+<p>هدف الفترة الانتقالية ليس مضاعفة المبيعات بأي ثمن. هدفها تحويل الشركة إلى وضع يمكن قياسه والتحكم فيه قبل ضغط نمو 2027. الترتيب مقصود: نعرّف الأرقام أولاً، ثم نفصل الحسابات والصلاحيات، ثم نوثق التشغيل، ثم نشتري التقنية التي تخدم عملية مفهومة.</p>
+<h2 id="مخرجات-31-ديسمبر-2026">مخرجات 31 ديسمبر 2026</h2>
+<ul>
+<li><p>إغلاق مالي شهري خلال 7 أيام، وتقرير يومي مختصر يطابق الطلبات والتحصيل والتسويات.</p></li>
+<li><p>تعريف موحد لـActive Subscriber وChurn وPause وRenewal وCAC وLTV وOn-Time Delivery.</p></li>
+<li><p>هيكل Accountability واضح، وكل قرار متكرر له صاحب صلاحية وحد مالي.</p></li>
+<li><p>30 SOP مكتوبة؛ 15 منها حرجة ومدرّبة ومختبرة بالفعل.</p></li>
+<li><p>خريطة طاقة للمطبخ والتعبئة والتوصيل، تتعامل صراحة مع ضغط الخميس وإجازة الجمعة والمناطق الأسبوعية البعيدة.</p></li>
+<li><p>PRD وData Dictionary وPrototype للـERP، وتحديد Phase 1 قبل توقيع عقد تطوير.</p></li>
+<li><p>قاعدة بيانات عملاء نظيفة، أسباب ترك موحدة، وتجربة تجديد آلية ولو عبر CRM بسيط قبل التطبيق الكامل.</p></li>
+<li><p>راتب هشام كـCEO مثبت في المصروفات، وأي توزيعات أرباح منفصلة بقرار مالك/مجلس إدارة.</p></li>
+</ul>
+<h2 id="الخطة-الشهرية">الخطة الشهرية</h2>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 45%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الشهر</strong></th>
+<th><strong>موضوع الشهر</strong></th>
+<th><strong>تعريف النجاح</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>سبتمبر - Truth &amp; Control</strong></td>
+<td>تثبيت التعريفات، تنظيف البيانات، Daily Close، خريطة العمليات، تعيين ملاك الأرقام.</td>
+<td>نستطيع شرح أين جاء كل جنيه وأين تعطل كل طلب.</td>
+</tr>
+<tr class="even">
+<td><strong>أكتوبر - People &amp; Process</strong></td>
+<td>Accountability Chart، Delegation، 15 SOP حرجة، QA/Waste، نظام تجديد أولي.</td>
+<td>القرارات اليومية لا تنتظر هشام، والأخطاء لها سبب وإجراء.</td>
+</tr>
+<tr class="odd">
+<td><strong>نوفمبر - Product &amp; Technology</strong></td>
+<td>توحيد الباقات، Unit Economics، PRD، Prototype، Vendor Selection، Capacity Test.</td>
+<td>المبرمج يبني على عملية محددة لا على كلام شفهي.</td>
+</tr>
+<tr class="even">
+<td><strong>ديسمبر - Stress Test &amp; 2027 Lock</strong></td>
+<td>اختبار غياب هشام، Budget 2027، Targets، Incentives، Data Room v0، إقفال Rocks.</td>
+<td>الشركة تدخل يناير بخطة وملاك وأرقام واحتياطيات.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="خطة-17-أسبوعا">خطة 17 أسبوعاً</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 17%" />
+<col style="width: 33%" />
+<col style="width: 14%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الأسبوع</strong></th>
+<th><strong>التركيز</strong></th>
+<th><strong>المخرجات</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>معيار القبول</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>W1<br />
+1-5 سبتمبر</strong></td>
+<td>War Room وBaseline</td>
+<td>اجتماع 4 ساعات؛ تجميع 12 شهر مبيعات/تحصيل/إنفاق/اشتراكات/شكاوى/توصيل؛ قائمة مصادر البيانات.</td>
+<td>هشام + Finance</td>
+<td>Data Inventory باسم المالك والتغطية وجودة كل مصدر.</td>
+</tr>
+<tr class="even">
+<td><strong>W2<br />
+6-12 سبتمبر</strong></td>
+<td>تعريف قاموس الأرقام</td>
+<td>اعتماد Definitions؛ فصل Pause/Churn؛ تحديد Gross/Contribution/PBT؛ قفل Timezone القاهرة.</td>
+<td>Finance + Product</td>
+<td>صفحة Definitions موقعة ولا يوجد KPI بتعريفين.</td>
+</tr>
+<tr class="odd">
+<td><strong>W3<br />
+13-19 سبتمبر</strong></td>
+<td>Daily Close v1</td>
+<td>نموذج مبيعات/تحصيل/إلغاء/Refund؛ مطابقة البنك والبوابة والكاش؛ سجل فروق.</td>
+<td>Finance</td>
+<td>7 أيام متتالية بفارق غير مفسر = صفر.</td>
+</tr>
+<tr class="even">
+<td><strong>W4<br />
+20-26 سبتمبر</strong></td>
+<td>Cohort Baseline</td>
+<td>تنظيف Customer IDs؛ ربط أول طلب بالقناة؛ استخراج Active/Churn/Repeat أولي.</td>
+<td>Growth + Finance</td>
+<td>&gt;=90% من إيراد آخر 90 يوماً مرتبط بعميل وقناة.</td>
+</tr>
+<tr class="odd">
+<td><strong>W5<br />
+27 سبتمبر-3 أكتوبر</strong></td>
+<td>Accountability Chart</td>
+<td>تثبيت المقاعد لا الأشخاص؛ Owner لكل رقم وعملية؛ فجوات التعيين.</td>
+<td>هشام</td>
+<td>لا توجد وظيفة حرجة بلا Accountable واحد.</td>
+</tr>
+<tr class="even">
+<td><strong>W6<br />
+4-10 أكتوبر</strong></td>
+<td>Delegation v1</td>
+<td>حدود الخصم/refund/شراء/تشغيل إضافي؛ Maker-Checker؛ سجل قرارات.</td>
+<td>CEO + Finance + داليا</td>
+<td>80% من القرارات المتكررة لها صلاحية مكتوبة.</td>
+</tr>
+<tr class="odd">
+<td><strong>W7<br />
+11-17 أكتوبر</strong></td>
+<td>Kitchen SOP Sprint</td>
+<td>توثيق التخطيط، الاستلام، التخزين، الإنتاج، الوزن، التعبئة، QA، Waste.</td>
+<td>داليا</td>
+<td>8 SOP حرجة مجرّبة بواسطة شخص غير الكاتب.</td>
+</tr>
+<tr class="even">
+<td><strong>W8<br />
+18-24 أكتوبر</strong></td>
+<td>Delivery SOP Sprint</td>
+<td>Dispatch، Handover، Route، POD، Failure، Cash، Complaint، Weekly Zones.</td>
+<td>Logistics</td>
+<td>&gt;=95% من الرحلات لها Timestamps وسبب تأخير.</td>
+</tr>
+<tr class="odd">
+<td><strong>W9<br />
+25-31 أكتوبر</strong></td>
+<td>Sales/Retention SOP</td>
+<td>Lead stages، Follow-up، Payment، Activation، Renewal، Save Offer، Win-back.</td>
+<td>Sales + Retention</td>
+<td>Funnel بدون مراحل مفقودة؛ D-7 قائمة يومية.</td>
+</tr>
+<tr class="even">
+<td><strong>W10<br />
+1-7 نوفمبر</strong></td>
+<td>Productization</td>
+<td>3 باقات أساسية؛ Add-ons؛ Price Book؛ Margin Floor؛ قواعد التخصيص/الإيقاف.</td>
+<td>CEO + داليا + Finance</td>
+<td>كل SKU يباع له Recipe/Price/COGS/Capacity impact.</td>
+</tr>
+<tr class="odd">
+<td><strong>W11<br />
+8-14 نوفمبر</strong></td>
+<td>Capacity Study</td>
+<td>Time-and-motion؛ سعة المحطات؛ الخميس Peak؛ عدد Stops لكل Rider؛ سيناريو +25%.</td>
+<td>داليا + Logistics</td>
+<td>مخطط Capacity مع عتبات 75/85/90% وإجراءات.</td>
+</tr>
+<tr class="even">
+<td><strong>W12<br />
+15-21 نوفمبر</strong></td>
+<td>ERP PRD وData Model</td>
+<td>User stories، RBAC/RLS، Events، Exports، ETA invoice readiness، Offline rider.</td>
+<td>Product Owner</td>
+<td>PRD موقع + Acceptance Criteria + Out-of-scope.</td>
+</tr>
+<tr class="odd">
+<td><strong>W13<br />
+22-28 نوفمبر</strong></td>
+<td>Prototype &amp; Vendor Test</td>
+<td>Clickable flow للبيع-المطبخ-التوصيل-الحسابات؛ مقابلة 2-3 موردين.</td>
+<td>Product + Users</td>
+<td>كل دور ينفذ سيناريو End-to-End دون صفحة وهمية.</td>
+</tr>
+<tr class="even">
+<td><strong>W14<br />
+29 نوفمبر-5 ديسمبر</strong></td>
+<td>Budget &amp; Unit Economics</td>
+<td>ميزانية 2027 شهرية؛ P&amp;L حسب باقة/قناة/منطقة؛ 13-week cash forecast.</td>
+<td>Finance + CEO</td>
+<td>Base/Downside/Upside وخطة سيولة لكل سيناريو.</td>
+</tr>
+<tr class="odd">
+<td><strong>W15<br />
+6-12 ديسمبر</strong></td>
+<td>Founder Absence Test</td>
+<td>هشام خارج القرارات اليومية 5 أيام؛ Escalation Log؛ قياس SLA/Refund/Production.</td>
+<td>داليا + Leads</td>
+<td>إغلاق 90% من القرارات داخل الصلاحيات؛ قائمة إصلاح.</td>
+</tr>
+<tr class="even">
+<td><strong>W16<br />
+13-19 ديسمبر</strong></td>
+<td>2027 Rocks &amp; Incentives</td>
+<td>أهداف Q1؛ Scorecards؛ Incentives على Contribution/Retention/SLA لا الإيراد فقط.</td>
+<td>CEO + Leads</td>
+<td>كل رئيس يوقع 1-3 Rocks وKPIs قابلة للحساب.</td>
+</tr>
+<tr class="odd">
+<td><strong>W17<br />
+20-31 ديسمبر</strong></td>
+<td>Close &amp; Go-Live Gate</td>
+<td>L10 quarterly؛ Data Room v0؛ قرار ERP Phase 1؛ تجميد Budget/Price Book/Org.</td>
+<td>Leadership Team</td>
+<td>قرار مكتوب Go/No-Go لكل مبادرة يناير.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="جدول-هشام-كـceo---ساعة-بساعة">جدول هشام كـCEO - ساعة بساعة</h2>
+<p>الجدول مبني على أيام العمل السبت إلى الأربعاء، مع الجمعة إجازة. الخميس نافذة خفيفة اختيارية للتفكير/المراجعة فقط بسبب ضغط التشغيل المضاعف، ولا يتحول إلى يوم اجتماعات دائم. يمكن تحريك وقت البداية ساعة، لكن لا تُكسر قاعدة: العمل الذهني قبل الرسائل.</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 51%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الوقت</strong></th>
+<th><strong>النشاط</strong></th>
+<th><strong>قاعدة التنفيذ</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>07:30-08:00</strong></td>
+<td>استيقاظ، ماء/قهوة، مراجعة شخصية بلا واتساب عمل.</td>
+<td>حماية التركيز.</td>
+</tr>
+<tr class="even">
+<td><strong>08:00-10:00</strong></td>
+<td>Deep Work: قرار/تحليل واحد عالي الرافعة مرتبط بموضوع اليوم.</td>
+<td>لا اجتماعات ولا إشعارات.</td>
+</tr>
+<tr class="odd">
+<td><strong>10:00-10:25</strong></td>
+<td>CEO Flash Dashboard: Cash، Sales، Production، Delivery، Alerts.</td>
+<td>لا حل تفصيلي؛ فقط تحديد Red Flags.</td>
+</tr>
+<tr class="even">
+<td><strong>10:30-12:00</strong></td>
+<td>جلسة موضوع اليوم أو L10 يوم السبت.</td>
+<td>ورقة قرار ومخرج محدد.</td>
+</tr>
+<tr class="odd">
+<td><strong>12:00-13:00</strong></td>
+<td>راحة/غداء وانتقال.</td>
+<td>لا اعتماد معاملات أثناء الراحة.</td>
+</tr>
+<tr class="even">
+<td><strong>13:00-14:00</strong></td>
+<td>One-on-One أو مراجعة قائد قسم.</td>
+<td>تطوير المدير وإزالة عائق، لا أخذ عمله.</td>
+</tr>
+<tr class="odd">
+<td><strong>14:00-15:30</strong></td>
+<td>مراجعة مشروع/عميل/مورد استراتيجي حسب اليوم.</td>
+<td>حد أقصى موضوعان.</td>
+</tr>
+<tr class="even">
+<td><strong>15:30-16:00</strong></td>
+<td>Approval Window موحد.</td>
+<td>الطلبات خارج الصلاحيات فقط، في نموذج مكتوب.</td>
+</tr>
+<tr class="odd">
+<td><strong>16:00-18:00</strong></td>
+<td>الجيم والاستحمام/استعادة الطاقة.</td>
+<td>موعد ثابت بقدر الإمكان.</td>
+</tr>
+<tr class="even">
+<td><strong>18:00-18:30</strong></td>
+<td>إغلاق يوم CEO: قرارات، To-dos، Issues، رسالة واحدة للفريق إن لزم.</td>
+<td>لا إعادة فتح اليوم بعد الإغلاق إلا P1.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 25%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>اليوم</strong></th>
+<th><strong>الثيمة</strong></th>
+<th><strong>الملف الرئيسي</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>السبت</strong></td>
+<td>قيادة وأرقام</td>
+<td>L10، Scorecard، Rocks، قضايا IDS، تثبيت أولويات الأسبوع.</td>
+</tr>
+<tr class="even">
+<td><strong>الأحد</strong></td>
+<td>النمو والعميل</td>
+<td>CAC والقنوات، Funnel، Retention Cohorts، تجربة/عرض واحد.</td>
+</tr>
+<tr class="odd">
+<td><strong>الاثنين</strong></td>
+<td>التشغيل والجودة</td>
+<td>Gemba walk، Capacity، Yield/Waste، مورد/جودة، مراجعة داليا.</td>
+</tr>
+<tr class="even">
+<td><strong>الثلاثاء</strong></td>
+<td>المال والتقنية</td>
+<td>Cash Forecast، P&amp;L، Unit Economics، ERP/Product Review.</td>
+</tr>
+<tr class="odd">
+<td><strong>الأربعاء</strong></td>
+<td>الأشخاص والاستراتيجية</td>
+<td>One-on-Ones، توظيف/تطوير، SOP audit، قرارات 30-90 يوماً.</td>
+</tr>
+<tr class="even">
+<td><strong>الخميس</strong></td>
+<td>نافذة اختيارية 09:00-11:00</td>
+<td>مراجعة هادئة/كتابة؛ لا تدخل في تشغيل حمولة الخميس إلا أزمة P1.</td>
+</tr>
+<tr class="odd">
+<td><strong>الجمعة</strong></td>
+<td>إجازة</td>
+<td>لا اجتماعات ولا رسائل تشغيلية عادية؛ On-call فقط للحوادث المعرفة مسبقاً.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="قواعد-الاجتماع-والـone-on-one">قواعد الاجتماع والـOne-on-One</h3>
+<ul>
+<li><p>كل اجتماع له Decision/Output مكتوب. إذا كان الغرض نقل معلومات فقط، يستخدم تقريراً أو Loom/فيديو.</p></li>
+<li><p>One-on-One أسبوعي 45-60 دقيقة مع داليا وFinance في أول 4 أشهر، وكل أسبوعين مع بقية الرؤساء بعد الاستقرار.</p></li>
+<li><p>أجندة One-on-One: أرقام الشخص، العوائق، قرار مطلوب، تطوير/تغذية راجعة، التزامات الأسبوع.</p></li>
+<li><p>لا يتجاوز هشام 15 ساعة اجتماعات أسبوعياً. الهدف 8-12 ساعة بعد يناير 2027.</p></li>
+<li><p>أي أزمة P1 تعني: سلامة غذاء، تهديد قانوني/بيانات، انقطاع نقدي، أو فشل تسليم واسع. ما عدا ذلك يدخل Queue عادية.</p></li>
+</ul>
+<h2 id="سيستم-التقفيل-اليومي-daily-close">سيستم التقفيل اليومي Daily Close</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+<col style="width: 36%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>التقرير</strong></th>
+<th><strong>الموعد</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>المحتوى</strong></th>
+<th><strong>دليل الإغلاق</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Sales Close</strong></td>
+<td>22:00</td>
+<td>Sales</td>
+<td>Leads، Orders، قيمة، خصومات، Cancellations، Channel، Expected cash.</td>
+<td>CRM export / locked form</td>
+</tr>
+<tr class="even">
+<td><strong>Cash Close</strong></td>
+<td>10:00 اليوم التالي</td>
+<td>Finance</td>
+<td>Bank، InstaPay، Card/Link، Wallet، Cash، Refunds، Unsettled.</td>
+<td>Reconciliation ID</td>
+</tr>
+<tr class="odd">
+<td><strong>Production Close</strong></td>
+<td>بعد آخر Batch</td>
+<td>داليا</td>
+<td>Planned vs Produced، Yield، Waste، Rework، Stock exceptions.</td>
+<td>Batch IDs + QA sign-off</td>
+</tr>
+<tr class="even">
+<td><strong>Delivery Close</strong></td>
+<td>بعد آخر Route</td>
+<td>Logistics</td>
+<td>Dispatch/Delivered/Failed، SLA، Cash collected، POD، reasons.</td>
+<td>Route ID + timestamps</td>
+</tr>
+<tr class="odd">
+<td><strong>CX Close</strong></td>
+<td>22:00</td>
+<td>CX</td>
+<td>Tickets، severity، root-cause، compensation، owner، open aging.</td>
+<td>Ticket IDs</td>
+</tr>
+<tr class="even">
+<td><strong>CEO Flash</strong></td>
+<td>10:00</td>
+<td>System</td>
+<td>8 Tiles + Red Alerts + prior-day variances.</td>
+<td>Dashboard snapshot</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ضوابط-مالية-غير-قابلة-للتفاوض">ضوابط مالية غير قابلة للتفاوض</h3>
+<ul>
+<li><p>راتب هشام كـCEO مصروف تشغيلي ثابت في P&amp;L. سحب المالك وتوزيعات الأرباح لا تُخفى داخل المصروفات.</p></li>
+<li><p>لا حذف أو تعديل فاتورة/طلب بعد الإغلاق؛ التعديل يكون Credit Note/Adjustment بسجل Audit وسبب وموافق.</p></li>
+<li><p>Maker-Checker لكل تحويل: من يجهز الدفع لا يكون وحده من يوافق وينفذ. صلاحيات البنك باسم أدوار، لا مشاركة كلمات مرور.</p></li>
+<li><p>كل Refund مرتبط بOrder ID وTicket ID وسبب موحد ومالك Root Cause. التعويض التسويقي والرد المالي حسابان منفصلان.</p></li>
+<li><p>جرد أسبوعي Cycle Count للخامات الأعلى قيمة/خطورة، وجرد شهري كامل. فروق المخزون تُسجل ولا تُدفن في استهلاك المطبخ.</p></li>
+<li><p>13-week cash forecast يتحدث أسبوعياً: Opening cash + Collections - Payroll - Suppliers - Delivery - Tax - Capex - Debt service.</p></li>
+<li><p>إغلاق شهر M+7 كحد أقصى في Q4 2026 ثم M+5 خلال 2027. أي Journal Entry بعد الإغلاق يحتاج Controller approval وسجل.</p></li>
+</ul>
+<p><strong>Closing Variance = Expected collections from orders - Actual bank/PSP/cash settlements</strong></p>
+<p><strong>Cash Runway (weeks) = Available unrestricted cash / Average weekly net cash burn</strong></p>
+<h1 id="الجزء-الثالث-الهيكل-التنظيمي-ومصفوفة-التفويض">الجزء الثالث: الهيكل التنظيمي ومصفوفة التفويض</h1>
+<p>نستخدم Accountability Chart لا شجرة ألقاب. كل مقعد له خمس مسؤوليات رئيسية وأرقام محددة، وقد يشغل الشخص مقعدين مؤقتاً لكن لا يختلط من يُحاسب على النتيجة. في 2026 يمكن أن تكون بعض الوظائف Outsourced أو Part-time، لكن الـAccountability لا يختفي.</p>
+<h2 id="شجرة-المسؤولية-المقترحة">شجرة المسؤولية المقترحة</h2>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 50%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المقعد</strong></th>
+<th><strong>النطاق</strong></th>
+<th><strong>يرفع إلى</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CEO - هشام</strong></td>
+<td>الاستراتيجية، رأس المال، الفريق القيادي، المنتج/العلامة، المستثمرون</td>
+<td>Board / Owners</td>
+</tr>
+<tr class="even">
+<td><strong>Head of Operations - داليا</strong></td>
+<td>Kitchen + Production Planning + QA + Procurement/Inventory</td>
+<td>CEO</td>
+</tr>
+<tr class="odd">
+<td><strong>Sales Lead</strong></td>
+<td>Lead-to-Cash، Pipeline، تحويل، Price Book discipline</td>
+<td>CEO</td>
+</tr>
+<tr class="even">
+<td><strong>Customer Experience &amp; Retention Lead</strong></td>
+<td>Onboarding، دعم، Renewals، Churn، Win-back</td>
+<td>CEO؛ تنسيق يومي مع Operations</td>
+</tr>
+<tr class="odd">
+<td><strong>Logistics Lead</strong></td>
+<td>Routing، Riders/3PL، Dispatch، POD، SLA، Cash handover</td>
+<td>CEO أو COO عند اكتمال الدور</td>
+</tr>
+<tr class="even">
+<td><strong>Finance Controller</strong></td>
+<td>Close، Cash، P&amp;L، Controls، Taxes، Audit readiness</td>
+<td>CEO؛ استقلال رقابي عن التشغيل</td>
+</tr>
+<tr class="odd">
+<td><strong>Growth, Brand &amp; PR Lead</strong></td>
+<td>Demand، Attribution، Content، Partnerships، Brand</td>
+<td>CEO</td>
+</tr>
+<tr class="even">
+<td><strong>Product &amp; Data Owner</strong></td>
+<td>ERP/App roadmap، Definitions، Data Quality، Vendor management</td>
+<td>CEO؛ Committee مع Leads</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>فصل مهم<br />
+</strong>داليا تملك التشغيل والجودة والطاقة، لكنها لا تعتمد نتائجها المالية وحدها. Finance يتحقق من التكلفة والمخزون والتسويات بصورة مستقلة. وفي المقابل، Finance لا يدير المطبخ. هذا الفصل يمنع تضارب المصالح ويخلق رقابة قابلة للثقة أمام المستثمر.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="التوصيف-التنفيذي-لكل-رئيس-قسم">التوصيف التنفيذي لكل رئيس قسم</h2>
+<h3 id="الرئيس-التنفيذي---هشام">1. الرئيس التنفيذي - هشام</h3>
+<p><strong>المهمة:</strong> بناء قيمة الشركة لا إدارة كل طلب. يحدد السوق والمنتج ورأس المال والفريق، ويضمن أن الأرقام صحيحة وأن الشركة تعمل بدونه.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>اعتماد 3-year vision وAnnual Plan وQuarterly Rocks.</p></li>
+<li><p>تعيين/تطوير/تغيير رؤساء الأقسام.</p></li>
+<li><p>تخصيص رأس المال: Capex، التقنية، التوسع، التمويل.</p></li>
+<li><p>ملكية المنتج الاستراتيجي والـBrand Positioning والعلاقات الاستثمارية.</p></li>
+<li><p>إدارة المخاطر الكبرى وقرارات خارج حدود التفويض.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> نمو الإيراد المؤهل والمتكرر | EBITDA/PBT مقابل الخطة | LTV:CAC وCAC Payback | % قرارات يومية دون CEO | Rocks completed &gt;=80% | Runway وWorking Capital</p>
+<h3 id="head-of-operations---داليا">2. Head of Operations - داليا</h3>
+<p><strong>المهمة:</strong> تسليم الوجبة الصحيحة بالمواصفة والموعد والتكلفة، مع قدرة إنتاج معلومة وفريق مدرب.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>S&amp;OP أسبوعي: Demand -&gt; Production -&gt; Procurement -&gt; Staffing.</p></li>
+<li><p>اعتماد خطة الإنتاج والـBatching وتوزيع الورديات.</p></li>
+<li><p>ملكية SOPs للمطبخ والجودة والمخزون والتالف.</p></li>
+<li><p>تطوير قادة الوردية وبدائل الوظائف الحرجة.</p></li>
+<li><p>Root-cause وإجراء تصحيحي لأي Quality Incident.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> Plan attainment &gt;=98% | First-pass yield &gt;=98% | Waste cost &lt;=3% ثم &lt;=2% | Food cost variance &lt;=2 نقطة | Critical QA incidents = 0 | Kitchen utilization 70%-85%</p>
+<h3 id="sales-lead">3. Sales Lead</h3>
+<p><strong>المهمة:</strong> تحويل الطلب المؤهل إلى عميل دافع بهامش سليم، مع Pipeline يمكن توقعه ومراجعة كل قناة.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>إدارة المراحل وسرعة الرد وFollow-up cadence.</p></li>
+<li><p>تطبيق Price Book وحدود الخصم وتسجيل Lost Reason.</p></li>
+<li><p>Forecast أسبوعي Weighted Pipeline.</p></li>
+<li><p>Coaching ومراجعة المكالمات/الواتساب وعروض الفريق.</p></li>
+<li><p>تسليم العميل إلى Onboarding دون بيانات ناقصة.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> New paid subscribers | Lead-to-paid conversion by channel | Response time | Revenue/rep | Discount leakage | Forecast accuracy +/-10% | Bad activation &lt;1%</p>
+<h3 id="customer-experience-retention-lead">4. Customer Experience &amp; Retention Lead</h3>
+<p><strong>المهمة:</strong> رفع العمر الربحي للعميل عبر Onboarding مبكر، حل موثوق، تجديد في موعده، وإنقاذ قائم على السبب لا الخصم العشوائي.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>Welcome/expectation setup خلال 24 ساعة.</p></li>
+<li><p>Renewal queue D-7/D-3/D-1 وWin-back 7/30/60 يوماً.</p></li>
+<li><p>تصنيف الشكاوى وRoot Cause وربط التعويض بالطلب.</p></li>
+<li><p>Voice of Customer شهري للمنتج والتشغيل.</p></li>
+<li><p>إدارة Pause/Cancel وفق السياسة والسجل.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> Monthly logo retention | Renewal rate | Churn by reason | CSAT بعد الحل | First response/resolution | Save rate | Complaint recurrence</p>
+<h3 id="logistics-lead">5. Logistics Lead</h3>
+<p><strong>المهمة:</strong> تسليم الطلب ضمن النافذة بأقل تكلفة صحيحة لكل Drop مع إثبات تسليم وسلامة Handover.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>تصميم Routes ومناطق ونوافذ وCapacity.</p></li>
+<li><p>Rider/3PL roster وDispatch readiness.</p></li>
+<li><p>Timestamps وPOD وFailed-delivery playbook.</p></li>
+<li><p>مطابقة الكاش/المرتجعات مع Finance.</p></li>
+<li><p>تحليل P50/P90 للتأخير حسب منطقة ومندوب.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> On-time &gt;=95% | Cost/drop | Failed delivery &lt;2% | POD completion &gt;=99% | Cash variance = 0 | Stops/rider-hour | Complaint per 100 drops</p>
+<h3 id="finance-controller">6. Finance Controller</h3>
+<p><strong>المهمة:</strong> إنتاج حقيقة مالية سريعة ومراجَعة، حماية النقد، وتحويل التشغيل إلى Unit Economics قابلة للتدقيق.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>Daily reconciliation وM+7 close.</p></li>
+<li><p>13-week cash forecast وBudget/Forecast.</p></li>
+<li><p>COGS وContribution حسب باقة/قناة/منطقة.</p></li>
+<li><p>Payables/Receivables/Tax/Payroll controls.</p></li>
+<li><p>Data Room وAudit trail وسياسات المحاسبة.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> Close days | Unreconciled variance | Forecast accuracy | Gross/Contribution/PBT margin | Inventory variance | Overdue payables | Control exceptions</p>
+<h3 id="growth-brand-pr-lead">7. Growth, Brand &amp; PR Lead</h3>
+<p><strong>المهمة:</strong> خلق طلب يمكن قياس مصدره وربحيته، وتقوية العلامة دون تشويش العروض أو زيادة CAC غير المنضبط.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>Channel plans وUTM/promo attribution.</p></li>
+<li><p>Creative/testing calendar وPartnerships.</p></li>
+<li><p>Brand message، PR، Influencer contracts، owned audience.</p></li>
+<li><p>Weekly spend-to-lead-to-paid report.</p></li>
+<li><p>Experiments بفرضية وميزانية وقرار Scale/Kill.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> Qualified leads | Paid CAC by channel | Contribution after marketing | Organic/referral share | Experiment velocity | Brand search/owned audience | Payback</p>
+<h3 id="product-data-owner">8. Product &amp; Data Owner</h3>
+<p><strong>المهمة:</strong> بناء المنتج الرقمي الذي يعكس الواقع ويحسن القرار، مع بيانات آمنة وقابلة للتدقيق.</p>
+<p><strong>المسؤوليات الخمس:</strong></p>
+<ul>
+<li><p>Roadmap وBacklog وAcceptance Criteria.</p></li>
+<li><p>Data Dictionary وevent instrumentation.</p></li>
+<li><p>Vendor/sprint/UAT/release management.</p></li>
+<li><p>Role permissions، audit، security، backups.</p></li>
+<li><p>Model monitoring وdata quality للأتمتة والذكاء.</p></li>
+</ul>
+<p><strong>مقاييس المقعد:</strong> Adoption by role | Data completeness &gt;=95% | Critical bugs | Release predictability | Uptime | Manual steps removed | Prediction lift after deployment</p>
+<h2 id="مصفوفة-الصلاحيات-المالية-والتشغيلية">مصفوفة الصلاحيات المالية والتشغيلية</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 25%" />
+<col style="width: 30%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>القرار</strong></th>
+<th><strong>مستوى التنفيذ</strong></th>
+<th><strong>رئيس القسم</strong></th>
+<th><strong>يرجع للـCEO عندما</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>خصم بيع</strong></td>
+<td>Sales rep: حتى 3% من Price Book</td>
+<td>Sales Lead: &gt;3%-5% مع Margin floor</td>
+<td>CEO: &gt;5% أو عرض جديد/خصم غير ممول</td>
+</tr>
+<tr class="even">
+<td><strong>تعويض غير نقدي</strong></td>
+<td>CX: إضافة/استبدال حتى 500 جنيه تكلفة</td>
+<td>Retention Lead: حتى 1,500 جنيه قيمة بيع</td>
+<td>CEO/Finance: أعلى أو حالة قانونية/سمعة</td>
+</tr>
+<tr class="odd">
+<td><strong>Refund نقدي</strong></td>
+<td>CX يوصي فقط</td>
+<td>Retention + Finance حتى 2,000 جنيه وفق السياسة</td>
+<td>CEO &gt;2,000 أو استثناء سياسة؛ Finance ينفذ</td>
+</tr>
+<tr class="even">
+<td><strong>شراء خامات معتمدة</strong></td>
+<td>Buyer ضمن PO وخطة</td>
+<td>داليا حتى 25,000 جنيه/PO داخل Budget وفارق سعر &lt;=3%</td>
+<td>CEO + Finance خارج Budget أو &gt;25,000 أو مورد جديد حرج</td>
+</tr>
+<tr class="odd">
+<td><strong>مصروف طوارئ تشغيل</strong></td>
+<td>لا صرف بلا سجل</td>
+<td>داليا حتى 5,000/حادث و20,000/أسبوع داخل cap</td>
+<td>CEO أعلى أو تكرار السبب أكثر من مرتين</td>
+</tr>
+<tr class="even">
+<td><strong>Overtime/عمالة مؤقتة</strong></td>
+<td>Shift lead داخل roster</td>
+<td>داليا داخل Weekly labor cap</td>
+<td>CEO إذا زاد إجمالي تكلفة العمالة عن Budget &gt;5%</td>
+</tr>
+<tr class="odd">
+<td><strong>تغيير Route/مندوب</strong></td>
+<td>Dispatcher يومياً</td>
+<td>Logistics Lead داخل SLA/cost guardrails</td>
+<td>CEO فقط فتح/إغلاق منطقة أو عقد 3PL</td>
+</tr>
+<tr class="even">
+<td><strong>دفع مورد</strong></td>
+<td>Finance maker يجهز</td>
+<td>Controller checker داخل PO/Budget حتى 25,000</td>
+<td>CEO checker &gt;25,000؛ لا شخص واحد يصنع ويعتمد</td>
+</tr>
+<tr class="odd">
+<td><strong>تغيير سعر/باقة</strong></td>
+<td>لا صلاحية فردية</td>
+<td>لجنة CEO + Finance + Ops توصي</td>
+<td>CEO يعتمد Price Book وتاريخ السريان</td>
+</tr>
+<tr class="even">
+<td><strong>تعيين/فصل</strong></td>
+<td>Lead يوصي</td>
+<td>Head داخل headcount budget للمستويات التنفيذية</td>
+<td>CEO لرؤساء الأقسام/خارج Budget/حالات عالية المخاطر</td>
+</tr>
+<tr class="odd">
+<td><strong>Incident P1</strong></td>
+<td>أي موظف يوقف الضرر</td>
+<td>Head يقود الاحتواء</td>
+<td>CEO فوراً: سلامة غذاء/قانون/بيانات/تعطل واسع</td>
+</tr>
+</tbody>
+</table>
+<p>الحدود المقترحة تبدأ كتجربة 60 يوماً وتُراجع وفق متوسط قيمة الطلب، التدفق النقدي، وعدد الاستثناءات. لا تُستخدم لتجاوز الضرائب أو الرقابة أو متطلبات البنك.</p>
+<h2 id="raci---كتالوج-القرارات">RACI - كتالوج القرارات</h2>
+<p>R = ينفذ، A = مسؤول نهائي عن النتيجة، C = يُستشار قبل القرار، I = يُبلّغ. ممنوع أكثر من A واحد. الجدول التالي يوضح المقاعد لا أسماء الأشخاص.</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 17%" />
+<col style="width: 16%" />
+<col style="width: 24%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>القرار</strong></th>
+<th><strong>R</strong></th>
+<th><strong>A</strong></th>
+<th><strong>C</strong></th>
+<th><strong>I</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>خطة الإنتاج الأسبوعية</strong></td>
+<td>داليا/Planner</td>
+<td>داليا</td>
+<td>Sales, Retention, Logistics</td>
+<td>CEO, Finance</td>
+</tr>
+<tr class="even">
+<td><strong>اعتماد Recipe/Yield</strong></td>
+<td>Kitchen/QA</td>
+<td>داليا</td>
+<td>Finance, Product</td>
+<td>Sales, CX</td>
+</tr>
+<tr class="odd">
+<td><strong>شراء داخل الخطة</strong></td>
+<td>Procurement</td>
+<td>داليا</td>
+<td>Finance</td>
+<td>CEO حسب الحد</td>
+</tr>
+<tr class="even">
+<td><strong>إيقاف Batch غير مطابق</strong></td>
+<td>QA</td>
+<td>داليا</td>
+<td>CX, Logistics</td>
+<td>CEO إذا P1</td>
+</tr>
+<tr class="odd">
+<td><strong>فتح/إغلاق منطقة توصيل</strong></td>
+<td>Logistics analysis</td>
+<td>CEO</td>
+<td>داليا, Finance, Sales</td>
+<td>كل الأقسام</td>
+</tr>
+<tr class="even">
+<td><strong>تغيير Route يومي</strong></td>
+<td>Dispatcher</td>
+<td>Logistics Lead</td>
+<td>CX</td>
+<td>داليا</td>
+</tr>
+<tr class="odd">
+<td><strong>تغيير Price Book</strong></td>
+<td>Finance/Product analysis</td>
+<td>CEO</td>
+<td>Sales, Retention, داليا</td>
+<td>كل المستخدمين</td>
+</tr>
+<tr class="even">
+<td><strong>خصم داخل الحد</strong></td>
+<td>Sales</td>
+<td>Sales Lead</td>
+<td>Finance عند الحاجة</td>
+<td>CEO في التقرير</td>
+</tr>
+<tr class="odd">
+<td><strong>Refund داخل السياسة</strong></td>
+<td>CX + Finance</td>
+<td>Retention Lead</td>
+<td>Operations root-cause</td>
+<td>CEO في report</td>
+</tr>
+<tr class="even">
+<td><strong>إقفال الشهر</strong></td>
+<td>Finance team</td>
+<td>Finance Controller</td>
+<td>داليا/Leads</td>
+<td>CEO</td>
+</tr>
+<tr class="odd">
+<td><strong>تحويل بنكي</strong></td>
+<td>Finance maker</td>
+<td>Authorized checker</td>
+<td>Owner dept</td>
+<td>CEO حسب الحد</td>
+</tr>
+<tr class="even">
+<td><strong>حملة تسويق</strong></td>
+<td>Growth</td>
+<td>Growth Lead</td>
+<td>Sales, Finance, Brand</td>
+<td>CEO داخل budget؛ A للرسالة الكبرى</td>
+</tr>
+<tr class="odd">
+<td><strong>تجربة عرض جديد</strong></td>
+<td>Product/Growth</td>
+<td>CEO</td>
+<td>Finance, Ops, Sales</td>
+<td>Leadership</td>
+</tr>
+<tr class="even">
+<td><strong>ERP requirement</strong></td>
+<td>Product Owner</td>
+<td>Product Owner</td>
+<td>End users + Finance</td>
+<td>CEO</td>
+</tr>
+<tr class="odd">
+<td><strong>قبول Sprint/UAT</strong></td>
+<td>Super users</td>
+<td>Product Owner</td>
+<td>Security/Finance</td>
+<td>CEO عند milestone</td>
+</tr>
+<tr class="even">
+<td><strong>Data breach</strong></td>
+<td>Incident team</td>
+<td>CEO/DPO وفق القانون</td>
+<td>Legal, Product</td>
+<td>Affected parties/regulator حسب المشورة</td>
+</tr>
+<tr class="odd">
+<td><strong>توظيف Head</strong></td>
+<td>CEO/HR</td>
+<td>CEO</td>
+<td>Leadership</td>
+<td>Owners/Board</td>
+</tr>
+<tr class="even">
+<td><strong>تعيين موظف داخل Budget</strong></td>
+<td>Head</td>
+<td>Head</td>
+<td>Finance/HR</td>
+<td>CEO summary</td>
+</tr>
+<tr class="odd">
+<td><strong>Saudi pilot</strong></td>
+<td>CEO/Expansion lead</td>
+<td>CEO/Board</td>
+<td>Finance, Legal, Ops, Product</td>
+<td>Company after decision</td>
+</tr>
+<tr class="even">
+<td><strong>حديث رسمي مع مستثمر</strong></td>
+<td>CEO/Advisor</td>
+<td>CEO/Owners</td>
+<td>Finance, Legal</td>
+<td>Leadership need-to-know</td>
+</tr>
+</tbody>
+</table>
+<h3 id="سجل-التصعيد-escalation-log">سجل التصعيد Escalation Log</h3>
+<ul>
+<li><p>كل مرة رجع الفريق لهشام تسجل: القرار، السبب، أثر الانتظار، هل توجد سياسة؟ ومن يجب أن يملك القرار مستقبلاً؟</p></li>
+<li><p>نهاية كل أسبوع يختار هشام أعلى 3 تصعيدات متكررة ويحسم واحداً من أربعة: Delegate، Automate، Standardize، أو Retain.</p></li>
+<li><p>هدف ديسمبر: أقل من 10 تصعيدات تشغيلية أسبوعياً. هدف Q2 2027: أقل من 5، ولا يوجد تصعيد متكرر بلا سياسة.</p></li>
+<li><p>الاحتفاظ Retain مسموح فقط لقرارات رأس المال، السمعة/القانون، رؤساء الأقسام، التسعير، التمويل، والتوسع الجغرافي.</p></li>
+</ul>
+<h1 id="الجزء-الرابع-المواصفات-الفنية-للتطبيق-والـerp-ومحرك-الذكاء-الاصطناعي">الجزء الرابع: المواصفات الفنية للتطبيق والـERP ومحرك الذكاء الاصطناعي</h1>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>قرار معماري قبل التطوير<br />
+</strong>لا يبدأ AI قبل اكتمال Event Tracking وتعريفات البيانات و90 يوماً على الأقل من التسجيل النظيف. Phase 1 هو System of Record يعمل فعلاً للمبيعات والمطبخ والتوصيل والحسابات. التنبؤ يبدأ Rule-based، ثم يُقاس، ثم يتحول إلى نموذج ML فقط إذا تفوق على Baseline بسيط.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="نطاق-المنتج-الرقمي">1. نطاق المنتج الرقمي</h2>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الموديول</strong></th>
+<th><strong>المخرجات الإلزامية</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Customer App / PWA</strong></td>
+<td>اشتراك وتجديد، اختيار وجبات ضمن القواعد، Pause، Address/Window، دفع، تتبع، Support، تاريخ الطلبات.</td>
+</tr>
+<tr class="even">
+<td><strong>Sales CRM</strong></td>
+<td>Leads، Attribution، مراحل، Follow-ups، Quote/Order، خصم بصلاحية، Handover.</td>
+</tr>
+<tr class="odd">
+<td><strong>Subscription Engine</strong></td>
+<td>Plans، Cycles، Entitlements، Cutoff، Pause/Resume، Swap، Renewal، Credits، Cancel.</td>
+</tr>
+<tr class="even">
+<td><strong>Kitchen ERP</strong></td>
+<td>Demand aggregation، BOM/Recipes، Production Queue، Batches، Yield، QA، Waste، Pack labels.</td>
+</tr>
+<tr class="odd">
+<td><strong>Inventory &amp; Procurement</strong></td>
+<td>Items، Lots/expiry، receipts، issues، cycle counts، vendor/price، reorder.</td>
+</tr>
+<tr class="even">
+<td><strong>Delivery</strong></td>
+<td>Zones، windows، routes، stops، rider app offline، scans، GPS events، POD، cash/failed.</td>
+</tr>
+<tr class="odd">
+<td><strong>Finance &amp; Controls</strong></td>
+<td>Payments، settlements، refunds، invoices/receipts، reconciliations، daily close، export Excel/PDF.</td>
+</tr>
+<tr class="even">
+<td><strong>Analytics &amp; AI</strong></td>
+<td>CAC/LTV/cohorts، SLA، churn risk، renewal propensity، meal preference، anomaly alerts.</td>
+</tr>
+<tr class="odd">
+<td><strong>Admin</strong></td>
+<td>Users/Roles/RLS، Price Book، logo/footer/invoice settings، audit، integrations، feature flags.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="المعمارية-المقترحة">2. المعمارية المقترحة</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الطبقة</strong></th>
+<th><strong>القرار الفني</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Frontend</strong></td>
+<td>Next.js App Router + TypeScript + Tailwind + Shadcn UI؛ Arabic RTL/English؛ mobile-first PWA.</td>
+</tr>
+<tr class="even">
+<td><strong>Backend</strong></td>
+<td>Supabase/PostgreSQL كنظام السجل؛ Edge/Server Functions للعمليات الحساسة؛ لا منطق مالي حرج في المتصفح.</td>
+</tr>
+<tr class="odd">
+<td><strong>Auth</strong></td>
+<td>Supabase Auth/MFA للأدوار الحساسة؛ Session controls؛ service accounts منفصلة للتكاملات.</td>
+</tr>
+<tr class="even">
+<td><strong>Security</strong></td>
+<td>RLS على كل جدول عميل/طلب/دفع؛ Least Privilege؛ audit immutable للأحداث الحساسة.</td>
+</tr>
+<tr class="odd">
+<td><strong>Async jobs</strong></td>
+<td>Queue/cron للتجديدات، الإشعارات، settlements، model scoring، exports؛ idempotency keys.</td>
+</tr>
+<tr class="even">
+<td><strong>Offline delivery</strong></td>
+<td>IndexedDB/local queue؛ sync عند رجوع الشبكة؛ conflict strategy؛ آخر Route فقط على الجهاز.</td>
+</tr>
+<tr class="odd">
+<td><strong>Files</strong></td>
+<td>Object storage للـPOD والفواتير والعقود؛ signed URLs؛ retention policy؛ malware/size checks.</td>
+</tr>
+<tr class="even">
+<td><strong>Observability</strong></td>
+<td>Structured logs، error tracking، job monitoring، audit dashboard، SLOs وتنبيهات.</td>
+</tr>
+<tr class="odd">
+<td><strong>Environments</strong></td>
+<td>Dev / Staging / Production بقواعد وSecrets منفصلة؛ migrations عبر Git؛ seed data غير حقيقي.</td>
+</tr>
+<tr class="even">
+<td><strong>Integrations</strong></td>
+<td>Payment gateway، WhatsApp provider، Maps/Geocoding، ETA eInvoice/eReceipt readiness، لاحقاً ZATCA.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="النموذج-البياني-الأساسي-data-model">3. النموذج البياني الأساسي Data Model</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Domain</strong></th>
+<th><strong>الجداول الجوهرية</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Identity</strong></td>
+<td>users, roles, permissions, user_role_assignments, branches, audit_events</td>
+</tr>
+<tr class="even">
+<td><strong>Customer</strong></td>
+<td>customers, customer_contacts, addresses, preferences, consent_records, customer_tags</td>
+</tr>
+<tr class="odd">
+<td><strong>Marketing</strong></td>
+<td>campaigns, channels, spend_daily, touchpoints, leads, lead_activities, promo_codes</td>
+</tr>
+<tr class="even">
+<td><strong>Catalog</strong></td>
+<td>plans, plan_versions, products, menu_cycles, recipes, recipe_versions, allergens, price_books</td>
+</tr>
+<tr class="odd">
+<td><strong>Subscription</strong></td>
+<td>subscriptions, subscription_cycles, entitlements, pauses, swaps, renewals, cancellations, credits</td>
+</tr>
+<tr class="even">
+<td><strong>Commerce</strong></td>
+<td>orders, order_items, discounts, taxes, invoices, credit_notes, payment_intents, payments, refunds, settlements</td>
+</tr>
+<tr class="odd">
+<td><strong>Kitchen</strong></td>
+<td>production_demands, production_batches, batch_items, qa_checks, yields, waste_events, pack_units, labels</td>
+</tr>
+<tr class="even">
+<td><strong>Inventory</strong></td>
+<td>items, vendors, purchase_orders, goods_receipts, stock_lots, stock_movements, cycle_counts</td>
+</tr>
+<tr class="odd">
+<td><strong>Delivery</strong></td>
+<td>zones, windows, routes, stops, riders, assignments, delivery_events, proof_of_delivery, cash_handover</td>
+</tr>
+<tr class="even">
+<td><strong>Service</strong></td>
+<td>tickets, ticket_events, complaint_reasons, compensations, surveys, renewal_tasks</td>
+</tr>
+<tr class="odd">
+<td><strong>Analytics</strong></td>
+<td>metric_definitions, metric_snapshots, customer_cohorts, feature_snapshots, predictions, experiments</td>
+</tr>
+</tbody>
+</table>
+<h3 id="معايير-تصميم-البيانات">معايير تصميم البيانات</h3>
+<ul>
+<li><p>كل سجل له UUID، created_at، updated_at، created_by، branch_id عند الحاجة، وsource_system.</p></li>
+<li><p>الأسعار والتكلفة والوصفات Versioned؛ لا نعدل الماضي. order_item يحتفظ بسعر/تكلفة/Recipe version وقت المعاملة.</p></li>
+<li><p>كل انتقال حالة يسجل Event منفصل بالتوقيت والفاعل والجهاز والمصدر؛ الحالة الحالية Cache مشتق وليست الدليل الوحيد.</p></li>
+<li><p>كل مبلغ Money يخزن Decimal بأصغر وحدة ومن دون float. العملة حقل صريح EGP/SAR.</p></li>
+<li><p>كل Timestamp UTC في قاعدة البيانات ويعرض Africa/Cairo أو Asia/Riyadh حسب الفرع؛ لا حسابات SLA على نصوص.</p></li>
+<li><p>Customer ID واحد يمنع تكرار الهاتف بصيغ مختلفة؛ عملية merge مدققة ولا تحذف التاريخ.</p></li>
+<li><p>PII والبيانات الصحية/التفضيلات الحساسة تحدد Data Classification وRetention وConsent؛ لا تصدر في Excel بلا صلاحية.</p></li>
+</ul>
+<h2 id="event-taxonomy-الإلزامية">4. Event Taxonomy الإلزامية</h2>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 24%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الأحداث</strong></th>
+<th><strong>الاستخدام</strong></th>
+<th><strong>الحقول الدنيا</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>lead_created / qualified / won / lost</strong></td>
+<td>CAC، Conversion، speed-to-lead</td>
+<td>lead_id, channel, campaign, owner, occurred_at, reason</td>
+</tr>
+<tr class="even">
+<td><strong>subscription_started / paused / resumed / renewed / cancelled / expired</strong></td>
+<td>Retention/Churn/ARR</td>
+<td>subscription_id, plan_version, effective_at, reason, actor</td>
+</tr>
+<tr class="odd">
+<td><strong>order_created / confirmed / paid / cancelled / refunded</strong></td>
+<td>Revenue، Daily close</td>
+<td>order_id, amounts, currency, source, promo, timestamps</td>
+</tr>
+<tr class="even">
+<td><strong>batch_started / qa_passed / packed / released</strong></td>
+<td>Kitchen cycle time</td>
+<td>batch_id, recipe_version, quantities, staff, temperature</td>
+</tr>
+<tr class="odd">
+<td><strong>delivery_ready / assigned / dispatched / arrived / delivered / failed</strong></td>
+<td>SLA tracker</td>
+<td>stop_id, route_id, geo, device, occurred_at, reason</td>
+</tr>
+<tr class="even">
+<td><strong>ticket_opened / first_response / resolved / reopened</strong></td>
+<td>CX SLA وRoot cause</td>
+<td>ticket_id, order_id, category, severity, compensation</td>
+</tr>
+<tr class="odd">
+<td><strong>renewal_prediction_scored / action_sent / outcome</strong></td>
+<td>AI lift</td>
+<td>customer_id, model_version, score, top_reasons, action, outcome</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>قاعدة عدم فقدان الحقيقة<br />
+</strong>واجهة الموظف لا تستطيع الانتقال للحالة التالية إذا لم تسجل الحدث السابق أو سبب الاستثناء. مثال: لا Delivered بلا dispatched_at وPOD أو Exception Reason. ولا Refund بلا payment_id وticket_id وapprover_id.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="محرك-cac-ltv">5. محرك CAC &amp; LTV</h2>
+<h3 id="مدخلات-cac">مدخلات CAC</h3>
+<ul>
+<li><p>spend_daily حسب channel/campaign: media، agency allocation، creative production، influencer fees، sales commissions، promo subsidy.</p></li>
+<li><p>first_paid_at لكل Customer، مع New Customer logic لا Order count. العميل العائد لا يدخل مقام CAC الجديد.</p></li>
+<li><p>Attribution models: First-touch للتخطيط، Last-paid-touch للتنفيذ، Blended للتحقق المالي. تعرض النتائج جنباً إلى جنب.</p></li>
+<li><p>نافذة attribution افتراضية 30 يوماً ويمكن تغييرها، مع UTM، promo، phone source، sales source، organic/direct.</p></li>
+<li><p>CAC fully-loaded وCAC media-only؛ لا خلطهما في عرض المستثمر أو تقييم الحملة.</p></li>
+</ul>
+<p><strong>Blended CAC = Total acquisition spend / Number of first-time paying customers</strong></p>
+<p><strong>Channel CAC = Attributed channel acquisition spend / First-time paying customers attributed to channel</strong></p>
+<p><strong>CAC Payback (months) = CAC / Average monthly contribution margin per new customer</strong></p>
+<h3 id="منهج-ltv-الموصى-به">منهج LTV الموصى به</h3>
+<p>يعرض النظام ثلاثة أرقام ولا يختصرها في رقم تجميلي واحد:</p>
+<ul>
+<li><p>Realized Cohort LTV: هامش المساهمة المتحقق فعلياً لكل عميل منذ أول شراء حتى تاريخ القياس. هو المصدر الأكثر صدقاً.</p></li>
+<li><p>Contracted/Remaining Value: قيمة الالتزامات المدفوعة/المتبقية، مع فصل الإيراد المؤجل ولا يُعامل كإيراد مكتسب فوراً.</p></li>
+<li><p>Modeled LTV: توقع مبني على Survival/Churn ويعرض Confidence Interval، ويُوسم بوضوح أنه Forecast.</p></li>
+</ul>
+<p><strong>Realized LTV_cohort = Sum(Revenue - food - packaging - delivery - payment fees - variable service - refunds) / Customers in cohort</strong></p>
+<p><strong>Simple modeled LTV = Monthly ARPA × Contribution Margin % / Monthly logo churn rate</strong></p>
+<p><strong>LTV:CAC = Contribution-margin LTV / Fully-loaded CAC</strong></p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Guardrails<br />
+</strong>هدف قرار مبدئي: LTV:CAC &gt;=3.0 وCAC Payback &lt;=3 أشهر. لأن الغذاء منخفض الهامش والتدفق النقدي حساس، لا نستخدم قواعد SaaS بطريقة عمياء. إذا LTV:CAC مرتفع بسبب Churn منخفض غير مثبت، يعرض النظام cohort maturity وتحذيراً.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h3 id="acceptance-criteria-لمحرك-cacltv">Acceptance Criteria لمحرك CAC/LTV</h3>
+<ul>
+<li><p>يمكن للمستخدم اختيار الفترة والقناة والحملة والباقة والمنطقة والـcohort.</p></li>
+<li><p>إجمالي spend في المحرك يطابق حسابات Finance ضمن tolerance 0.5% مع تقرير فروق.</p></li>
+<li><p>لا يُحسب Customer مرتين بعد merge، وتوجد اختبارات لحالات العودة وrefund الكامل والاشتراك المجاني.</p></li>
+<li><p>يعرض التقرير numerator/denominator وراء كل KPI، وليس النسبة فقط.</p></li>
+<li><p>Excel export يحافظ على IDs والتعريفات ووقت الاستخراج؛ PDF summary يحمل نسخة metric definitions.</p></li>
+</ul>
+<h2 id="delivery-sla-tracker">6. Delivery SLA Tracker</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 33%" />
+<col style="width: 19%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Timestamp</strong></th>
+<th><strong>التعريف</strong></th>
+<th><strong>المصدر</strong></th>
+<th><strong>الضبط</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ready_at</strong></td>
+<td>المطبخ يحرر الطلب بعد QA</td>
+<td>Kitchen</td>
+<td>ليس packed_at إذا بقي محجوزاً.</td>
+</tr>
+<tr class="even">
+<td><strong>assigned_at</strong></td>
+<td>تعيين Route/Rider</td>
+<td>Dispatcher</td>
+<td>يشترط rider/route صالحين.</td>
+</tr>
+<tr class="odd">
+<td><strong>dispatched_at</strong></td>
+<td>مسح Handover وخروج فعلي</td>
+<td>Rider + Dispatcher</td>
+<td>GPS/scan أو exception موثق.</td>
+</tr>
+<tr class="even">
+<td><strong>arrived_at</strong></td>
+<td>دخول geofence أو ضغط Arrived</td>
+<td>Rider app</td>
+<td>يحفظ دقة الموقع.</td>
+</tr>
+<tr class="odd">
+<td><strong>delivered_at</strong></td>
+<td>OTP/توقيع/صورة حسب السياسة</td>
+<td>Rider app</td>
+<td>POD إلزامي.</td>
+</tr>
+<tr class="even">
+<td><strong>failed_at</strong></td>
+<td>تعذر التسليم</td>
+<td>Rider + CX</td>
+<td>سبب موحد ومحاولات واتصال.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>On-time % = Deliveries completed within promised window / Eligible successful deliveries × 100</strong></p>
+<p><strong>Dispatch dwell = dispatched_at - ready_at | Last-mile time = delivered_at - dispatched_at</strong></p>
+<p><strong>Use P50 and P90 cycle time by zone/window/rider; averages alone hide bad tails</strong></p>
+<ul>
+<li><p>Eligibility policy must be explicit: customer-requested early/late, wrong address، force majeure، failed contact. تعرض الأرقام Gross وAdjusted معاً لمنع التلاعب.</p></li>
+<li><p>Alert قبل الخرق: إذا ETA المتوقعة تتجاوز window_end بـ10 دقائق، ينشأ intervention task للـDispatcher وCX.</p></li>
+<li><p>Route score: On-time، cost/drop، failed، complaint، cash variance، GPS completeness. لا يتم تقييم المندوب بـOn-time فقط.</p></li>
+<li><p>Offline: كل event يحمل client_event_id وdevice_time وserver_received_at؛ عند sync لا تتكرر الأحداث وتُعلّم clock anomalies.</p></li>
+</ul>
+<h2 id="إدارة-subscriptions-مقابل-a-la-carte">7. إدارة Subscriptions مقابل A-la-Carte</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 59%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>النوع</strong></th>
+<th><strong>سلوك النظام</strong></th>
+<th><strong>الهدف</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subscription</strong></td>
+<td>دورة، Entitlements، cutoff، renew/expire، pause policy، recurring-qualified revenue.</td>
+<td>Retention/LTV</td>
+</tr>
+<tr class="even">
+<td><strong>A-la-Carte</strong></td>
+<td>Order منفصل بلا افتراض تجديد؛ menu availability وminimum order وdelivery fee.</td>
+<td>Acquisition/convenience</td>
+</tr>
+<tr class="odd">
+<td><strong>Trial</strong></td>
+<td>SKU محدد وتحويله إلى خطة؛ لا يُخلط مع عميل recurring قبل أول renewal.</td>
+<td>Funnel experiment</td>
+</tr>
+<tr class="even">
+<td><strong>Credit</strong></td>
+<td>رصيد خدمة لا Cash؛ له source، expiry، usage ledger، liability treatment.</td>
+<td>Service recovery</td>
+</tr>
+<tr class="odd">
+<td><strong>Pause</strong></td>
+<td>effective dates، entitlement freeze/shift، max days، return date؛ لا يحسب Churn.</td>
+<td>Retention</td>
+</tr>
+<tr class="even">
+<td><strong>Cancellation</strong></td>
+<td>effective date، reason، refund/credit rule، win-back eligibility.</td>
+<td>Churn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user-stories-حرجة">User Stories حرجة</h3>
+<ul>
+<li><p>كمندوب مبيعات، لا أستطيع تفعيل اشتراك قبل نجاح الدفع أو اعتماد Credit، واختيار plan_version وaddress وwindow وstart date.</p></li>
+<li><p>كعميل، أستطيع Pause ضمن السياسة ويعرض النظام أثره على تاريخ الانتهاء قبل التأكيد.</p></li>
+<li><p>كمخطط مطبخ، أرى demand مجمعاً حسب meal/portion/day قبل cutoff، وأرى أي تغيير بعد cutoff كاستثناء مع أثره.</p></li>
+<li><p>كمحاسب، أرى الفرق بين cash collected والإيراد المكتسب والإيراد المؤجل والـcredits القائمة.</p></li>
+<li><p>كـRetention، أرى كل من ينتهي خلال 7 أيام مرتبين حسب قيمة العميل وخطر عدم التجديد وأفضل Next Action.</p></li>
+<li><p>كـCEO، أضغط على أي KPI فأصل إلى numerator/denominator والطلبات/الأحداث التي صنعته.</p></li>
+</ul>
+<h2 id="ai-predictive-analytics">8. AI Predictive Analytics</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 39%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>النموذج</strong></th>
+<th><strong>السؤال</strong></th>
+<th><strong>Features</strong></th>
+<th><strong>مقياس النجاح</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Renewal propensity</strong></td>
+<td>هل يجدد خلال 14 يوماً؟</td>
+<td>RFM، plan، pauses، complaints، satisfaction، delivery SLA، meal rating، price/discount، engagement</td>
+<td>AUC/PR + calibration + incremental renewal lift</td>
+</tr>
+<tr class="even">
+<td><strong>Churn risk</strong></td>
+<td>احتمال churn خلال 30 يوماً</td>
+<td>declining orders، failed payments، complaints، pauses، contact behavior</td>
+<td>Precision@top-k + save rate vs control</td>
+</tr>
+<tr class="odd">
+<td><strong>Meal preference</strong></td>
+<td>ترتيب الوجبات المناسبة</td>
+<td>history، skips/swaps، ratings، allergens، macro goals</td>
+<td>acceptance rate + repeat + waste impact</td>
+</tr>
+<tr class="even">
+<td><strong>Demand forecast</strong></td>
+<td>كم وجبة/SKU/يوم؟</td>
+<td>subscriptions، cutoff، seasonality، campaign، holiday، weather إذا قانوني/متاح</td>
+<td>WAPE/MAPE + waste/stockout reduction</td>
+</tr>
+<tr class="odd">
+<td><strong>SLA breach</strong></td>
+<td>أي Stop مهدد بالتأخير؟</td>
+<td>route load، ready delay، travel ETA، zone، rider history</td>
+<td>recall of actual breaches + intervention success</td>
+</tr>
+<tr class="even">
+<td><strong>Anomaly/Fraud</strong></td>
+<td>خصم/Refund/stock/cash غير معتاد</td>
+<td>actor، amount، frequency، time، linked IDs</td>
+<td>confirmed anomaly rate؛ false-positive cap</td>
+</tr>
+</tbody>
+</table>
+<h3 id="مراحل-ai-الصحيحة">مراحل AI الصحيحة</h3>
+<ul>
+<li><p>Stage 0 - Rules: انتهاء خلال 7 أيام + شكوى حديثة + انخفاض تفاعل = High Risk. هذه Baseline إلزامية.</p></li>
+<li><p>Stage 1 - Descriptive: Cohorts وdrivers وsegments. لا إرسال آلي قبل فهم الانحياز والنتائج.</p></li>
+<li><p>Stage 2 - Supervised Model: training snapshot time-safe؛ منع leakage؛ تقسيم زمني لا random فقط.</p></li>
+<li><p>Stage 3 - Action Experiment: holdout/control؛ النموذج لا ينجح لمجرد Accuracy، بل إذا رفع التجديد أو خفض الهدر incremental.</p></li>
+<li><p>Stage 4 - Automation: human override، reason codes، model/version logging، drift alerts، rollback.</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>حماية العميل والقرار<br />
+</strong>لا يستخدم النظام بيانات صحية أو تفضيلات حساسة دون أساس قانوني وموافقة ملائمة. لا يرسل ادعاءات طبية. يجب أن يستطيع المستخدم معرفة سبب توصية التجديد أو الوجبة بلغة مبسطة، وأن يوقف التسويق. راجع قانون حماية البيانات المصري 151/2020 ومتطلبات السعودية PDPL مع مستشار محلي.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="الصلاحيات-والأمن-والامتثال">9. الصلاحيات والأمن والامتثال</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الضابط</strong></th>
+<th><strong>المتطلب</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>RBAC + RLS</strong></td>
+<td>Sales يرى Leads/Orders اللازمة؛ Kitchen لا يرى أرقام الدفع؛ Rider يرى Route يومه فقط؛ Finance يرى المال؛ Admin ليس وصولاً مطلقاً بلا Audit.</td>
+</tr>
+<tr class="even">
+<td><strong>Audit</strong></td>
+<td>تسجيل before/after للـprice، discount، refund، status override، role، export، deletion/merge، AI action.</td>
+</tr>
+<tr class="odd">
+<td><strong>Data minimization</strong></td>
+<td>لا تعرض الهاتف الكامل أو العنوان لكل دور؛ masking في exports؛ retention policy للـPOD/GPS.</td>
+</tr>
+<tr class="even">
+<td><strong>Authentication</strong></td>
+<td>MFA للـFinance/Admin؛ device/session revoke؛ no shared users؛ rate limits.</td>
+</tr>
+<tr class="odd">
+<td><strong>Backups</strong></td>
+<td>Daily backup + point-in-time recovery حسب الخطة؛ اختبار restore ربع سنوي؛ RPO/RTO مكتوبان.</td>
+</tr>
+<tr class="even">
+<td><strong>Egypt tax</strong></td>
+<td>طبقة تكامل قابلة لاستخدام ETA eInvoice/eReceipt APIs، مع document IDs/status/rejection handling؛ اعتماد محاسب الشركة قبل Go-Live.</td>
+</tr>
+<tr class="odd">
+<td><strong>Saudi readiness</strong></td>
+<td>فصل tenant/branch/currency/tax؛ Arabic invoice؛ ZATCA integration adapter؛ PDPL/data transfer review قبل الإطلاق.</td>
+</tr>
+<tr class="even">
+<td><strong>IP</strong></td>
+<td>Repo وCloud وDomains وKeys باسم الشركة؛ developer IP assignment؛ dependency/SBOM؛ exit handover.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="المتطلبات-غير-الوظيفية-وdefinition-of-done">10. المتطلبات غير الوظيفية وDefinition of Done</h2>
+<ul>
+<li><p>Performance: الصفحات الأساسية على شبكة 4G متوسطة &lt;=2.5 ثانية P75؛ Kitchen/Delivery actions &lt;=1 ثانية feedback.</p></li>
+<li><p>Availability: 99.5% شهرياً للعمليات في Phase 1، مع degraded offline flow للرiders.</p></li>
+<li><p>Accessibility: touch targets &gt;=44px، contrast، keyboard، RTL حقيقي، نصوص أخطاء قابلة للفهم.</p></li>
+<li><p>Quality: unit/integration/E2E tests للمال والحالات؛ UAT signed by each department؛ no Coming Soon pages ضمن accepted scope.</p></li>
+<li><p>Migration: reconciliation counts/amounts، duplicate report، rollback plan، read-only legacy period.</p></li>
+<li><p>Observability: error_id للمستخدم، logs بلا PII غير لازمة، alert owner وseverity وrunbook.</p></li>
+<li><p>Documentation: architecture، data dictionary، API، deployment، backup/restore، admin manual، role manuals.</p></li>
+<li><p>Release: staging data anonymized؛ approval gates؛ feature flags؛ rollback &lt;30 minutes للـP1.</p></li>
+</ul>
+<h2 id="خطة-البناء-على-مراحل">11. خطة البناء على مراحل</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 44%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المرحلة</strong></th>
+<th><strong>النطاق</strong></th>
+<th><strong>المخرجات</strong></th>
+<th><strong>بوابة القرار</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Phase 0 - 2-3 أسابيع</strong></td>
+<td>Definitions + Process + UX prototype</td>
+<td>PRD، event map، permissions، clickable end-to-end، acceptance plan.</td>
+<td>لا عقد Build كامل قبل النجاح.</td>
+</tr>
+<tr class="even">
+<td><strong>Phase 1 - 8-12 أسبوعاً</strong></td>
+<td>Core ERP</td>
+<td>CRM/Orders/Subscriptions/Payments/Kitchen/Delivery/Daily close/Excel/PDF/Audit.</td>
+<td>System of Record usable.</td>
+</tr>
+<tr class="odd">
+<td><strong>Phase 2 - 6-10 أسابيع</strong></td>
+<td>Customer PWA + automation</td>
+<td>Self-service renew/pause/menu/address، notifications، ETA/settlement integrations.</td>
+<td>خفض manual touches.</td>
+</tr>
+<tr class="even">
+<td><strong>Phase 3 - بعد 90-180 يوم بيانات</strong></td>
+<td>Analytics &amp; AI</td>
+<td>Cohorts، risk rules، prediction pilots، experiments، monitoring.</td>
+<td>Incremental lift مثبت.</td>
+</tr>
+<tr class="odd">
+<td><strong>Phase 4</strong></td>
+<td>Saudi localization</td>
+<td>SAR/VAT/ZATCA/PDPL، branch tenancy، local logistics، pilot controls.</td>
+<td>Go-live قانوني وتشغيلي.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="البرومبت-التنفيذي-الجاهز-للمبرمجالفريق">12. البرومبت التنفيذي الجاهز للمبرمج/الفريق</h2>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>MASTER BUILD BRIEF<br />
+</strong>Act as a principal enterprise architect and lead full-stack engineer. Build a production-grade, Arabic-first, mobile-first ERP/PWA for ECO Healthy using Next.js, TypeScript, Tailwind/Shadcn, Supabase/PostgreSQL, Auth and RLS. The system must implement working end-to-end business logic for Lead -&gt; Paid Order/Subscription -&gt; Production Demand -&gt; QA/Pack -&gt; Route/Delivery/POD -&gt; Settlement/Daily Close. Do not ship placeholder or Coming Soon pages inside accepted scope. Treat every state transition as an immutable event with actor, timestamp, source and reason. Financial amounts use decimal money types; prices, recipes and policies are versioned. Implement roles for CEO, Sales, Retention, Operations/Kitchen, Logistics/Rider, Finance and Admin with least privilege. Include Excel exports, printable PDF invoices, audit logs, offline rider actions with idempotent sync, and Arabic RTL UX. Deliver database migrations, seed/demo data, automated tests, UAT scripts, deployment/runbook, backups and documentation. AI is out of Phase 1 except rule-based renewal risk; instrument all events required for later models. Acceptance is by executable scenarios and reconciled totals, not screenshots.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h3 id="acceptance-scenarios-التي-توضع-في-العقد">Acceptance Scenarios التي توضع في العقد</h3>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 45%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>السيناريو</strong></th>
+<th><strong>الخطوات</strong></th>
+<th><strong>معيار النجاح</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>S1 Sale-to-cash</strong></td>
+<td>Create lead -&gt; convert -&gt; choose plan/start/days/menu/address -&gt; pay -&gt; invoice -&gt; subscription active.</td>
+<td>Order/payment/invoice totals reconcile; unauthorized discount blocked.</td>
+</tr>
+<tr class="even">
+<td><strong>S2 Production</strong></td>
+<td>Tomorrow demand aggregates by recipe/portion -&gt; batch -&gt; QA -&gt; pack labels.</td>
+<td>Planned=produced+short+cancel; yield/waste recorded; no duplicate demand.</td>
+</tr>
+<tr class="odd">
+<td><strong>S3 Delivery</strong></td>
+<td>Assign route -&gt; offline dispatch -&gt; arrive -&gt; OTP/POD -&gt; sync -&gt; cash handover.</td>
+<td>Events ordered/idempotent; SLA and cash match.</td>
+</tr>
+<tr class="even">
+<td><strong>S4 Pause/Renew</strong></td>
+<td>Pause within policy -&gt; entitlements shift -&gt; D-7 renewal -&gt; payment -&gt; next cycle.</td>
+<td>No false churn; ARR and deferred revenue correct.</td>
+</tr>
+<tr class="odd">
+<td><strong>S5 Refund</strong></td>
+<td>Complaint -&gt; approval threshold -&gt; refund/credit note -&gt; settlement.</td>
+<td>Audit complete; P&amp;L and customer ledger update once.</td>
+</tr>
+<tr class="even">
+<td><strong>S6 Month close</strong></td>
+<td>Export orders/payments/refunds/settlements/COGS.</td>
+<td>Totals reconcile to dashboard within 0.5%; Excel usable and PDF invoice printable.</td>
+</tr>
+<tr class="odd">
+<td><strong>S7 Security</strong></td>
+<td>Try cross-role access and direct API/table calls.</td>
+<td>RLS denies; audit logs privileged exports/overrides.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="الجزء-الخامس-الخطة-الاستراتيجية-لعام-2027-وتفكيك-الأرباع">الجزء الخامس: الخطة الاستراتيجية لعام 2027 وتفكيك الأرباع</h1>
+<h2 id="أولا-حل-التعارض-بين-arr-والإيراد-السنوي">أولاً: حل التعارض بين ARR والإيراد السنوي</h2>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>قرار تعريف الهدف<br />
+</strong>هناك هدفان مختلفان رياضياً: (أ) الوصول في ديسمبر 2027 إلى MRR = 2.083 مليون، أي Exit ARR ≈25 مليون؛ أو (ب) تحقيق 25 مليون إيراد محاسبي خلال السنة كلها. مع بداية حالية 0.8-1.0 مليون شهرياً، الهدف (ب) يحتاج نهاية سنة قرب 2.8 مليون MRR وExit ARR ≈33.6 مليون. الخطة الموصى بها هنا تعتمد الهدف (أ) لأنه يطابق عبارة ARR و400-500 مشترك، وتعرض الهدف (ب) كـStretch منفصل.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="الخطة-الموصى-بها-exit-arr-25.2-مليون-في-ديسمبر-2027">الخطة الموصى بها: Exit ARR 25.2 مليون في ديسمبر 2027</h2>
+<p>هذه الخطة تبدأ يناير عند 1.2 مليون MRR وتصل ديسمبر إلى 2.1 مليون. إجمالي الإيراد المحاسبي المخطط خلال 2027 نحو 20.1 مليون جنيه. يلزم تأكيد نقطة البداية الفعلية في إغلاق ديسمبر 2026؛ أي فجوة تُعاد توزيعها ولا تُخفى في افتراضات.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الشهر</strong></th>
+<th><strong>MRR م.ج</strong></th>
+<th><strong>نشط نهاية الشهر</strong></th>
+<th><strong>ARPA ج</strong></th>
+<th><strong>Churn</strong></th>
+<th><strong>جديد+عائد</strong></th>
+<th><strong>Exit ARR م.ج</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>يناير</strong></td>
+<td>1.20</td>
+<td>300</td>
+<td>4,000</td>
+<td>12.0%</td>
+<td>80</td>
+<td>14.4</td>
+</tr>
+<tr class="even">
+<td><strong>فبراير</strong></td>
+<td>1.30</td>
+<td>315</td>
+<td>4,127</td>
+<td>11.5%</td>
+<td>50</td>
+<td>15.6</td>
+</tr>
+<tr class="odd">
+<td><strong>مارس</strong></td>
+<td>1.40</td>
+<td>330</td>
+<td>4,242</td>
+<td>11.0%</td>
+<td>50</td>
+<td>16.8</td>
+</tr>
+<tr class="even">
+<td><strong>أبريل</strong></td>
+<td>1.50</td>
+<td>345</td>
+<td>4,348</td>
+<td>10.5%</td>
+<td>50</td>
+<td>18.0</td>
+</tr>
+<tr class="odd">
+<td><strong>مايو</strong></td>
+<td>1.60</td>
+<td>360</td>
+<td>4,444</td>
+<td>10.0%</td>
+<td>50</td>
+<td>19.2</td>
+</tr>
+<tr class="even">
+<td><strong>يونيو</strong></td>
+<td>1.70</td>
+<td>380</td>
+<td>4,474</td>
+<td>9.5%</td>
+<td>54</td>
+<td>20.4</td>
+</tr>
+<tr class="odd">
+<td><strong>يوليو</strong></td>
+<td>1.75</td>
+<td>390</td>
+<td>4,487</td>
+<td>9.0%</td>
+<td>44</td>
+<td>21.0</td>
+</tr>
+<tr class="even">
+<td><strong>أغسطس</strong></td>
+<td>1.80</td>
+<td>400</td>
+<td>4,500</td>
+<td>8.5%</td>
+<td>43</td>
+<td>21.6</td>
+</tr>
+<tr class="odd">
+<td><strong>سبتمبر</strong></td>
+<td>1.85</td>
+<td>410</td>
+<td>4,512</td>
+<td>8.0%</td>
+<td>42</td>
+<td>22.2</td>
+</tr>
+<tr class="even">
+<td><strong>أكتوبر</strong></td>
+<td>1.90</td>
+<td>420</td>
+<td>4,524</td>
+<td>7.5%</td>
+<td>41</td>
+<td>22.8</td>
+</tr>
+<tr class="odd">
+<td><strong>نوفمبر</strong></td>
+<td>2.00</td>
+<td>440</td>
+<td>4,545</td>
+<td>7.0%</td>
+<td>49</td>
+<td>24.0</td>
+</tr>
+<tr class="even">
+<td><strong>ديسمبر</strong></td>
+<td>2.10</td>
+<td>460</td>
+<td>4,565</td>
+<td>6.5%</td>
+<td>49</td>
+<td>25.2</td>
+</tr>
+</tbody>
+</table>
+<p>الجديد+العائد = المطلوب لتعويض Churn وتحقيق صافي نمو؛ يفترض بداية يناير بنحو 250 مشتركاً نشطاً. الرقم النهائي يُعاد حسابه بعد Baseline ديسمبر.</p>
+<p><strong>Active_end = Active_begin × (1 - logo churn) + New paid + Reactivated</strong></p>
+<p><strong>MRR = Active subscribers × ARPA + Qualified recurring corporate revenue</strong></p>
+<h2 id="تفكيك-الأرباع---base-plan">تفكيك الأرباع - Base Plan</h2>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 7%" />
+<col style="width: 10%" />
+<col style="width: 9%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الربع</strong></th>
+<th><strong>إيراد م.ج</strong></th>
+<th><strong>MRR نهاية</strong></th>
+<th><strong>نشط</strong></th>
+<th><strong>جديد+عائد</strong></th>
+<th><strong>Retention</strong></th>
+<th><strong>GM</strong></th>
+<th><strong>PBT</strong></th>
+<th><strong>OTD</strong></th>
+<th><strong>الأولوية</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Q1</strong></td>
+<td>3.90</td>
+<td>1.40</td>
+<td>330</td>
+<td>180</td>
+<td>88%-89%</td>
+<td>32%</td>
+<td>8%-9%</td>
+<td>92%</td>
+<td>ثبت البيانات والمنتج والتجديد؛ لا توسع جغرافي.</td>
+</tr>
+<tr class="even">
+<td><strong>Q2</strong></td>
+<td>4.80</td>
+<td>1.70</td>
+<td>380</td>
+<td>154</td>
+<td>89%-91%</td>
+<td>33%-34%</td>
+<td>9%-10%</td>
+<td>93%</td>
+<td>Scale القنوات الناجحة؛ PWA self-service؛ شراكات B2B2C.</td>
+</tr>
+<tr class="odd">
+<td><strong>Q3</strong></td>
+<td>5.40</td>
+<td>1.85</td>
+<td>410</td>
+<td>129</td>
+<td>91%-92%</td>
+<td>34%-35%</td>
+<td>10%-11%</td>
+<td>94%</td>
+<td>Capacity expansion عند gate؛ تقليل Waste وCost/drop.</td>
+</tr>
+<tr class="even">
+<td><strong>Q4</strong></td>
+<td>6.00</td>
+<td>2.10</td>
+<td>460</td>
+<td>139</td>
+<td>92%-93.5%</td>
+<td>35%-36%</td>
+<td>10%-12%</td>
+<td>95%</td>
+<td>تثبيت ARR؛ Audit readiness؛ قرار Saudi pilot لا إطلاق متسرع.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stretch-plan-25-مليون-إيراد-محاسبي-خلال-2027">Stretch Plan: 25 مليون إيراد محاسبي خلال 2027</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 34%" />
+<col style="width: 19%" />
+<col style="width: 16%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الربع</strong></th>
+<th><strong>MRR الشهور م.ج</strong></th>
+<th><strong>إيراد الربع م.ج</strong></th>
+<th><strong>MRR نهاية</strong></th>
+<th><strong>Exit ARR</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Q1</strong></td>
+<td>1.40 / 1.50 / 1.60</td>
+<td>4.50</td>
+<td>1.60</td>
+<td>19.2</td>
+</tr>
+<tr class="even">
+<td><strong>Q2</strong></td>
+<td>1.80 / 1.90 / 2.00</td>
+<td>5.70</td>
+<td>2.00</td>
+<td>24.0</td>
+</tr>
+<tr class="odd">
+<td><strong>Q3</strong></td>
+<td>2.10 / 2.30 / 2.40</td>
+<td>6.80</td>
+<td>2.40</td>
+<td>28.8</td>
+</tr>
+<tr class="even">
+<td><strong>Q4</strong></td>
+<td>2.50 / 2.70 / 2.80</td>
+<td>8.00</td>
+<td>2.80</td>
+<td>33.6</td>
+</tr>
+<tr class="odd">
+<td><strong>الإجمالي</strong></td>
+<td></td>
+<td>25.00</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>مشكلة Stretch مع هدف 400-500 مشترك<br />
+</strong>2.8 مليون MRR عند ARPA 4,600 جنيه يحتاج نحو 609 مشتركين. لكي يبقى العدد 500، تحتاج ARPA =5,600 جنيه، أو 2.3 مليون من الاشتراكات +0.5 مليون طلبات فردية/Corporate شهرية. لذلك لا تخلط الإدارة بين هدف الإيراد وعدد المشتركين وARR؛ يجب أن تتطابق المعادلة كل شهر.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="أهداف-q1-2027-كـeos-rocks">أهداف Q1 2027 كـEOS Rocks</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 17%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Rock</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>Done عندما</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>R1 Unit Economics</strong></td>
+<td>Finance</td>
+<td>P&amp;L باقة/قناة/منطقة مع Contribution margin أسبوعي، وإغلاق M+5.</td>
+</tr>
+<tr class="even">
+<td><strong>R2 Retention Engine</strong></td>
+<td>Retention</td>
+<td>D-7 automation؛ churn reason completeness &gt;=95%؛ cohort dashboard.</td>
+</tr>
+<tr class="odd">
+<td><strong>R3 ERP Phase 1</strong></td>
+<td>Product</td>
+<td>Go-live للمسار end-to-end مع reconciled totals وUAT signed.</td>
+</tr>
+<tr class="even">
+<td><strong>R4 Kitchen predictability</strong></td>
+<td>داليا</td>
+<td>Plan attainment &gt;=98%؛ Waste &lt;=3%؛ capacity dashboard.</td>
+</tr>
+<tr class="odd">
+<td><strong>R5 Delivery control</strong></td>
+<td>Logistics</td>
+<td>Timestamp completeness &gt;=98%؛ OTD &gt;=92%؛ cost/drop baseline.</td>
+</tr>
+<tr class="even">
+<td><strong>R6 Leadership independence</strong></td>
+<td>CEO</td>
+<td>5 مقاعد قيادية scorecards؛ &lt;10 escalations/week؛ CEO absence 10 أيام.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="كشف-فجوات-الطاقة-الاستيعابية-قبل-وقوعها">كشف فجوات الطاقة الاستيعابية قبل وقوعها</h2>
+<p>الطاقة لا تُقاس بعدد الوجبات التي أنتجناها أمس؛ تقاس بالطاقة القابلة للاستخدام في أبطأ محطة وقت الذروة مع احتياطي للجودة والأعطال. نستخدم Takt/Throughput لكل محطة ثم نأخذ عنق الزجاجة.</p>
+<p><strong>Rated station capacity = Available productive minutes / Standard minutes per unit</strong></p>
+<p><strong>Usable capacity = Rated capacity × labor availability × equipment uptime × first-pass yield</strong></p>
+<p><strong>Kitchen capacity = MIN(prep, cook, chill, portion, pack, dispatch usable capacities)</strong></p>
+<p><strong>Peak demand = Active subscribers × meals due per day × day-pattern factor + A-la-carte forecast</strong></p>
+<p><strong>Utilization = Peak demand / Usable capacity</strong></p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 16%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الاستخدام</strong></th>
+<th><strong>الحالة</strong></th>
+<th><strong>الإجراء الإلزامي</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>&lt;75%</strong></td>
+<td>أخضر</td>
+<td>استمرار؛ تدريب؛ تحسين Yield؛ قبول نمو مضبوط.</td>
+</tr>
+<tr class="even">
+<td><strong>75%-85%</strong></td>
+<td>أصفر</td>
+<td>خطة زيادة shift/equipment/vendor خلال 4-8 أسابيع؛ لا وعود تسويق بلا slot check.</td>
+</tr>
+<tr class="odd">
+<td><strong>85%-90%</strong></td>
+<td>برتقالي</td>
+<td>تقييد Promotions/زمن cutoff؛ overtime مؤقت؛ تفعيل خطة السعة؛ daily S&amp;OP.</td>
+</tr>
+<tr class="even">
+<td><strong>&gt;90%</strong></td>
+<td>أحمر</td>
+<td>وقف منطقة/SKU منخفض الهامش مؤقتاً؛ لا عملاء جدد في slot الممتلئ؛ CEO incident review.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="capacity-review-أسبوعي">Capacity Review أسبوعي</h3>
+<ul>
+<li><p>Rolling 8-week forecast حسب اليوم والنافذة والـSKU والـportion؛ لا متوسط شهري فقط.</p></li>
+<li><p>عامل الخميس: طلب الخميس + أي تسليم مزدوج مرتبط بإجازة الجمعة يُحسب Peak مستقل.</p></li>
+<li><p>المناطق البعيدة ذات التسليم الأسبوعي تجمع حمولة في يوم واحد؛ تقاس بمساحة المركبة ووقت التحميل وDrops لا بعدد العملاء فقط.</p></li>
+<li><p>مخاطر السعة: غياب قائد وردية، فرن/ثلاجة single point، مورد واحد، packing line، printer/labels، Rider shortage.</p></li>
+<li><p>كل Capex له Trigger وROI: تكلفة الاختناق الحالية، سعة إضافية، contribution margin المحرر، فترة استرداد، بدائل التأجير/shift/outsourcing.</p></li>
+</ul>
+<p><strong>Capex payback months = Capex cost / Monthly incremental contribution margin enabled</strong></p>
+<h2 id="خطة-المبيعات-والتسويق-المباشر">خطة المبيعات والتسويق المباشر</h2>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 18%" />
+<col style="width: 41%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>القناة</strong></th>
+<th><strong>الشريحة</strong></th>
+<th><strong>التصميم</strong></th>
+<th><strong>الحكم</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Referral</strong></td>
+<td>عميل حالي/صديق</td>
+<td>Credit بعد أول دفع/أول أسبوع ناجح، لا قبل تحقق الإيراد</td>
+<td>CAC وRetention cohort</td>
+</tr>
+<tr class="even">
+<td><strong>Gyms &amp; Coaches</strong></td>
+<td>Fitness / performance</td>
+<td>كود/صفحة لكل Partner + عمولة على paid/retained</td>
+<td>Paid users، 60-day retention، margin</td>
+</tr>
+<tr class="odd">
+<td><strong>Doctors/Dietitians</strong></td>
+<td>Weight/medical-adjacent</td>
+<td>إحالة أخلاقية بلا ادعاءات طبية؛ plans واضحة</td>
+<td>Quality leads، renewal، complaints</td>
+</tr>
+<tr class="even">
+<td><strong>Corporate</strong></td>
+<td>شركات/فرق</td>
+<td>Pilot صغير، invoice/collection terms، menu/slot cap</td>
+<td>Contribution، DSO، concentration</td>
+</tr>
+<tr class="odd">
+<td><strong>Paid Social/Search</strong></td>
+<td>طلب نشط/retargeting</td>
+<td>Campaign+UTM+landing+offer؛ stop-loss</td>
+<td>Fully-loaded CAC، payback</td>
+</tr>
+<tr class="even">
+<td><strong>Influencer/PR</strong></td>
+<td>Reach/trust</td>
+<td>عقد وcode/holdout إن أمكن؛ usage rights</td>
+<td>Incremental paid، branded search</td>
+</tr>
+<tr class="odd">
+<td><strong>A-la-Carte Trial</strong></td>
+<td>خفض حاجز التجربة</td>
+<td>SKU محدود ثم offer اشتراك خلال 48 ساعة</td>
+<td>Trial-to-subscription conversion</td>
+</tr>
+<tr class="even">
+<td><strong>Win-back</strong></td>
+<td>Churned/expired</td>
+<td>سبب مخصص + إصلاح + offer محدود</td>
+<td>Reactivation contribution</td>
+</tr>
+</tbody>
+</table>
+<h3 id="قواعد-budget-التسويق">قواعد Budget التسويق</h3>
+<ul>
+<li><p>70% Proven channels، 20% growth tests، 10% exploratory. النسب تتغير بعد إثبات لا حسب الصوت الأعلى.</p></li>
+<li><p>كل Experiment: hypothesis، audience، offer، spend cap، success metric، decision date. لا حملة مفتوحة بلا Kill rule.</p></li>
+<li><p>Scale 20%-30% أسبوعياً فقط إذا cohort quality ثابت؛ لا تعتمد ROAS دون Refund/COGS/Retention.</p></li>
+<li><p>توقف القناة إذا CAC Payback &gt;4 أشهر أو LTV:CAC &lt;2 بعد نضج كافٍ، إلا اختباراً بقرار مكتوب.</p></li>
+<li><p>عمولة المبيعات ترتبط بالتحصيل والـ30-day retention أو contribution، لا بالتوقيع فقط؛ تمنع الخصم الرديء والعملاء غير المناسبين.</p></li>
+</ul>
+<h2 id="خطة-الاحتفاظ-والتجديد">خطة الاحتفاظ والتجديد</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>التوقيت</strong></th>
+<th><strong>المرحلة</strong></th>
+<th><strong>الإجراء</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Day 0-1</strong></td>
+<td>Onboarding</td>
+<td>توقعات التسليم، الباقة، pause/cancel، قناة الدعم، preferences.</td>
+</tr>
+<tr class="even">
+<td><strong>Day 3-5</strong></td>
+<td>Early check</td>
+<td>هل الوجبات/المواعيد مناسبة؟ تدخل سريع قبل تراكم الاستياء.</td>
+</tr>
+<tr class="odd">
+<td><strong>أسبوعي</strong></td>
+<td>Health score</td>
+<td>SLA، complaints، skips، engagement، payment، meal feedback.</td>
+</tr>
+<tr class="even">
+<td><strong>D-7</strong></td>
+<td>Renewal discovery</td>
+<td>استمرار الهدف، نتائج، ملاحظات، تغيير plan/window قبل السعر.</td>
+</tr>
+<tr class="odd">
+<td><strong>D-3</strong></td>
+<td>Offer/payment</td>
+<td>رابط دفع/فاتورة، next cycle، options؛ Escalate high-value risk.</td>
+</tr>
+<tr class="even">
+<td><strong>D-1</strong></td>
+<td>Final confirmation</td>
+<td>تأكيد/وقف/إلغاء بسبب موحد؛ لا silent expiry.</td>
+</tr>
+<tr class="odd">
+<td><strong>D+7/30/60</strong></td>
+<td>Win-back</td>
+<td>رسالة حسب سبب الترك وإثبات الإصلاح، وليس خصماً عاماً.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="استراتيجية-التوصيل-واللوجستيات">استراتيجية التوصيل واللوجستيات</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المحور</strong></th>
+<th><strong>السياسة</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Zone design</strong></td>
+<td>Geo-coded clusters، حد أدنى drops/route، رسوم/أيام حسب التكلفة؛ مراجعة شهرية.</td>
+</tr>
+<tr class="even">
+<td><strong>Windows</strong></td>
+<td>1-3 و5-7:30 مثلاً حسب السياسة؛ capacity slot visible at sale؛ no overbooking.</td>
+</tr>
+<tr class="odd">
+<td><strong>Far zones</strong></td>
+<td>Saturday weekly drop أو نموذج محدد؛ لا استثناء فردي ينسف Route economics.</td>
+</tr>
+<tr class="even">
+<td><strong>Own vs 3PL</strong></td>
+<td>Own fleet للـdense/core/quality؛ 3PL للـoverflow/pilot مع SLA وPOD وpenalties.</td>
+</tr>
+<tr class="odd">
+<td><strong>Dispatch</strong></td>
+<td>Kitchen ready cutoff، scan handover، route freeze، exception board.</td>
+</tr>
+<tr class="even">
+<td><strong>Rider app</strong></td>
+<td>Offline، navigation، contact masking، OTP/POD، failed reason، cash wallet.</td>
+</tr>
+<tr class="odd">
+<td><strong>Control tower</strong></td>
+<td>ETA risk، late-ready، missed contact، rider capacity، alerts قبل breach.</td>
+</tr>
+<tr class="even">
+<td><strong>Economics</strong></td>
+<td>Cost/drop وcost/order حسب zone/window؛ contribution after delivery determines expansion.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Route capacity (stops) = Available rider minutes / (Avg travel + service minutes per stop)</strong></p>
+<p><strong>Delivery cost per drop = Rider/3PL + fuel + vehicle + dispatch allocation + failed-delivery cost / Successful drops</strong></p>
+<p><strong>Zone contribution = Revenue - food - pack - payment - delivery-zone cost - refunds/variable service</strong></p>
+<h1 id="الجزء-السادس-لوحة-تحكم-الـceo-والمعادلات-الحاكمة">الجزء السادس: لوحة تحكم الـCEO والمعادلات الحاكمة</h1>
+<p>الداشبورد ليست تجميع رسوم. هي عقد تعريفات بين الأقسام. كل KPI يحمل: الاسم، المعادلة، المالك، المصدر، وقت التحديث، الهدف، حدود الأحمر/الأصفر، ورابطاً للسجلات التي كوّنته. أي رقم لا يمكن Drill-down له لا يصلح لاتخاذ قرار.</p>
+<h2 id="customer-acquisition-cost---cac">1. Customer Acquisition Cost - CAC</h2>
+<p><strong>Fully-loaded CAC = (Media + agency + creative + influencer + acquisition sales commissions + acquisition promo subsidy) / First-time paying customers</strong></p>
+<p><strong>Media CAC = Paid media spend / First-time paying customers attributed to paid media</strong></p>
+<p><strong>Blended CAC = Total acquisition spend across all channels / All first-time paying customers</strong></p>
+<ul>
+<li><p>المقام عملاء جدد دافعون Unique، لا Leads ولا Orders. العميل الذي عاد بعد churn يعرض Reactivation CAC منفصلاً.</p></li>
+<li><p>التوقيت: Cohort حسب first_paid_at، مع Attribution window ثابتة. الإنفاق الإنتاجي الكبير يوزع بسياسة معتمدة أو يعرض منفصلاً.</p></li>
+<li><p>لا تقارن CAC قناة فيها عمولة/خصم بقناة لا تحمل هذه التكلفة إلا عبر Fully-loaded view.</p></li>
+<li><p>التقرير يعرض العدد والمبلغ مع النسبة؛ CAC المنخفض على 3 عملاء ليس دليلاً كافياً.</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>مثال<br />
+</strong>إنفاق اكتساب كامل 100,000 جنيه خلال شهر وجلب 50 عميلاً جديداً دافعاً: CAC = 2,000 جنيه. إذا كان هامش المساهمة الشهري للعميل 1,100 جنيه، فإن Payback ≈1.82 شهر قبل أثر Churn.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="customer-lifetime-value---ltv">2. Customer Lifetime Value - LTV</h2>
+<p><strong>Realized customer LTV = Cumulative contribution margin earned from that customer to date</strong></p>
+<p><strong>Cohort realized LTV at month n = Total cumulative contribution of cohort through month n / Customers acquired in cohort</strong></p>
+<p><strong>Simple modeled LTV = ARPA × Contribution Margin % / Monthly logo churn</strong></p>
+<p><strong>Discounted LTV = Sum[t=1..T] (Expected contribution_t × survival_probability_t) / (1 + monthly discount rate)^t</strong></p>
+<p>Contribution Margin هنا = الإيراد ناقص الطعام والتغليف والتوصيل ورسوم الدفع وخدمة متغيرة وRefunds. استخدام Gross Margin وحده يبالغ في قيمة عميل يحتاج توصيل ودعم مرتفعين.</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>مثال الحساسية<br />
+</strong>ARPA =4,565 جنيه، Contribution Margin =25%، Churn شهري =6.5%: Simple LTV ≈17,558 جنيه. لو Churn الحقيقي 10% يصبح LTV ≈11,413 فقط. لذلك يعرض النظام LTV تحت 3 سيناريوهات ولا يعتمد رقماً واحداً قبل نضج Cohorts.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="churn-rate">3. Churn Rate</h2>
+<p><strong>Monthly logo churn = Subscribers cancelled or expired during month / Active subscribers at start of month × 100</strong></p>
+<p><strong>Gross revenue churn = Lost recurring revenue from opening cohort / Opening recurring revenue × 100</strong></p>
+<p><strong>Voluntary churn = Customer cancellations / Opening active subscribers</strong></p>
+<p><strong>Involuntary churn = Failed-payment expiries / Opening active subscribers</strong></p>
+<ul>
+<li><p>Pause بتاريخ عودة لا يدخل Churn، لكنه يُعرض Pause rate وOverdue pause منفصلاً.</p></li>
+<li><p>Upgrade/Downgrade لا يغير logo churn لكنه يدخل revenue retention.</p></li>
+<li><p>العميل الذي ينتهي ويعود بعد أيام: الحدث Churn ثم Reactivation حسب السياسة؛ لا نمحو التاريخ لتجميل الرقم.</p></li>
+<li><p>حلل Churn حسب cohort/channel/plan/zone/first month/tenure/reason، لا الإجمالي فقط.</p></li>
+</ul>
+<h2 id="retention-rate">4. Retention Rate</h2>
+<p><strong>Logo retention = (Opening active subscribers - churned opening subscribers) / Opening active subscribers × 100</strong></p>
+<p><strong>Logo retention = 100% - Logo churn % [لنفس التعريف والفترة]</strong></p>
+<p><strong>Renewal rate = Eligible subscriptions renewed / Eligible subscriptions due for renewal × 100</strong></p>
+<p><strong>Net Revenue Retention = (Opening recurring revenue - churn - downgrades + upgrades) / Opening recurring revenue × 100</strong></p>
+<p>Renewal Rate ليست Retention بالضرورة: الاشتراك طويل المدة قد لا يكون Due هذا الشهر. NRR يشرح هل الإيراد من العملاء الحاليين يحافظ على نفسه بعد تغير الباقات.</p>
+<h2 id="gross-margin-وcontribution-margin-وpbtnet-margin">5. Gross Margin وContribution Margin وPBT/Net Margin</h2>
+<p><strong>Gross profit = Net revenue - COGS</strong></p>
+<p><strong>Gross margin % = Gross profit / Net revenue × 100</strong></p>
+<p><strong>Contribution margin = Net revenue - food - packaging - variable kitchen labor - delivery - payment fees - variable customer service - refunds</strong></p>
+<p><strong>Contribution margin % = Contribution margin / Net revenue × 100</strong></p>
+<p><strong>EBITDA = Revenue - operating expenses before interest, tax, depreciation and amortization</strong></p>
+<p><strong>PBT margin % = Profit before tax / Net revenue × 100</strong></p>
+<p><strong>Net margin % = Profit after tax / Net revenue × 100</strong></p>
+<ul>
+<li><p>يُثبت Finance Chart of Accounts: هل عمالة المطبخ المباشرة COGS أم Opex؟ الأهم الثبات والإفصاح، ثم Contribution مستقل للقرار.</p></li>
+<li><p>Net revenue بعد discounts/refunds/credits المتحققة والضرائب التي لا تعتبر إيراداً وفق السياسة المحاسبية.</p></li>
+<li><p>راتب CEO السوقي يظهر في Opex. عند التقييم تُعاد Normalization بصورة شفافة، لا بإخفاء تكلفة الإدارة.</p></li>
+<li><p>PBT 8%-10% قبل الضريبة لا تسمى Net Margin في تقرير المستثمر. استخدم المصطلح الصحيح لمنع فقد الثقة.</p></li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>مثال<br />
+</strong>إيراد صافٍ 900,000 جنيه وCOGS 612,000: Gross Profit =288,000 وGM=32%. إذا كانت المصروفات التشغيلية قبل الضريبة 207,000، فالربح قبل الضريبة 81,000 وPBT Margin=9%.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="delivery-sla">6. Delivery SLA</h2>
+<p><strong>Gross on-time delivery = Delivered within window / All successful deliveries × 100</strong></p>
+<p><strong>Adjusted on-time delivery = Eligible on-time deliveries / Eligible successful deliveries × 100</strong></p>
+<p><strong>First-attempt success = Delivered on first attempt / Delivery stops attempted × 100</strong></p>
+<p><strong>Timestamp completeness = Stops with all required events / Total stops × 100</strong></p>
+<p><strong>P90 last-mile = 90th percentile(delivered_at - dispatched_at)</strong></p>
+<p>يعرض CEO Gross وAdjusted معاً. الاستثناءات customer-caused أو force majeure لا تختفي؛ تظهر عدداً وقيمة. مثال: 920 توصيلاً في النافذة من 1,000 ناجح =92% Gross OTD.</p>
+<h2 id="مقاييس-إضافية-لا-غنى-عنها">7. مقاييس إضافية لا غنى عنها</h2>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 49%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المقياس</strong></th>
+<th><strong>المعادلة</strong></th>
+<th><strong>القرار</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ARPA</strong></td>
+<td>Recurring revenue / Average active subscribers</td>
+<td>التسعير والمزيج.</td>
+</tr>
+<tr class="even">
+<td><strong>AOV</strong></td>
+<td>Net order revenue / Paid orders</td>
+<td>لا يساوي ARPA.</td>
+</tr>
+<tr class="odd">
+<td><strong>Food cost %</strong></td>
+<td>Food ingredient cost / Net revenue</td>
+<td>حسب recipe/actual.</td>
+</tr>
+<tr class="even">
+<td><strong>Waste % cost</strong></td>
+<td>Waste cost / Food issued cost</td>
+<td>بسبب موحد.</td>
+</tr>
+<tr class="odd">
+<td><strong>First-pass yield</strong></td>
+<td>Units passed without rework / Units produced</td>
+<td>جودة وإنتاجية.</td>
+</tr>
+<tr class="even">
+<td><strong>Plan attainment</strong></td>
+<td>Produced complete units / Planned due units</td>
+<td>التخطيط.</td>
+</tr>
+<tr class="odd">
+<td><strong>Complaint rate</strong></td>
+<td>Valid complaint tickets / Delivered orders or meals</td>
+<td>ثبّت المقام.</td>
+</tr>
+<tr class="even">
+<td><strong>Refund rate</strong></td>
+<td>Refund amount / Net collected sales</td>
+<td>سبب/قناة/باقة.</td>
+</tr>
+<tr class="odd">
+<td><strong>Revenue per labor hour</strong></td>
+<td>Net revenue / Direct labor hours</td>
+<td>إنتاجية.</td>
+</tr>
+<tr class="even">
+<td><strong>Cost per drop</strong></td>
+<td>Total delivery cost / Successful drops</td>
+<td>منطقة/نافذة.</td>
+</tr>
+<tr class="odd">
+<td><strong>Inventory variance</strong></td>
+<td>Book stock - physical stock</td>
+<td>قيمة وكمية.</td>
+</tr>
+<tr class="even">
+<td><strong>Forecast accuracy</strong></td>
+<td>1 - |Actual-Forecast|/Actual</td>
+<td>مبيعات/طلب/نقد.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="شكل-الداشبورد-اليومية">8. شكل الداشبورد اليومية</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 40%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Tile</strong></th>
+<th><strong>ما يظهر</strong></th>
+<th><strong>Alert</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Cash collected yesterday</strong></td>
+<td>Actual / expected / variance</td>
+<td>Red إذا فرق غير مفسر &gt;0.5% أو &gt;5,000 ج</td>
+</tr>
+<tr class="even">
+<td><strong>Sales</strong></td>
+<td>Orders، new paid، MRR، discounts</td>
+<td>Red إذا &lt;90% من pace الأسبوعي</td>
+</tr>
+<tr class="odd">
+<td><strong>Renewals</strong></td>
+<td>Due D-7، contacted، paid، at risk</td>
+<td>Red إذا high-value بلا action</td>
+</tr>
+<tr class="even">
+<td><strong>Production</strong></td>
+<td>Plan، complete، shortage، waste</td>
+<td>Red إذا attainment &lt;98% أو QA P1</td>
+</tr>
+<tr class="odd">
+<td><strong>Delivery</strong></td>
+<td>Ready، dispatched، delivered، OTD forecast</td>
+<td>Red إذا breach risk &gt;5%</td>
+</tr>
+<tr class="even">
+<td><strong>Customer</strong></td>
+<td>Open P1/P2، aging، refunds</td>
+<td>Red إذا P1 مفتوح أو reopen</td>
+</tr>
+<tr class="odd">
+<td><strong>Capacity</strong></td>
+<td>Today/Thu peak utilization</td>
+<td>Red &gt;90%؛ Amber &gt;85%</td>
+</tr>
+<tr class="even">
+<td><strong>System</strong></td>
+<td>Jobs failed، sync backlog، data completeness</td>
+<td>Red financial/delivery job failed</td>
+</tr>
+</tbody>
+</table>
+<p>الترتيب أعلى الشاشة: Cash | Sales | Renewal | Production | Delivery | Customer | Capacity | System. تحتها قائمة واحدة فقط بعنوان Decisions Needed Today، مرتبة بالأثر المالي/العميل/السلامة، لا feed طويل.</p>
+<h2 id="الداشبورد-الأسبوعية---l10-scorecard">9. الداشبورد الأسبوعية - L10 Scorecard</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>القسم</strong></th>
+<th><strong>المقاييس</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Growth</strong></td>
+<td>Leads، first-paid، conversion، CAC by channel، pace vs target</td>
+</tr>
+<tr class="even">
+<td><strong>Retention</strong></td>
+<td>Opening، churn، renewal due/paid، pause، reactivated، at-risk value</td>
+</tr>
+<tr class="odd">
+<td><strong>Economics</strong></td>
+<td>Revenue، contribution، GM، discount، refund، marketing contribution</td>
+</tr>
+<tr class="even">
+<td><strong>Operations</strong></td>
+<td>Plan attainment، yield، waste، labor hours، capacity، stockouts</td>
+</tr>
+<tr class="odd">
+<td><strong>Logistics</strong></td>
+<td>OTD gross/adjusted، P90، failed، cost/drop، cash variance</td>
+</tr>
+<tr class="even">
+<td><strong>People/System</strong></td>
+<td>Absence، training/SOP audit، escalations، bugs، adoption/data quality</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>الصفوف هي الأسابيع، الأعمدة المقاييس، وكل خلية Target/Actual/Status. لا رسوم بلا baseline.</p></li>
+<li><p>كل رقم Red ينزل آلياً إلى Issues List إذا استمر أسبوعين أو تجاوز حد خطر واحداً.</p></li>
+<li><p>كل Owner يحدّث رقمه قبل L10 بساعتين؛ الاجتماع لا يُستهلك في البحث عن رقم.</p></li>
+</ul>
+<h2 id="الداشبورد-الشهرية---board-pack">10. الداشبورد الشهرية - Board Pack</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>صفحة</strong></th>
+<th><strong>المحتوى</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Executive page</strong></td>
+<td>هدف/فعلي/Forecast، 5 wins، 5 risks، 5 decisions.</td>
+</tr>
+<tr class="even">
+<td><strong>2. P&amp;L</strong></td>
+<td>Actual vs Budget vs prior month/year؛ GM، EBITDA، PBT، normalized view.</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Revenue quality</strong></td>
+<td>MRR/ARR qualified، A-la-carte، corporate، discount/refund، concentration.</td>
+</tr>
+<tr class="even">
+<td><strong>4. Cohorts</strong></td>
+<td>Retention and contribution by acquisition month/channel/plan.</td>
+</tr>
+<tr class="odd">
+<td><strong>5. CAC/LTV</strong></td>
+<td>Fully-loaded، media، payback، maturity، sensitivity.</td>
+</tr>
+<tr class="even">
+<td><strong>6. Unit economics</strong></td>
+<td>Plan/meal/zone/channel contribution؛ winners/losers.</td>
+</tr>
+<tr class="odd">
+<td><strong>7. Operations</strong></td>
+<td>Capacity، yield، waste، QA، procurement/stock variance.</td>
+</tr>
+<tr class="even">
+<td><strong>8. Delivery/CX</strong></td>
+<td>SLA tails، cost/drop، failure، complaints/root causes.</td>
+</tr>
+<tr class="odd">
+<td><strong>9. Cash</strong></td>
+<td>13-week forecast، working capital، debt، tax، capex.</td>
+</tr>
+<tr class="even">
+<td><strong>10. People/Product</strong></td>
+<td>Org gaps، productivity، escalations، ERP adoption، security incidents.</td>
+</tr>
+<tr class="odd">
+<td><strong>11. Rocks</strong></td>
+<td>Status، blockers، next quarter issues.</td>
+</tr>
+<tr class="even">
+<td><strong>12. Appendix</strong></td>
+<td>Definitions، reconciliations، data quality، detailed tables.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="metric-definition-card---نموذج-إلزامي">Metric Definition Card - نموذج إلزامي</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الحقل</strong></th>
+<th><strong>مثال</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Name</strong></td>
+<td>Monthly logo churn</td>
+</tr>
+<tr class="even">
+<td><strong>Business question</strong></td>
+<td>كم من قاعدة بداية الشهر فقدنا؟</td>
+</tr>
+<tr class="odd">
+<td><strong>Formula</strong></td>
+<td>Churned opening subscribers / opening active subscribers</td>
+</tr>
+<tr class="even">
+<td><strong>Inclusions</strong></td>
+<td>Cancelled/expired from opening cohort within month</td>
+</tr>
+<tr class="odd">
+<td><strong>Exclusions</strong></td>
+<td>New customers، pause with valid return، test/internal accounts</td>
+</tr>
+<tr class="even">
+<td><strong>Owner</strong></td>
+<td>Retention Lead</td>
+</tr>
+<tr class="odd">
+<td><strong>Data steward</strong></td>
+<td>Product/Data</td>
+</tr>
+<tr class="even">
+<td><strong>Source</strong></td>
+<td>subscriptions + subscription_events</td>
+</tr>
+<tr class="odd">
+<td><strong>Refresh</strong></td>
+<td>Daily provisional; monthly locked M+5</td>
+</tr>
+<tr class="even">
+<td><strong>Target/alerts</strong></td>
+<td>Target trajectory; red if &gt;plan by 1.5pp</td>
+</tr>
+<tr class="odd">
+<td><strong>Version</strong></td>
+<td>v1.0 effective 1 Sep 2026</td>
+</tr>
+</tbody>
+</table>
+<h1 id="الجزء-السابع-خارطة-التقييم-2-مليون-دولار-والتوسعالتخارج">الجزء السابع: خارطة التقييم 2 مليون دولار والتوسع/التخارج</h1>
+<h2 id="ميكانيكا-التقييم-من-enterprise-value-إلى-ما-يستلمه-المالك">1. ميكانيكا التقييم: من Enterprise Value إلى ما يستلمه المالك</h2>
+<p><strong>Enterprise Value (EV) = Normalized EBITDA × Selected EV/EBITDA multiple</strong></p>
+<p><strong>Enterprise Value (EV) = Qualified revenue or ARR × Selected EV/Revenue multiple</strong></p>
+<p><strong>Equity Value = EV + Cash - Debt ± Normalized working-capital adjustment - debt-like items</strong></p>
+<p><strong>Seller proceeds = Equity Value × stake sold - transaction costs - taxes - escrow/holdback ± earnout</strong></p>
+<p>هدف 100 مليون يجب تحديده: هل هو EV أم Equity Value أم قيمة 100% من الأسهم أم مبلغ Cash at Close؟ المستثمر يتحدث غالباً عن EV، بينما المؤسس يفكر في المبلغ الذي سيدخل حسابه. الدين ورأس المال العامل والـEarnout قد يصنعون فارقاً كبيراً.</p>
+<h3 id="normalized-ebitda-وراتب-المؤسس">Normalized EBITDA وراتب المؤسس</h3>
+<p><strong>Normalized EBITDA = Reported EBITDA + genuine one-offs + owner personal/discretionary costs - missing market-rate management costs ± accounting normalization</strong></p>
+<ul>
+<li><p>تثبيت راتب هشام كـCEO خطوة صحيحة؛ يجعل ربح الشركة بعد تكلفة الإدارة أكثر صدقاً.</p></li>
+<li><p>إذا راتبه أقل من راتب مدير بديل يحتاجه المشتري، سيخصم المشتري الفرق من EBITDA. وإذا أعلى بلا سبب قد يضيف فرقاً مع توثيق.</p></li>
+<li><p>لا تعدّ الإعلان المتكرر أو الرواتب الطبيعية one-off. الاستثناء المتكرر جزء من التشغيل.</p></li>
+<li><p>Lease liabilities، supplier arrears، unpaid tax، customer credits، end-of-service، وdeferred revenue قد تعامل كـdebt-like حسب الصفقة.</p></li>
+</ul>
+<h2 id="حسبة-هدف-100-مليون-جنيه">2. حسبة هدف 100 مليون جنيه</h2>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 13%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>السيناريو</strong></th>
+<th><strong>EV م.ج</strong></th>
+<th><strong>التفسير</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ARR 25m × 1.0x</strong></td>
+<td>25</td>
+<td>نموذج تشغيلي/إيراد أقل جودة</td>
+</tr>
+<tr class="even">
+<td><strong>ARR 25m × 2.0x</strong></td>
+<td>50</td>
+<td>علامة قوية ونمو واحتفاظ وتقنية، لكنه ما زال طموحاً لشركة طعام خاصة</td>
+</tr>
+<tr class="odd">
+<td><strong>ARR 25m × 4.0x</strong></td>
+<td>100</td>
+<td>يتطلب قصة Platform/tech-like نادرة؛ لا يُفترض تلقائياً</td>
+</tr>
+<tr class="even">
+<td><strong>EBITDA 2.5m × 8x</strong></td>
+<td>20</td>
+<td>25m revenue بهامش EBITDA 10%</td>
+</tr>
+<tr class="odd">
+<td><strong>EBITDA 3.75m × 10x</strong></td>
+<td>37.5</td>
+<td>25m revenue بهامش 15% ومضاعف قوي</td>
+</tr>
+<tr class="even">
+<td><strong>EBITDA 10m × 10x</strong></td>
+<td>100</td>
+<td>يحتاج EBITDA 40% عند revenue 25m؛ غير واقعي لمطبخ وجبات</td>
+</tr>
+<tr class="odd">
+<td><strong>Revenue 60m × 15% EBITDA × 10x</strong></td>
+<td>90</td>
+<td>مسار تشغيلي أقرب؛ 9m EBITDA</td>
+</tr>
+<tr class="even">
+<td><strong>Revenue 60m × 15% × 10x + 11% strategic premium</strong></td>
+<td>≈100</td>
+<td>لا توجد علاوة بلا Synergy ومنافسة بين مشترين</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>القرار المالي<br />
+</strong>الخطة الرسمية يجب ألا تبني Exit على 4x ARR وحده. المسار الأقوى بحلول 2029: إيراد 45-60 مليون، EBITDA 12%-15%، أكثر من 70% إيراد متكرر مؤهل، نمو موثق، إدارة مستقلة، وSaudi proof. عندها يصبح نطاق 75-100+ مليون قابلاً للنقاش مع مشتري استراتيجي، لا مضموناً.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h3 id="مضاعفات-التخطيط-ليست-عرضا-سوقيا">مضاعفات التخطيط ليست عرضاً سوقياً</h3>
+<p>لأغراض السيناريو نستخدم 6x-10x Normalized EBITDA و0.8x-2.0x Revenue كحزام داخلي لشركة خاصة صغيرة/متوسطة، مع حالة 4x كاختبار Tech-like فقط. بيانات الشركات العامة الأمريكية المنشورة في يناير 2026 تُظهر مضاعفات أعلى لبعض قطاعات المطاعم/الغذاء، لكنها لا تصلح مباشرة لشركة مصرية خاصة بسبب الحجم والسيولة والمخاطر والحوكمة. المقارنة الحقيقية تحتاج معاملات إقليمية خاصة ومشترين محتملين في وقت الصفقة.</p>
+<h2 id="خارطة-2027-2029">3. خارطة 2027-2029</h2>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 55%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>السنة</strong></th>
+<th><strong>بوابات الرقم</strong></th>
+<th><strong>قصة المستثمر</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>2027 - Prove</strong></td>
+<td>Exit ARR 25m؛ 400-500 active؛ clean cohorts؛ ERP core؛ GM 35%±؛ PBT 10%±؛ founder absence 30 days</td>
+<td>الشركة قابلة للقياس والتشغيل دون مؤسس يومي</td>
+</tr>
+<tr class="even">
+<td><strong>2028 - Replicate</strong></td>
+<td>Revenue 32-42m؛ EBITDA 10%-13%؛ ثاني موقع/خط قدرة أو Saudi pilot؛ management bench؛ audited/Reviewed statements</td>
+<td>إثبات أن النظام يتكرر جغرافياً ولا ينكسر</td>
+</tr>
+<tr class="odd">
+<td><strong>2029 - Harvest</strong></td>
+<td>Revenue 45-60m؛ EBITDA 12%-15%؛ 70%+ recurring-qualified؛ Saudi proof/partner؛ buyer pipeline</td>
+<td>Process تنافسي أو شريك استراتيجي بسعر وشروط مناسبين</td>
+</tr>
+</tbody>
+</table>
+<h3 id="value-driver-scorecard-للمشتري">Value Driver Scorecard للمشتري</h3>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 42%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المحرك</strong></th>
+<th><strong>ما يراه المشتري</strong></th>
+<th><strong>دليل إيكو</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Financial performance</strong></td>
+<td>نمو شهري/سنوي، EBITDA/PBT، cash conversion، forecast accuracy</td>
+<td>24-36 شهر بيانات قابلة للمراجعة</td>
+</tr>
+<tr class="even">
+<td><strong>Growth potential</strong></td>
+<td>مصر + Saudi playbook + channel scalability</td>
+<td>Pilot economics لا عرض PowerPoint فقط</td>
+</tr>
+<tr class="odd">
+<td><strong>Recurring revenue</strong></td>
+<td>ARR definition، renewals، cohorts، deferred revenue</td>
+<td>70%+ مؤهل وشفاف</td>
+</tr>
+<tr class="even">
+<td><strong>Customer diversity</strong></td>
+<td>لا عميل/قناة/منطقة مهيمنة</td>
+<td>Top customer &lt;10%; top channel &lt;35% كهدف</td>
+</tr>
+<tr class="odd">
+<td><strong>Owner independence</strong></td>
+<td>Org، SOP، approvals، absence tests</td>
+<td>30 يوماً بلا تدهور جوهري</td>
+</tr>
+<tr class="even">
+<td><strong>Competitive moat</strong></td>
+<td>Brand، direct data، recipes/yields، tech/workflows، partnerships</td>
+<td>IP وevidence وadoption</td>
+</tr>
+<tr class="odd">
+<td><strong>Operational scalability</strong></td>
+<td>Capacity model، QA، supplier alternatives، unit economics</td>
+<td>Second-site/pilot repeatability</td>
+</tr>
+<tr class="even">
+<td><strong>Risk quality</strong></td>
+<td>Tax/legal/data/food safety/employment/insurance</td>
+<td>لا مفاجآت في diligence</td>
+</tr>
+</tbody>
+</table>
+<h2 id="حساب-tam-sam-som-لمصر-والسعودية">4. حساب TAM / SAM / SOM لمصر والسعودية</h2>
+<p>لا تستخدم تقرير Market Size جاهز ثم تضرب نسبة عشوائية. النموذج المناسب لإيكو Bottom-up من عدد الأشخاص/الأسر القابلة للخدمة، معدل تبني حقيقي، والإنفاق السنوي. الأرقام التوضيحية التالية افتراضات لا حقائق سوقية، ويجب استبدالها ببيانات CAPMAS/GASTAT وMeta/Google reach وبحث أسعار ومقابلات.</p>
+<p><strong>TAM = Target customers in total chosen market × Category adoption rate × Annual spend per active customer</strong></p>
+<p><strong>SAM = Target customers reachable under product/geography/price constraints × Adoption × Annual spend</strong></p>
+<p><strong>SOM = Capacity-constrained active customers achievable in 3 years × ARPA × 12</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 33%" />
+<col style="width: 17%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المستوى</strong></th>
+<th><strong>المعادلة</strong></th>
+<th><strong>النتيجة</strong></th>
+<th><strong>ملاحظة</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>مصر - Illustrative TAM</strong></td>
+<td>1,000,000 target adults × 3% adoption × 48,000 EGP/year</td>
+<td>1.44bn EGP</td>
+<td>افتراض Greater Cairo premium/fitness/health cohort</td>
+</tr>
+<tr class="even">
+<td><strong>مصر - Illustrative SAM</strong></td>
+<td>300,000 reachable adults × 3% × 48,000</td>
+<td>432m EGP</td>
+<td>المناطق والنوافذ القابلة للخدمة اقتصادياً</td>
+</tr>
+<tr class="odd">
+<td><strong>مصر - SOM 3 years</strong></td>
+<td>500 active × 4,600 EGP/month ×12</td>
+<td>27.6m EGP</td>
+<td>مقيد بالسعة؛ قريب من هدف ARR</td>
+</tr>
+<tr class="even">
+<td><strong>السعودية - Illustrative TAM</strong></td>
+<td>1,200,000 target adults ×2% ×1,200 SAR/month ×12</td>
+<td>345.6m SAR</td>
+<td>افتراض Riyadh+Jeddah، يحتاج تحقق</td>
+</tr>
+<tr class="odd">
+<td><strong>السعودية - Illustrative SAM</strong></td>
+<td>500,000 reachable ×2% ×14,400 SAR/year</td>
+<td>144m SAR</td>
+<td>مدينة/مناطق/سعر/تشغيل محدد</td>
+</tr>
+<tr class="even">
+<td><strong>السعودية - SOM pilot scale</strong></td>
+<td>1,000 active ×1,200 SAR/month ×12</td>
+<td>14.4m SAR</td>
+<td>لا يبدأ بهذا الحجم؛ نهاية 3 سنوات افتراضية</td>
+</tr>
+</tbody>
+</table>
+<h3 id="خطة-تحقق-السوق-خلال-8-أسابيع">خطة تحقق السوق خلال 8 أسابيع</h3>
+<ul>
+<li><p>حدد ICPs: موظفون/أصحاب أعمال، Fitness، weight-management، corporate teams، medical-adjacent بلا ادعاءات طبية.</p></li>
+<li><p>احصل على عدد الأسر/البالغين والدخل/العمر حسب المناطق من مصدر رسمي حديث؛ لا تستخدم إجمالي سكان الدولة كمقام قابل للشراء.</p></li>
+<li><p>استخرج حجم الوصول الرقمي وتقاطع الاهتمامات، لكن صححه لأن ad reach لا يساوي أشخاصاً فريدين أو مشترين.</p></li>
+<li><p>30 مقابلة عميقة + 300 survey موثقة + landing price tests + 3 عروض فعلية. willingness-to-pay من دفع/Deposit أفضل من سؤال رأي.</p></li>
+<li><p>في السعودية: تحليل كل مدينة منفصل؛ منافسون وأسعار وتوصيل وتراخيص وضريبة ومطبخ سحابي وشريك محلي/تشغيلي.</p></li>
+<li><p>اربط SOM بالسعة والنقد: عدد الوجبات/اليوم، kitchen slots، riders، working capital، CAC budget؛ لا بنسبة سوق عامة.</p></li>
+</ul>
+<p>GASTAT قدّرت سكان المملكة بـ35.3 مليون منتصف 2024؛ هذا سياق سكاني فقط، وليس TAM لإيكو. السوق الحقيقي يضيق حسب المدينة والدخل والسلوك والسعة.</p>
+<h2 id="متى-نفتح-الحديث-مع-المستثمرين">5. متى نفتح الحديث مع المستثمرين؟</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 23%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الفترة</strong></th>
+<th><strong>نوع الحديث</strong></th>
+<th><strong>بوابة الدخول</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>الآن-Q1 2027</strong></td>
+<td>لا Formal process</td>
+<td>ابنِ البيانات والهيكل؛ يمكن بناء قائمة علاقات ومستشارين دون طلب تقييم.</td>
+</tr>
+<tr class="even">
+<td><strong>Q2-Q3 2027</strong></td>
+<td>Readiness conversations</td>
+<td>بعد 6 أشهر close/cohorts: feedback من 5-8 مستثمرين/استراتيجيين بلا ضغط بيع.</td>
+</tr>
+<tr class="odd">
+<td><strong>Q4 2027-Q1 2028</strong></td>
+<td>Soft market test</td>
+<td>إذا MRR trajectory، retention، margins، management صحيحة؛ teaser سري وNDA انتقائي.</td>
+</tr>
+<tr class="even">
+<td><strong>2028</strong></td>
+<td>Capital/strategic pilot</td>
+<td>تمويل محدد milestone أو شريك سعودي إذا كل جنيه له use-of-funds وreturn.</td>
+</tr>
+<tr class="odd">
+<td><strong>2029</strong></td>
+<td>Formal competitive process</td>
+<td>12-24 شهراً clean data، audited/reviewed financials، buyer synergies، management ready.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>لا تفتح مزاداً مبكراً<br />
+</strong>الحديث الرسمي قبل إصلاح التناقضات يثبت Anchor منخفضاً ويكشف ضعف الشركة للسوق. الأفضل تجهيز Buyer Map مبكراً، لكن لا توزع أرقاماً غير متطابقة أو Data Room ناقصة. كل نسخة معلومات لها رقم وتاريخ وNDA وسياسة وصول.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h2 id="ma-data-room---هيكل-الملفات">6. M&amp;A Data Room - هيكل الملفات</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المجلد</strong></th>
+<th><strong>المحتوى</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>00 Index &amp; Process</strong></td>
+<td>Index، owner، last update، NDA، Q&amp;A log، disclosure rules.</td>
+</tr>
+<tr class="even">
+<td><strong>01 Corporate</strong></td>
+<td>سجل/عقد/نظام، مساهمون وcap table، قرارات، توكيلات، فروع.</td>
+</tr>
+<tr class="odd">
+<td><strong>02 Financial</strong></td>
+<td>36 شهر P&amp;L/BS/CF، trial balance، bank، monthly management accounts، budget/forecast، normalized EBITDA.</td>
+</tr>
+<tr class="even">
+<td><strong>03 Tax</strong></td>
+<td>إقرارات، VAT، payroll، eInvoice/eReceipt، مراسلات وفحوص، موقف ضريبي.</td>
+</tr>
+<tr class="odd">
+<td><strong>04 Commercial</strong></td>
+<td>Revenue by customer/channel/plan/zone، ARR bridge، churn/retention cohorts، CAC/LTV، contracts.</td>
+</tr>
+<tr class="even">
+<td><strong>05 Operations</strong></td>
+<td>SOPs، capacity، suppliers، production/yield/waste، QA/food safety، delivery SLA.</td>
+</tr>
+<tr class="odd">
+<td><strong>06 HR</strong></td>
+<td>Org، contracts، payroll، benefits، turnover، key-person، incentives، disputes.</td>
+</tr>
+<tr class="even">
+<td><strong>07 Legal &amp; Compliance</strong></td>
+<td>Licenses، food/health permits، litigation، insurance، consumer policies، data protection.</td>
+</tr>
+<tr class="odd">
+<td><strong>08 Technology</strong></td>
+<td>Architecture، repos/IP، vendors، licenses، security، backups، incidents، roadmap، penetration results.</td>
+</tr>
+<tr class="even">
+<td><strong>09 IP &amp; Brand</strong></td>
+<td>Trademarks، domains، creative rights، recipes/process IP، influencer/content rights.</td>
+</tr>
+<tr class="odd">
+<td><strong>10 Assets &amp; Leases</strong></td>
+<td>Kitchen lease، equipment register، vehicles، maintenance، liens، capex.</td>
+</tr>
+<tr class="even">
+<td><strong>11 Saudi/Expansion</strong></td>
+<td>Market proof، partner/JV drafts، unit economics، licenses/tax/privacy plan، pilot results.</td>
+</tr>
+<tr class="odd">
+<td><strong>12 ESG/Risk</strong></td>
+<td>Waste، food sourcing، health/safety incidents، business continuity، risk register.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>كل ملف YYYY-MM-DD_Name_v#. لا صور واتساب كدليل أساسي؛ استخدم PDF/Excel أصلي مع source reconciliation.</p></li>
+<li><p>Finance Controller يملك Data Room Index؛ Legal يراجع privilege/confidentiality؛ Product يملك access logs والتقنية.</p></li>
+<li><p>Red Flag Register داخلي قبل المستثمر: المشكلة، الأثر، العلاج، المالك، الموعد، الدليل. لا تنتظر أن يكتشفها المشتري.</p></li>
+<li><p>Vendor due diligence/QoE قبل البيع بـ6-9 أشهر إذا الحجم يسمح؛ يختبر جودة الأرباح، working capital، والسياسات.</p></li>
+</ul>
+<h2 id="بناء-brand-equity-وproprietary-tech">7. بناء Brand Equity وProprietary Tech</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الأصل</strong></th>
+<th><strong>ما يجب بناؤه</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trademark &amp; identity</strong></td>
+<td>تسجيل ECO Healthy والأسماء الأساسية في الفئات المناسبة مصر؛ مسح/تسجيل السعودية قبل الإطلاق؛ ملكية domains/social.</td>
+</tr>
+<tr class="even">
+<td><strong>Owned audience</strong></td>
+<td>CRM consented، email/WhatsApp opt-in، referral base، direct traffic؛ لا اعتماد كامل على Meta.</td>
+</tr>
+<tr class="odd">
+<td><strong>Customer data asset</strong></td>
+<td>Clean IDs، cohorts، preferences، meal outcomes/ratings، route/quality data مع consent/governance.</td>
+</tr>
+<tr class="even">
+<td><strong>Proprietary operating system</strong></td>
+<td>Recipe/Yield/QA/S&amp;OP/route/retention playbooks codified and versioned.</td>
+</tr>
+<tr class="odd">
+<td><strong>Software/IP</strong></td>
+<td>Company-owned source، IP assignment، architecture، event schema، prediction pipeline، documentation.</td>
+</tr>
+<tr class="even">
+<td><strong>Proof</strong></td>
+<td>Case studies، retention، NPS/CSAT، before/after operational metrics دون ادعاءات طبية غير موثقة.</td>
+</tr>
+<tr class="odd">
+<td><strong>Partnership network</strong></td>
+<td>Gyms/coaches/corporates/suppliers/3PL agreements transferable and not founder-only.</td>
+</tr>
+<tr class="even">
+<td><strong>Management brand</strong></td>
+<td>الشركة معروفة بفريق ونظام، لا بهشام وحده؛ spokesperson bench وleadership visibility.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="بوابات-التوسع-السعودي">8. بوابات التوسع السعودي</h2>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>البوابة</strong></th>
+<th><strong>لا تعبر إلا إذا</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Gate 1 - مصر مستقرة</strong></td>
+<td>30 يوماً غياب مؤسس؛ OTD &gt;=95%; monthly close M+5; contribution positive by core plan.</td>
+</tr>
+<tr class="even">
+<td><strong>Gate 2 - Market proof</strong></td>
+<td>مدينة واحدة؛ 30 interviews؛ paid pilot/LOIs؛ price/CAC/delivery unit model.</td>
+</tr>
+<tr class="odd">
+<td><strong>Gate 3 - Legal/tax/data</strong></td>
+<td>Entity/JV/licensing، food permits، labor، VAT/ZATCA، PDPL/data transfer reviewed by Saudi counsel.</td>
+</tr>
+<tr class="even">
+<td><strong>Gate 4 - Operating model</strong></td>
+<td>Kitchen partner/own، suppliers، QA، cold chain، routes، local manager، ERP localization.</td>
+</tr>
+<tr class="odd">
+<td><strong>Gate 5 - Pilot</strong></td>
+<td>Riyadh first recommended unless evidence favors Jeddah؛ 50-100 customers؛ 12 weeks؛ kill/scale rules.</td>
+</tr>
+<tr class="even">
+<td><strong>Gate 6 - Scale</strong></td>
+<td>Cohort retention، contribution after delivery، complaints، SLA، cash cycle beat thresholds for 8 weeks.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>مبدأ التوسع<br />
+</strong>لا تفتح الرياض وجدة معاً. اختبر مدينة واحدة بنموذج صغير، وافصل P&amp;L وCAC/LTV وSLA الخاص بها. التقنية المشتركة لا تعني تشغيلين متطابقين؛ الضرائب والخصوصية والفوترة واللوجستيات المحلية متطلبات مستقلة.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<h1 id="الملاحق-التنفيذية">الملاحق التنفيذية</h1>
+<h2 id="الملحق-a-كتالوج-30-sop-يجب-امتلاكها">الملحق A: كتالوج 30 SOP يجب امتلاكها</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 48%" />
+<col style="width: 20%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الكود</strong></th>
+<th><strong>الإجراء</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>KPI</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SAL-01</strong></td>
+<td>Lead intake &amp; source capture</td>
+<td>Sales</td>
+<td>سرعة/اكتمال بيانات</td>
+</tr>
+<tr class="even">
+<td><strong>SAL-02</strong></td>
+<td>Qualification &amp; needs discovery</td>
+<td>Sales</td>
+<td>Qualified rate</td>
+</tr>
+<tr class="odd">
+<td><strong>SAL-03</strong></td>
+<td>Quote/plan/price/discount</td>
+<td>Sales</td>
+<td>Margin/discount leakage</td>
+</tr>
+<tr class="even">
+<td><strong>SAL-04</strong></td>
+<td>Payment and order activation</td>
+<td>Sales/Finance</td>
+<td>Failed activation</td>
+</tr>
+<tr class="odd">
+<td><strong>SAL-05</strong></td>
+<td>Sales-to-onboarding handover</td>
+<td>Sales/CX</td>
+<td>Missing fields</td>
+</tr>
+<tr class="even">
+<td><strong>RET-01</strong></td>
+<td>Welcome and expectation setup</td>
+<td>Retention</td>
+<td>Day-3 issue rate</td>
+</tr>
+<tr class="odd">
+<td><strong>RET-02</strong></td>
+<td>Renewal D-7/D-3/D-1</td>
+<td>Retention</td>
+<td>Renewal rate</td>
+</tr>
+<tr class="even">
+<td><strong>RET-03</strong></td>
+<td>Pause/resume</td>
+<td>Retention</td>
+<td>Policy compliance</td>
+</tr>
+<tr class="odd">
+<td><strong>RET-04</strong></td>
+<td>Cancellation/save/win-back</td>
+<td>Retention</td>
+<td>Save/reactivation</td>
+</tr>
+<tr class="even">
+<td><strong>RET-05</strong></td>
+<td>Complaint/refund/compensation</td>
+<td>CX/Finance</td>
+<td>Resolution/recurrence</td>
+</tr>
+<tr class="odd">
+<td><strong>KIT-01</strong></td>
+<td>Demand freeze &amp; production plan</td>
+<td>داليا</td>
+<td>Plan accuracy</td>
+</tr>
+<tr class="even">
+<td><strong>KIT-02</strong></td>
+<td>Purchase requisition/PO</td>
+<td>Procurement</td>
+<td>Price/stockout</td>
+</tr>
+<tr class="odd">
+<td><strong>KIT-03</strong></td>
+<td>Goods receipt/QA/lot/expiry</td>
+<td>Store/QA</td>
+<td>Reject/expiry</td>
+</tr>
+<tr class="even">
+<td><strong>KIT-04</strong></td>
+<td>Storage &amp; FEFO</td>
+<td>Store</td>
+<td>Stock variance</td>
+</tr>
+<tr class="odd">
+<td><strong>KIT-05</strong></td>
+<td>Prep/cook recipe execution</td>
+<td>Kitchen</td>
+<td>Yield/temperature</td>
+</tr>
+<tr class="even">
+<td><strong>KIT-06</strong></td>
+<td>Portioning after cooking</td>
+<td>Kitchen/QA</td>
+<td>Weight compliance</td>
+</tr>
+<tr class="odd">
+<td><strong>KIT-07</strong></td>
+<td>Pack/label/allergen check</td>
+<td>Packing/QA</td>
+<td>Pack errors</td>
+</tr>
+<tr class="even">
+<td><strong>KIT-08</strong></td>
+<td>Waste/rework recording</td>
+<td>Kitchen</td>
+<td>Waste cost</td>
+</tr>
+<tr class="odd">
+<td><strong>KIT-09</strong></td>
+<td>Cleaning/sanitation close</td>
+<td>QA</td>
+<td>Audit score</td>
+</tr>
+<tr class="even">
+<td><strong>KIT-10</strong></td>
+<td>Recall/food safety incident</td>
+<td>داليا/QA</td>
+<td>Containment time</td>
+</tr>
+<tr class="odd">
+<td><strong>LOG-01</strong></td>
+<td>Route planning/slot capacity</td>
+<td>Logistics</td>
+<td>Utilization/cost</td>
+</tr>
+<tr class="even">
+<td><strong>LOG-02</strong></td>
+<td>Kitchen-to-rider handover</td>
+<td>Dispatch</td>
+<td>Missing/late-ready</td>
+</tr>
+<tr class="odd">
+<td><strong>LOG-03</strong></td>
+<td>Offline delivery/POD</td>
+<td>Rider</td>
+<td>Timestamp/POD</td>
+</tr>
+<tr class="even">
+<td><strong>LOG-04</strong></td>
+<td>Failed delivery/retry</td>
+<td>Logistics/CX</td>
+<td>First-attempt</td>
+</tr>
+<tr class="odd">
+<td><strong>LOG-05</strong></td>
+<td>Cash/returns handover</td>
+<td>Logistics/Finance</td>
+<td>Variance</td>
+</tr>
+<tr class="even">
+<td><strong>FIN-01</strong></td>
+<td>Daily sales/payment reconciliation</td>
+<td>Finance</td>
+<td>Unreconciled</td>
+</tr>
+<tr class="odd">
+<td><strong>FIN-02</strong></td>
+<td>Refund/credit note</td>
+<td>Finance</td>
+<td>Audit/settlement</td>
+</tr>
+<tr class="even">
+<td><strong>FIN-03</strong></td>
+<td>Supplier payment maker-checker</td>
+<td>Finance</td>
+<td>Control exceptions</td>
+</tr>
+<tr class="odd">
+<td><strong>FIN-04</strong></td>
+<td>Inventory count/variance</td>
+<td>Finance/Ops</td>
+<td>Variance</td>
+</tr>
+<tr class="even">
+<td><strong>FIN-05</strong></td>
+<td>Month close and board pack</td>
+<td>Controller</td>
+<td>Close days/accuracy</td>
+</tr>
+</tbody>
+</table>
+<h2 id="الملحق-b-قالب-sop-قابل-للنسخ">الملحق B: قالب SOP قابل للنسخ</h2>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>الحقل</strong></th>
+<th><strong>ما يكتب</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Document ID</strong></td>
+<td>[DEPT]-[PROCESS]-[###] | Version | Effective date</td>
+</tr>
+<tr class="even">
+<td><strong>Purpose</strong></td>
+<td>النتيجة التي يضمنها الإجراء والمشكلة التي يمنعها.</td>
+</tr>
+<tr class="odd">
+<td><strong>Scope/Trigger</strong></td>
+<td>متى يبدأ؟ ما الحالات المشمولة/المستبعدة؟</td>
+</tr>
+<tr class="even">
+<td><strong>Accountable/Responsible/Backup</strong></td>
+<td>مالك واحد نهائي + منفذون + بديل مدرب.</td>
+</tr>
+<tr class="odd">
+<td><strong>Inputs/Systems</strong></td>
+<td>بيانات، خامات، أدوات، صلاحيات، نماذج.</td>
+</tr>
+<tr class="even">
+<td><strong>Procedure</strong></td>
+<td>خطوات مرقمة بفعل واضح، زمن، نقطة إثبات.</td>
+</tr>
+<tr class="odd">
+<td><strong>Decision rules</strong></td>
+<td>If/Then وحدود مالية/جودة/زمن.</td>
+</tr>
+<tr class="even">
+<td><strong>Controls</strong></td>
+<td>Maker-checker، QA، وزن/حرارة، reconciliation، access.</td>
+</tr>
+<tr class="odd">
+<td><strong>Exceptions/Escalation</strong></td>
+<td>متى يتوقف العمل؟ من يُخطر؟ Severity.</td>
+</tr>
+<tr class="even">
+<td><strong>Outputs/Evidence</strong></td>
+<td>ID، سجل، توقيع، صورة، تقرير، SLA timestamp.</td>
+</tr>
+<tr class="odd">
+<td><strong>KPIs</strong></td>
+<td>الاسم والمعادلة والهدف والمالك والمصدر.</td>
+</tr>
+<tr class="even">
+<td><strong>Training</strong></td>
+<td>من تدرب؟ اختبار كفاءة؟ تاريخ إعادة التدريب.</td>
+</tr>
+<tr class="odd">
+<td><strong>Change log</strong></td>
+<td>Version، change، reason، approver، affected users.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="الملحق-c-أربع-sops-نموذجية-مختصرة-قابلة-للتفعيل">الملحق C: أربع SOPs نموذجية مختصرة قابلة للتفعيل</h2>
+<h3 id="c1---البيع-إلى-تفعيل-الاشتراك">C1 - البيع إلى تفعيل الاشتراك</h3>
+<ul>
+<li><p>Trigger: Lead وافق على الخطة. Sales يفتح Customer/Lead ID ولا ينشئ duplicate phone.</p></li>
+<li><p>يختار plan_version وportion وstart date وdelivery zone/window وallowed preferences من قوائم معتمدة.</p></li>
+<li><p>النظام يحسب Price Book والخصم داخل الصلاحية؛ أي override يطلب approver_id وreason.</p></li>
+<li><p>يرسل payment link مرتبطاً بـorder_id؛ لا Active قبل payment_succeeded أو Credit approval.</p></li>
+<li><p>بعد الدفع ينشأ subscription + cycle + entitlements + invoice/receipt task + onboarding task.</p></li>
+<li><p>Sales يراجع completeness checklist: address pin، phone، allergen acknowledgement، schedule، notes.</p></li>
+<li><p>CX يتسلم خلال ساعتين عمل ويجري Welcome؛ Kitchen demand يدخل فقط حسب cutoff.</p></li>
+<li><p>KPI: activation errors &lt;1%; paid-to-onboard &lt;=24h; missing required data =0.</p></li>
+</ul>
+<h3 id="c2---تخطيط-وإغلاق-يوم-الإنتاج">C2 - تخطيط وإغلاق يوم الإنتاج</h3>
+<ul>
+<li><p>T-1 cutoff: النظام يجمد eligible demand؛ التغييرات بعده exception وليس تعديل صامت.</p></li>
+<li><p>Planner يجمع الطلب حسب recipe_version/portion/day؛ يخصم approved stock ويصدر production/purchase needs.</p></li>
+<li><p>Shift lead يفتح Batch ID لكل وصفة؛ يسجل raw issued، staff، start/end، cooked yield.</p></li>
+<li><p>QA يراجع الحرارة والمظهر والوزن/العينة والحساسيات؛ failure يوقف release ويحدد rework/disposal.</p></li>
+<li><p>Packing يمسح pack_unit/order label؛ يمنع duplicate/missing item.</p></li>
+<li><p>عند الإغلاق: planned = passed packed + shortage + cancelled exception. Waste له reason/weight/cost.</p></li>
+<li><p>داليا توقع Production Close؛ Finance يسحب actual consumption والvariance.</p></li>
+<li><p>KPI: attainment &gt;=98%; first-pass &gt;=98%; waste &lt;=3%; critical QA=0.</p></li>
+</ul>
+<h3 id="c3---التسليم-وإثباته">C3 - التسليم وإثباته</h3>
+<ul>
+<li><p>Dispatcher يثبت route وstop sequence بعد فحص slot/capacity والعناوين؛ late-ready يظهر alert.</p></li>
+<li><p>Handover بالمسح: كل pack_unit ينتقل من Ready إلى Dispatched مع rider/route/time.</p></li>
+<li><p>Rider app يحمل route اليوم فقط ويعمل Offline؛ كل action client_event_id فريد.</p></li>
+<li><p>Arrived عبر geofence/زر؛ Delivered يتطلب OTP أو POD حسب السياسة؛ cash amount يظهر إذا مطلوب.</p></li>
+<li><p>Failed يتطلب reason ومحاولات اتصال؛ CX يتلقى task فوراً للحالات القابلة للإنقاذ.</p></li>
+<li><p>نهاية route: cash/returns scan وتسليم maker-checker؛ أي variance لا يغلق دون incident.</p></li>
+<li><p>KPI: OTD &gt;=95%; timestamp/POD &gt;=99%; failed &lt;2%; cash variance=0.</p></li>
+</ul>
+<h3 id="c4---الشكوى-والـrefund">C4 - الشكوى والـRefund</h3>
+<ul>
+<li><p>CX ينشئ ticket ويربط order/item/batch/route، ويحدد severity/category وevidence.</p></li>
+<li><p>P1 safety/legal/data: أوقف الضرر، اخطر Head/CEO، لا تعد العميل بنتيجة فنية قبل التحقيق.</p></li>
+<li><p>P2/P3: acknowledge بزمن SLA؛ اجمع fact pattern؛ Operations/Logistics يحدد root cause.</p></li>
+<li><p>التعويض وفق threshold. Refund ينفذه Finance على payment الأصلي مع credit note/audit.</p></li>
+<li><p>لا يغلق ticket قبل customer communication وcorrective action owner/date إذا recurring issue.</p></li>
+<li><p>Weekly Pareto: أعلى أسباب بالعدد والتكلفة والتكرار؛ IDS لأعلى سبب لا لأعلى صوت.</p></li>
+<li><p>KPI: first response، resolution، reopen، repeat cause، compensation cost، complaint rate.</p></li>
+</ul>
+<h2 id="الملحق-d-نموذج-l10-أسبوعي">الملحق D: نموذج L10 أسبوعي</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>البند</strong></th>
+<th><strong>النموذج</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Meeting</strong></td>
+<td>Saturday 10:30-12:00 | Facilitator | Scribe | Attendance</td>
+</tr>
+<tr class="even">
+<td><strong>Segue</strong></td>
+<td>Good news - 5 min</td>
+</tr>
+<tr class="odd">
+<td><strong>Scorecard</strong></td>
+<td>12 measurables; red numbers copied to Issues</td>
+</tr>
+<tr class="even">
+<td><strong>Rocks</strong></td>
+<td>On Track / Off Track; owner only</td>
+</tr>
+<tr class="odd">
+<td><strong>Headlines</strong></td>
+<td>Customer/employee headlines</td>
+</tr>
+<tr class="even">
+<td><strong>To-dos</strong></td>
+<td>Last week done/not done; target &gt;=90%</td>
+</tr>
+<tr class="odd">
+<td><strong>IDS</strong></td>
+<td>Top 3 issues; root cause; decision; owner; due date</td>
+</tr>
+<tr class="even">
+<td><strong>Conclude</strong></td>
+<td>Recap to-dos; cascading messages; rate 1-10</td>
+</tr>
+</tbody>
+</table>
+<h2 id="الملحق-e-نموذج-ceo-daily-flash">الملحق E: نموذج CEO Daily Flash</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Tile</strong></th>
+<th><strong>الحقول</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Cash</strong></td>
+<td>Expected / collected / variance / unresolved IDs</td>
+</tr>
+<tr class="even">
+<td><strong>Sales</strong></td>
+<td>Revenue / new paid / MRR / discount / pace</td>
+</tr>
+<tr class="odd">
+<td><strong>Renewal</strong></td>
+<td>Due 7d / contacted / paid / high-risk value</td>
+</tr>
+<tr class="even">
+<td><strong>Kitchen</strong></td>
+<td>Plan / passed / shortage / waste / QA incident</td>
+</tr>
+<tr class="odd">
+<td><strong>Delivery</strong></td>
+<td>Stops / OTD gross / P90 / failed / breach risk</td>
+</tr>
+<tr class="even">
+<td><strong>CX</strong></td>
+<td>P1/P2 open / aging / refund / repeat root cause</td>
+</tr>
+<tr class="odd">
+<td><strong>Capacity</strong></td>
+<td>Today/Thursday kitchen + route utilization</td>
+</tr>
+<tr class="even">
+<td><strong>Decisions</strong></td>
+<td>Maximum 5; impact; recommendation; owner; deadline</td>
+</tr>
+</tbody>
+</table>
+<h2 id="الملحق-f-قائمة-gono-go-قبل-أي-growth-spend">الملحق F: قائمة Go/No-Go قبل أي Growth Spend</h2>
+<ul>
+<li><p>هل نعرف Contribution margin للباقة والقناة والمنطقة؟</p></li>
+<li><p>هل يوجد Capacity slot أخضر/أصفر لـ8 أسابيع وليس اليوم فقط؟</p></li>
+<li><p>هل CAC fully-loaded وPayback ضمن الحدود، وCohort retention ناضجة كفاية؟</p></li>
+<li><p>هل Customer promise وSLA والـcutoff ظاهرون في العرض؟</p></li>
+<li><p>هل المطبخ واللوجستيات وCX وافقوا على volume scenario؟</p></li>
+<li><p>هل هناك stop-loss وowner وdecision date؟</p></li>
+<li><p>هل cash forecast يتحمل اكتساب العملاء وworking capital وrefund downside؟</p></li>
+<li><p>إذا فشل الاختبار، هل يمكن إيقافه دون التزام طويل أو ضرر علامة؟</p></li>
+</ul>
+<h2 id="الملحق-g-قائمة-القرارات-التي-يجب-على-هشام-اتخاذها-في-أول-14-يوما">الملحق G: قائمة القرارات التي يجب على هشام اتخاذها في أول 14 يوماً</h2>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 60%" />
+<col style="width: 20%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>#</strong></th>
+<th><strong>القرار</strong></th>
+<th><strong>المالك</strong></th>
+<th><strong>الموعد</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1</strong></td>
+<td>اعتماد التعريف: هدف 2027 هو Exit ARR 25m أم FY revenue 25m؟</td>
+<td>هشام + Finance</td>
+<td>3 سبتمبر</td>
+</tr>
+<tr class="even">
+<td><strong>2</strong></td>
+<td>تثبيت راتب CEO وسياسة توزيعات/سحوبات منفصلة.</td>
+<td>Owners + Accountant</td>
+<td>5 سبتمبر</td>
+</tr>
+<tr class="odd">
+<td><strong>3</strong></td>
+<td>اعتماد Accountability Chart ومقاعد الفريق القيادي.</td>
+<td>هشام</td>
+<td>7 سبتمبر</td>
+</tr>
+<tr class="even">
+<td><strong>4</strong></td>
+<td>تعيين Data/Metric owner وFinance Controller فعلياً.</td>
+<td>هشام</td>
+<td>10 سبتمبر</td>
+</tr>
+<tr class="odd">
+<td><strong>5</strong></td>
+<td>تثبيت Price Book وخصومات/Refund thresholds 60-day pilot.</td>
+<td>CEO+Finance+Ops</td>
+<td>12 سبتمبر</td>
+</tr>
+<tr class="even">
+<td><strong>6</strong></td>
+<td>اعتماد L10 Saturday 10:30 وعدم إلغائه.</td>
+<td>Leadership</td>
+<td>فوراً</td>
+</tr>
+<tr class="odd">
+<td><strong>7</strong></td>
+<td>تجميد تطوير AI وأي Scope ثانوي حتى نجاح ERP Phase 1 requirements.</td>
+<td>CEO+Product</td>
+<td>فوراً</td>
+</tr>
+<tr class="even">
+<td><strong>8</strong></td>
+<td>تحديد No-Go: لا Saudi launch قبل gates، ولا marketing scale قبل capacity/economics.</td>
+<td>Board</td>
+<td>15 سبتمبر</td>
+</tr>
+</tbody>
+</table>
+<h2 id="الملحق-h-ما-لا-نفعله">الملحق H: ما لا نفعله</h2>
+<ul>
+<li><p>لا نبني تطبيقاً واسعاً ليحل غياب تعريفات أو صلاحيات؛ التطبيق يسرّع النظام الجيد والسيئ معاً.</p></li>
+<li><p>لا نفتح السعودية لإثبات النمو قبل أن تعمل مصر 30 يوماً دون هشام.</p></li>
+<li><p>لا نسمي كل المبيعات ARR؛ الطلب الفردي والموسمي وإيراد الـtrial لا يصبح recurring بتغيير الاسم.</p></li>
+<li><p>لا نرفع Budget الإعلان لأن الإيراد ارتفع إذا Contribution بعد التوصيل والـrefunds لم يرتفع.</p></li>
+<li><p>لا نعالج Churn بخصم عام. نصلح السبب، ثم نقدم Save Offer له اقتصاد واضح.</p></li>
+<li><p>لا نعرض تقييم 100 مليون كحقيقة. نعرض منهجاً، مضاعفات، سيناريوهات، وأدلة.</p></li>
+<li><p>لا يدخل المستثمر Data Room وفيه أرقام مختلفة بين CRM والبنك والـP&amp;L.</p></li>
+</ul>
+<h1 id="المصادر-والمنهجية">المصادر والمنهجية</h1>
+<p>تمت مراجعة المصادر التالية في 29 أغسطس 2026. تطبيق الكتب هنا صياغة تشغيلية خاصة بإيكو وليس نقلاً حرفياً. مضاعفات التقييم الواردة نطاقات تخطيط وليست تسعيراً أو عرضاً استثمارياً.</p>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 42%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>المصدر</strong></th>
+<th><strong>الرابط</strong></th>
+<th><strong>الاستخدام</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>EOS - Level 10 Meeting</strong></td>
+<td>https://www.eosworldwide.com/level-10-meeting</td>
+<td>الاجتماع الأسبوعي 90 دقيقة والأجندة ذات السبعة بنود.</td>
+</tr>
+<tr class="even">
+<td><strong>EOS - Rocks</strong></td>
+<td>https://www.eosworldwide.com/rocks</td>
+<td>مراجعة On Track/Off Track وإحالة التعثر إلى Issues.</td>
+</tr>
+<tr class="odd">
+<td><strong>Built to Sell - Service businesses</strong></td>
+<td>https://builttosell.com/why-service-businesses-are-less-valuable-and-what-to-do-about-it/</td>
+<td>تقييس العملية وترميزها في التقنية لبناء توقع وقيمة.</td>
+</tr>
+<tr class="even">
+<td><strong>Built to Sell - Hub &amp; Spoke</strong></td>
+<td>https://builttosell.com/hubandspoke/</td>
+<td>خطر اعتماد الشركة على المؤسس كمركز لكل النشاط.</td>
+</tr>
+<tr class="odd">
+<td><strong>E-Myth - Systems Guide</strong></td>
+<td>https://www.emyth.com/the-emyth-systems-guide</td>
+<td>بناء شركة كنظام من الأنظمة يعمل دون المالك.</td>
+</tr>
+<tr class="even">
+<td><strong>Penguin Random House - High Output Management</strong></td>
+<td>https://www.penguinrandomhouse.com/books/72467/high-output-management-by-andrew-s-grove-former-chairman-and-ceo-of-intel/</td>
+<td>المرجع الأصلي للكتاب ومنهج إدارة مخرجات المؤسسة.</td>
+</tr>
+<tr class="odd">
+<td><strong>Damodaran - EV/EBITDA by sector, Jan 2026</strong></td>
+<td>https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/vebitda.html</td>
+<td>مرجع شركات عامة للمقارنة السياقية فقط، لا معاملة خاصة مماثلة.</td>
+</tr>
+<tr class="even">
+<td><strong>Damodaran - Margins by sector, Jan 2026</strong></td>
+<td>https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/margin.html</td>
+<td>سياق هوامش الشركات العامة؛ لا معيار مباشر لمصر.</td>
+</tr>
+<tr class="odd">
+<td><strong>KPMG - Enterprise to equity value bridge</strong></td>
+<td>https://kpmg.com/uk/en/insights/advisory/unlocking-value.html</td>
+<td>EV ليس المبلغ الذي يستلمه البائع؛ أثر cash/debt/working capital وشروط الصفقة.</td>
+</tr>
+<tr class="even">
+<td><strong>KPMG - Completion accounts</strong></td>
+<td>https://kpmg.com/lu/en/insights/risk-and-regulation/locked-box-completion-accounts-solutions-under-different-completion-mechanisms.html</td>
+<td>تسويات net debt وworking capital عند الإغلاق.</td>
+</tr>
+<tr class="odd">
+<td><strong>EY - M&amp;A due diligence</strong></td>
+<td>https://www.ey.com/en_ce/services/strategy-transactions/mergers-acquisitions-due-diligence</td>
+<td>مجالات الفحص المالي والضريبي والتجاري والتشغيلي والتقني والسيبراني.</td>
+</tr>
+<tr class="even">
+<td><strong>McKinsey - Subscriptions</strong></td>
+<td>https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/sign-up-now-creating-consumer-and-business-value-with-subscriptions</td>
+<td>الاشتراكات والقيمة/الراحة والاستقرار والنمو.</td>
+</tr>
+<tr class="odd">
+<td><strong>McKinsey - Customer lifetime value</strong></td>
+<td>https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/customer-lifetime-value-the-customer-compass</td>
+<td>استخدام CLV لتحديد العملاء الأعلى قيمة والاستثمار في ولائهم.</td>
+</tr>
+<tr class="even">
+<td><strong>GASTAT - Population estimates 2024</strong></td>
+<td>https://www.stats.gov.sa/documents/20117/2435273/Population%2BEstimates%2BStatistics%2B2024%2BEN.pdf/9b71e303-5fd9-19cb-9913-850a9d521639</td>
+<td>35.3 مليون نسمة منتصف 2024؛ سياق لا TAM مباشر.</td>
+</tr>
+<tr class="odd">
+<td><strong>Egyptian Tax Authority - eInvoice/eReceipt SDK</strong></td>
+<td>https://sdk.invoicing.eta.gov.eg/</td>
+<td>واجهات تكامل أنظمة ERP/POS مع الفاتورة/الإيصال الإلكتروني.</td>
+</tr>
+<tr class="even">
+<td><strong>SDAIA - Saudi PDPL</strong></td>
+<td>https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf</td>
+<td>متطلبات حماية البيانات الشخصية في المملكة.</td>
+</tr>
+<tr class="odd">
+<td><strong>ZATCA - E-Invoicing</strong></td>
+<td>https://zatca.gov.sa/en/E-Invoicing/Pages/default.aspx</td>
+<td>متطلبات الفوترة الإلكترونية ومرحلتها التكاملية.</td>
+</tr>
+<tr class="even">
+<td><strong>Egypt Personal Data Protection Law 151/2020</strong></td>
+<td>https://www.acc.com/sites/default/files/program-materials/upload/Data%20Protection%20Law%20-%20Egypt%20-%20EN%20-%20MBH.PDF</td>
+<td>مرجع ترجمة للقانون؛ يلزم رأي قانوني محلي بشأن التطبيق والتراخيص.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="تنبيه-مهني">تنبيه مهني</h2>
+<p><strong>هذه الوثيقة دليل إدارة وتخطيط وليست توصية استثمارية ملزمة أو تقييم مستقل أو رأياً ضريبياً/قانونياً. قبل جولة أو بيع، يلزم Finance model مبني على البيانات الفعلية، Quality of Earnings، تقييم مستقل/مستشار M&amp;A، ومراجعة قانونية وضريبية في مصر والسعودية.</strong></p>
+<h2 id="الجملة-التي-تحكم-التنفيذ">الجملة التي تحكم التنفيذ</h2>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>شركة قابلة للبيع = نتائج يمكن توقعها + أرقام يمكن إثباتها + نظام يعمل دون المؤسس<br />
+</strong>كل أسبوع في 2026-2027 يجب أن يرفع واحدة من هذه الثلاث: predictability، evidence، independence. إذا لم يفعل، فهو نشاط وليس تقدماً نحو التخارج.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+    </main>
+    <footer class="footer-note">
+      ECO Healthy — مانيفستو إعادة الهيكلة والتوسع والتخارج 2027–2029<br>
+      وثيقة عمل إدارية واستثمارية، ولا تغني عن مراجعة المحاسب القانوني أو المستشار القانوني المرخص.
+    </footer>
+  </div>
+  <button class="back-to-top" type="button" aria-label="العودة إلى أعلى الصفحة" title="العودة إلى أعلى الصفحة">↑</button>
+  <script>
+    (function () {
+      'use strict';
+
+      const report = document.getElementById('report');
+      const firstHeading = report ? report.querySelector('h1') : null;
+
+      /* جمع الغلاف الأصلي قبل أول عنوان رئيسي داخل بطاقة غلاف واحدة. */
+      if (report && firstHeading) {
+        const cover = document.createElement('section');
+        cover.className = 'document-cover';
+        cover.setAttribute('aria-label', 'غلاف التقرير');
+        while (report.firstChild && report.firstChild !== firstHeading) {
+          cover.appendChild(report.firstChild);
+        }
+        report.insertBefore(cover, firstHeading);
+      }
+
+      /* تغليف الجداول للاستجابة على الهاتف، وتمييز جداول التنبيه ذات الخلية الواحدة. */
+      document.querySelectorAll('table').forEach(function (table) {
+        const headerCells = table.querySelectorAll('thead th').length;
+        const bodyRows = table.querySelectorAll('tbody tr').length;
+        if (headerCells === 1 && bodyRows === 0) {
+          table.classList.add('callout-table');
+        }
+        if (!table.parentElement.classList.contains('table-wrap')) {
+          const wrap = document.createElement('div');
+          wrap.className = 'table-wrap' + (table.classList.contains('callout-table') ? ' callout-wrap' : '');
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+      });
+
+      /* تحويل السطور الحسابية والبرمجية إلى اتجاه LTR معزول تلقائياً. */
+      document.querySelectorAll('#report p').forEach(function (paragraph) {
+        const text = paragraph.textContent.trim();
+        const latinCount = (text.match(/[A-Za-z0-9%+*/=<>._$:-]/g) || []).length;
+        if ((text.includes('=') || text.includes('→')) && latinCount >= Math.max(8, text.length * 0.35)) {
+          paragraph.classList.add('formula');
+          paragraph.setAttribute('dir', 'ltr');
+        }
+      });
+
+      document.querySelector('.back-to-top').addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }());
+  </script>
+</body>
+</html>

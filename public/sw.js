@@ -1,25 +1,11 @@
-const CACHE = "eco-healthy-shell-v1";
-const SHELL = ["/", "/kitchen", "/delivery", "/offline", "/eco-icon.svg"];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
-  self.skipWaiting();
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))));
-  self.clients.claim();
-});
-
+const CACHE = "eco-healthy-static-v5";
+const STATIC = ["/offline", "/eco-icon.svg"];
+self.addEventListener("install", (event) => { event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(STATIC))); self.skipWaiting(); });
+self.addEventListener("activate", (event) => { event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))); self.clients.claim(); });
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-        return response;
-      })
-      .catch(() => caches.match(event.request).then((cached) => cached || (event.request.mode === "navigate" ? caches.match("/offline") : undefined)))
-  );
+  const url = new URL(event.request.url);
+  if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/_next/data/")) return;
+  if (event.request.mode === "navigate") event.respondWith(fetch(event.request).catch(() => caches.match("/offline")));
+  else if (url.pathname === "/eco-icon.svg") event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
 });

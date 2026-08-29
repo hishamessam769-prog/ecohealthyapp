@@ -11,8 +11,6 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [name, setName] = useState("");
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,12 +27,10 @@ export function LoginForm() {
       }
 
       const supabase = createClient();
-      const { error: authError } = mode === "login"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password, options: { data: { full_name: name || email.split("@")[0] } } });
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
       if (authError) {
-        setError(mode === "login" ? "البريد الإلكتروني أو كلمة المرور غير صحيحة." : authError.message);
+        setError("بيانات الدخول غير صحيحة أو الحساب غير مفعّل. تواصل مع مسؤول النظام.");
         return;
       }
 
@@ -47,8 +43,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={submit} className="space-y-5">
-      <div className="grid grid-cols-2 gap-2 rounded bg-[#eef4f0] p-2"><button type="button" onClick={() => setMode("login")} className={`min-h-10 rounded text-sm font-bold ${mode === "login" ? "bg-[#16794a] text-white" : "bg-white"}`}>تسجيل الدخول</button><button type="button" onClick={() => setMode("signup")} className={`min-h-10 rounded text-sm font-bold ${mode === "signup" ? "bg-[#16794a] text-white" : "bg-white"}`}>أول حساب Admin</button></div>
-      {mode === "signup" ? <div><label htmlFor="name" className="mb-2 block text-sm font-semibold text-[#28342d]">الاسم</label><input id="name" required value={name} onChange={(event) => setName(event.target.value)} className="min-h-12 w-full border border-[#cfd9d2] bg-white px-4 text-sm outline-none focus:border-[#16794a]" /></div> : null}
+      <div className="rounded-lg border border-[#cfe2d6] bg-[#f1f8f4] p-3 text-sm text-[#24523a]">دخول الموظفين بالدعوة فقط. لا يمكن إنشاء حساب عام من هذه الصفحة.</div>
       <div>
         <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#28342d]">
           البريد الإلكتروني
@@ -95,7 +90,7 @@ export function LoginForm() {
         className="flex min-h-12 w-full items-center justify-center gap-2 bg-[#16794a] px-4 text-sm font-bold text-white transition-colors hover:bg-[#0f603a] disabled:cursor-wait disabled:opacity-70"
       >
         <LogIn size={19} aria-hidden="true" />
-        {loading ? "جاري التنفيذ..." : mode === "login" ? "دخول للنظام" : "إنشاء أول حساب"}
+        {loading ? "جاري التحقق..." : "دخول للنظام"}
       </button>
     </form>
   );

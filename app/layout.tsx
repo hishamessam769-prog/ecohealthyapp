@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { ERPProvider } from "@/components/erp-provider";
 import { PwaRegister } from "@/components/pwa-register";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -23,10 +22,8 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <body>
         <TooltipProvider>
-          <ERPProvider>
-            <PwaRegister />
-            {children}
-          </ERPProvider>
+          <PwaRegister />
+          {children}
         </TooltipProvider>
       </body>
     </html>

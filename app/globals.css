@@ -31,7 +31,9 @@ body {
 
 button,
 a,
-input {
+input,
+select,
+textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -43,4 +45,54 @@ a {
 ::selection {
   background: #cdebd9;
   color: #10281b;
+}
+
+.field {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid #cfdad3;
+  border-radius: 0.375rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  color: #17211b;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.field:focus {
+  border-color: #16794a;
+  box-shadow: 0 0 0 2px rgb(22 121 74 / 0.1);
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #435148;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.metric {
+  display: flex;
+  min-height: 82px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 0.375rem;
+  background: #f3f7f4;
+  padding: 0.85rem;
+}
+
+.metric small {
+  color: #66736b;
+  font-weight: 700;
+}
+
+.metric b {
+  display: block;
+}
+
+table th,
+table td {
+  vertical-align: middle;
 }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { AuthProvider } from "@/components/auth-provider";
+import { ERPProvider } from "@/components/erp-provider";
 import { PwaRegister } from "@/components/pwa-register";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -23,10 +23,10 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <body>
         <TooltipProvider>
-          <AuthProvider>
+          <ERPProvider>
             <PwaRegister />
             {children}
-          </AuthProvider>
+          </ERPProvider>
         </TooltipProvider>
       </body>
     </html>

@@ -17,10 +17,9 @@ export default function LoginPage() {
         <LoginForm />
 
         <p className="mt-6 border-t border-[#edf1ee] pt-5 text-xs leading-5 text-[#7a847e]">
-          في النسخة الأولى يتم إنشاء حسابات الموظفين من Supabase Authentication.
+          أول حساب يتم إنشاؤه يصبح Admin تلقائيًا. الحسابات التالية يحدد Admin صلاحياتها.
         </p>
       </section>
     </main>
   );
 }
-

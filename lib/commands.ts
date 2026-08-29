@@ -99,7 +99,11 @@ export const commands: Record<string, CommandDefinition> = {
   },
   install_demo_data: {
     permission: "system.demo.manage", schema: z.object({ confirmation: z.literal("INSTALL_DEMO") }),
-    execute: async (_payload, principal) => rpc("eco_install_demo_data", { p_actor_id: principal.employeeId }),
+    execute: async (_payload, principal) => {
+      const base = await rpc("eco_install_demo_data", { p_actor_id: principal.employeeId });
+      const full = await rpc("eco_enrich_demo_data", { p_actor_id: principal.employeeId });
+      return { base, full };
+    },
   },
 };
 

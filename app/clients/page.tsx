@@ -1,3 +1,70 @@
-import { ModuleWorkspace } from "@/components/module-workspace"; import { SecurePage } from "@/components/secure-page"; import { WorkspaceBoundary } from "@/components/workspace-boundary";
-export const dynamic="force-dynamic";
-export default function Page(){return <SecurePage permission="subscribers.read" title="دليل المشتركين" subtitle="ملف 360° والاستحقاقات والتجديد والمخاطر"><WorkspaceBoundary><ModuleWorkspace model="subscribers" columns={[{key:"customer_number",label:"رقم العميل"},{key:"full_name",label:"العميل"},{key:"phone_masked",label:"الهاتف"},{key:"sales_owner_name",label:"مسؤول المبيعات"},{key:"subscription_status",label:"الحالة",format:"status"},{key:"plan_name",label:"الباكدج"},{key:"remaining_entitlements",label:"الرصيد",format:"number"},{key:"renewal_due_date",label:"موعد التجديد",format:"date"},{key:"zone_name",label:"المنطقة"},{key:"churn_risk_score",label:"خطر الإلغاء",format:"percent"}]} commands={[{command:"create_customer",label:"عميل جديد",fields:[{name:"full_name",label:"الاسم",required:true},{name:"phone",label:"الهاتف",type:"tel",required:true},{name:"email",label:"البريد",type:"email"},{name:"zone_id",label:"المنطقة",type:"select",lookup:"zone_options",required:true},{name:"address_line",label:"العنوان",required:true},{name:"sales_owner_id",label:"مسؤول المبيعات",type:"select",lookup:"employee_options"},{name:"dietary_notes",label:"المحاذير والتفضيلات",type:"textarea"}]}]}/></WorkspaceBoundary></SecurePage>}
+import { ModuleWorkspace } from "@/components/module-workspace";
+import { SecurePage } from "@/components/secure-page";
+import { WorkspaceBoundary } from "@/components/workspace-boundary";
+export const dynamic = "force-dynamic";
+export default function Page() {
+  return (
+    <SecurePage
+      permission="subscribers.read"
+      title="دليل المشتركين"
+      subtitle="ملف 360° والاستحقاقات والتجديد والمخاطر"
+    >
+      <WorkspaceBoundary>
+        <ModuleWorkspace
+          model="subscribers"
+          metrics={[{ key: "remaining_entitlements", label: "إجمالي الوجبات المتبقية", format: "number" }, { key: "churn_risk_score", label: "متوسط خطر الإلغاء", format: "percent" }]}
+          columns={[
+            { key: "customer_number", label: "رقم العميل" },
+            { key: "full_name", label: "العميل" },
+            { key: "phone_masked", label: "الهاتف" },
+            { key: "sales_owner_name", label: "مسؤول المبيعات" },
+            { key: "subscription_status", label: "الحالة", format: "status" },
+            { key: "plan_name", label: "الباكدج" },
+            {
+              key: "remaining_entitlements",
+              label: "الرصيد",
+              format: "number",
+            },
+            { key: "renewal_due_date", label: "موعد التجديد", format: "date" },
+            { key: "zone_name", label: "المنطقة" },
+            {
+              key: "churn_risk_score",
+              label: "خطر الإلغاء",
+              format: "percent",
+            },
+          ]}
+          commands={[
+            {
+              command: "create_customer",
+              label: "عميل جديد",
+              fields: [
+                { name: "full_name", label: "الاسم", required: true },
+                { name: "phone", label: "الهاتف", type: "tel", required: true },
+                { name: "email", label: "البريد", type: "email" },
+                {
+                  name: "zone_id",
+                  label: "المنطقة",
+                  type: "select",
+                  lookup: "zone_options",
+                  required: true,
+                },
+                { name: "address_line", label: "العنوان", required: true },
+                {
+                  name: "sales_owner_id",
+                  label: "مسؤول المبيعات",
+                  type: "select",
+                  lookup: "employee_options",
+                },
+                {
+                  name: "dietary_notes",
+                  label: "المحاذير والتفضيلات",
+                  type: "textarea",
+                },
+              ],
+            },
+          ]}
+        />
+      </WorkspaceBoundary>
+    </SecurePage>
+  );
+}

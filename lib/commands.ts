@@ -102,7 +102,8 @@ export const commands: Record<string, CommandDefinition> = {
     execute: async (_payload, principal) => {
       const base = await rpc("eco_install_demo_data", { p_actor_id: principal.employeeId });
       const full = await rpc("eco_enrich_demo_data", { p_actor_id: principal.employeeId });
-      return { base, full };
+      const history = await rpc("eco_seed_ten_day_demo", { p_actor_id: principal.employeeId });
+      return { base, full, history };
     },
   },
 };

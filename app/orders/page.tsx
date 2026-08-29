@@ -1,3 +1,104 @@
-import { ModuleWorkspace } from "@/components/module-workspace"; import { SecurePage } from "@/components/secure-page"; import { WorkspaceBoundary } from "@/components/workspace-boundary";
-export const dynamic="force-dynamic";
-export default function Page(){return <SecurePage permission="orders.read" title="الطلبات والفواتير" subtitle="التسعير من الخادم ثم بوابة اعتماد الحسابات"><WorkspaceBoundary><ModuleWorkspace model="orders" rowInvoice rowProofUpload columns={[{key:"order_number",label:"رقم الطلب"},{key:"invoice_number",label:"الفاتورة"},{key:"customer_name",label:"العميل"},{key:"order_type",label:"النوع",format:"status"},{key:"invoice_total",label:"الإجمالي",format:"money"},{key:"payment_method",label:"الدفع"},{key:"payment_status",label:"حالة الدفع",format:"status"},{key:"order_status",label:"حالة الطلب",format:"status"},{key:"created_at",label:"تاريخ الإنشاء",format:"datetime"}]} commands={[{command:"create_invoice",label:"طلب / اشتراك جديد",fields:[{name:"customer_id",label:"العميل",type:"select",lookup:"customer_options",required:true},{name:"order_type",label:"نوع البيع",type:"select",required:true,options:[{value:"SUBSCRIPTION",label:"اشتراك"},{value:"A_LA_CARTE",label:"طلب عادي"},{value:"RENEWAL",label:"تجديد"},{value:"REACTIVATION",label:"إعادة تفعيل"},{value:"CORPORATE",label:"Corporate"}]},{name:"package_version_id",label:"الباكدج / المنتج",type:"select",lookup:"package_options",required:true},{name:"start_date",label:"تاريخ البداية / التسليم",type:"date",required:true},{name:"address_id",label:"عنوان التوصيل",type:"select",lookup:"address_options",required:true},{name:"delivery_window_id",label:"نافذة التوصيل",type:"select",lookup:"delivery_window_options",required:true},{name:"payment_method",label:"طريقة الدفع",type:"select",required:true,options:[{value:"CASH",label:"Cash"},{value:"INSTAPAY",label:"InstaPay"},{value:"BANK_TRANSFER",label:"تحويل بنكي"},{value:"WALLET",label:"Wallet"},{value:"VISA",label:"Visa / Payment Link"}]},{name:"payment_reference",label:"مرجع الدفع"},{name:"promotion_code",label:"كود الخصم"},{name:"notes",label:"ملاحظات",type:"textarea"}]}]}/></WorkspaceBoundary></SecurePage>}
+import { ModuleWorkspace } from "@/components/module-workspace";
+import { SecurePage } from "@/components/secure-page";
+import { WorkspaceBoundary } from "@/components/workspace-boundary";
+export const dynamic = "force-dynamic";
+export default function Page() {
+  return (
+    <SecurePage
+      permission="orders.read"
+      title="الطلبات والفواتير"
+      subtitle="التسعير من الخادم ثم بوابة اعتماد الحسابات"
+    >
+      <WorkspaceBoundary>
+        <ModuleWorkspace
+          model="orders"
+          rowInvoice
+          rowProofUpload
+          metrics={[{ key: "invoice_total", label: "إجمالي قيمة الطلبات", format: "money" }]}
+          columns={[
+            { key: "order_number", label: "رقم الطلب" },
+            { key: "invoice_number", label: "الفاتورة" },
+            { key: "customer_name", label: "العميل" },
+            { key: "order_type", label: "النوع", format: "status" },
+            { key: "invoice_total", label: "الإجمالي", format: "money" },
+            { key: "payment_method", label: "الدفع" },
+            { key: "payment_status", label: "حالة الدفع", format: "status" },
+            { key: "order_status", label: "حالة الطلب", format: "status" },
+            { key: "created_at", label: "تاريخ الإنشاء", format: "datetime" },
+          ]}
+          commands={[
+            {
+              command: "create_invoice",
+              label: "طلب / اشتراك جديد",
+              fields: [
+                {
+                  name: "customer_id",
+                  label: "العميل",
+                  type: "select",
+                  lookup: "customer_options",
+                  required: true,
+                },
+                {
+                  name: "order_type",
+                  label: "نوع البيع",
+                  type: "select",
+                  required: true,
+                  options: [
+                    { value: "SUBSCRIPTION", label: "اشتراك" },
+                    { value: "A_LA_CARTE", label: "طلب عادي" },
+                    { value: "RENEWAL", label: "تجديد" },
+                    { value: "REACTIVATION", label: "إعادة تفعيل" },
+                    { value: "CORPORATE", label: "Corporate" },
+                  ],
+                },
+                {
+                  name: "package_version_id",
+                  label: "الباكدج / المنتج",
+                  type: "select",
+                  lookup: "package_options",
+                  required: true,
+                },
+                {
+                  name: "start_date",
+                  label: "تاريخ البداية / التسليم",
+                  type: "date",
+                  required: true,
+                },
+                {
+                  name: "address_id",
+                  label: "عنوان التوصيل",
+                  type: "select",
+                  lookup: "address_options",
+                  required: true,
+                },
+                {
+                  name: "delivery_window_id",
+                  label: "نافذة التوصيل",
+                  type: "select",
+                  lookup: "delivery_window_options",
+                  required: true,
+                },
+                {
+                  name: "payment_method",
+                  label: "طريقة الدفع",
+                  type: "select",
+                  required: true,
+                  options: [
+                    { value: "CASH", label: "Cash" },
+                    { value: "INSTAPAY", label: "InstaPay" },
+                    { value: "BANK_TRANSFER", label: "تحويل بنكي" },
+                    { value: "WALLET", label: "Wallet" },
+                    { value: "VISA", label: "Visa / Payment Link" },
+                  ],
+                },
+                { name: "payment_reference", label: "مرجع الدفع" },
+                { name: "promotion_code", label: "كود الخصم" },
+                { name: "notes", label: "ملاحظات", type: "textarea" },
+              ],
+            },
+          ]}
+        />
+      </WorkspaceBoundary>
+    </SecurePage>
+  );
+}

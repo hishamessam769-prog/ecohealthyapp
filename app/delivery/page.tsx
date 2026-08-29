@@ -1,3 +1,149 @@
-import { ModuleWorkspace } from "@/components/module-workspace"; import { SecurePage } from "@/components/secure-page"; import { WorkspaceBoundary } from "@/components/workspace-boundary"; import { getCurrentPrincipal } from "@/lib/auth";
-export const dynamic="force-dynamic";
-export default async function Page(){const principal=await getCurrentPrincipal();const rider=principal?.roles.includes("rider");return <SecurePage permission="delivery.access" title={rider?"مسار اليوم":"التوصيل والمسارات"} subtitle={rider?"محطة واحدة في كل مرة مع مزامنة آمنة":"تعيين المسارات ومتابعة SLA وCOD"}><WorkspaceBoundary><ModuleWorkspace model={rider?"rider_route":"dispatcher_routes"} columns={rider?[{key:"sequence_no",label:"#",format:"number"},{key:"customer_name",label:"العميل"},{key:"address_line",label:"العنوان"},{key:"pack_count",label:"العبوات",format:"number"},{key:"cod_amount",label:"COD",format:"money"},{key:"state",label:"الحالة",format:"status"},{key:"navigation_url",label:"الخريطة"}]:[{key:"route_date",label:"التاريخ",format:"date"},{key:"route_number",label:"المسار"},{key:"zone_name",label:"Zone"},{key:"window_name",label:"النافذة"},{key:"rider_name",label:"المندوب"},{key:"stop_count",label:"Stops",format:"number"},{key:"delivered_count",label:"تم",format:"number"},{key:"failed_count",label:"فشل",format:"number"},{key:"cod_exposure",label:"COD",format:"money"},{key:"route_status",label:"الحالة",format:"status"}]} commands={rider?[{command:"delivery_event",label:"تحديث المحطة",rowAction:true,prefill:{route_stop_id:"id"},fields:[{name:"route_stop_id",label:"Stop ID",required:true},{name:"event_type",label:"الحركة",type:"select",required:true,options:[{value:"ARRIVED",label:"وصلت"},{value:"DELIVERED",label:"تم التسليم"},{value:"FAILED",label:"تعذر التسليم"}]},{name:"failure_reason",label:"سبب الفشل",type:"textarea"},{name:"otp",label:"OTP"},{name:"pod_path",label:"مسار إثبات التسليم"},{name:"cash_amount",label:"المبلغ المحصل",type:"number"},{name:"device_time",label:"وقت الجهاز",defaultValue:new Date().toISOString()},{name:"client_event_id",label:"Client Event ID",defaultValue:"AUTO"}]},{command:"declare_cash",label:"إقرار التحصيل",fields:[{name:"route_id",label:"Route ID",required:true},{name:"amount",label:"المبلغ",type:"number",required:true},{name:"notes",label:"ملاحظات",type:"textarea"}]}]:[{command:"create_route",label:"إنشاء مسار",fields:[{name:"route_date",label:"التاريخ",type:"date",required:true},{name:"zone_id",label:"المنطقة",type:"select",lookup:"zone_options",required:true},{name:"delivery_window_id",label:"النافذة",type:"select",lookup:"delivery_window_options",required:true},{name:"rider_employee_id",label:"المندوب",type:"select",lookup:"employee_options"}]}]}/></WorkspaceBoundary></SecurePage>}
+import { ModuleWorkspace } from "@/components/module-workspace";
+import { SecurePage } from "@/components/secure-page";
+import { WorkspaceBoundary } from "@/components/workspace-boundary";
+import { getCurrentPrincipal } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+export default async function Page() {
+  const principal = await getCurrentPrincipal();
+  const rider = principal?.roles.includes("rider");
+  return (
+    <SecurePage
+      permission="delivery.access"
+      title={rider ? "مسار اليوم" : "التوصيل والمسارات"}
+      subtitle={
+        rider
+          ? "محطة واحدة في كل مرة مع مزامنة آمنة"
+          : "تعيين المسارات ومتابعة SLA وCOD"
+      }
+    >
+      <WorkspaceBoundary>
+        <ModuleWorkspace
+          model={rider ? "rider_route" : "dispatcher_routes"}
+          columns={
+            rider
+              ? [
+                  { key: "sequence_no", label: "#", format: "number" },
+                  { key: "customer_name", label: "العميل" },
+                  { key: "address_line", label: "العنوان" },
+                  { key: "pack_count", label: "العبوات", format: "number" },
+                  { key: "cod_amount", label: "COD", format: "money" },
+                  { key: "state", label: "الحالة", format: "status" },
+                  { key: "navigation_url", label: "الخريطة" },
+                ]
+              : [
+                  { key: "route_date", label: "التاريخ", format: "date" },
+                  { key: "route_number", label: "المسار" },
+                  { key: "zone_name", label: "Zone" },
+                  { key: "window_name", label: "النافذة" },
+                  { key: "rider_name", label: "المندوب" },
+                  { key: "stop_count", label: "Stops", format: "number" },
+                  { key: "delivered_count", label: "تم", format: "number" },
+                  { key: "failed_count", label: "فشل", format: "number" },
+                  { key: "cod_exposure", label: "COD", format: "money" },
+                  { key: "route_status", label: "الحالة", format: "status" },
+                ]
+          }
+          commands={
+            rider
+              ? [
+                  {
+                    command: "delivery_event",
+                    label: "تحديث المحطة",
+                    rowAction: true,
+                    prefill: { route_stop_id: "id" },
+                    fields: [
+                      {
+                        name: "route_stop_id",
+                        label: "Stop ID",
+                        required: true,
+                      },
+                      {
+                        name: "event_type",
+                        label: "الحركة",
+                        type: "select",
+                        required: true,
+                        options: [
+                          { value: "ARRIVED", label: "وصلت" },
+                          { value: "DELIVERED", label: "تم التسليم" },
+                          { value: "FAILED", label: "تعذر التسليم" },
+                        ],
+                      },
+                      {
+                        name: "failure_reason",
+                        label: "سبب الفشل",
+                        type: "textarea",
+                      },
+                      { name: "otp", label: "OTP" },
+                      { name: "pod_path", label: "مسار إثبات التسليم" },
+                      {
+                        name: "cash_amount",
+                        label: "المبلغ المحصل",
+                        type: "number",
+                      },
+                      {
+                        name: "device_time",
+                        label: "وقت الجهاز",
+                        defaultValue: new Date().toISOString(),
+                      },
+                      {
+                        name: "client_event_id",
+                        label: "Client Event ID",
+                        defaultValue: "AUTO",
+                      },
+                    ],
+                  },
+                  {
+                    command: "declare_cash",
+                    label: "إقرار التحصيل",
+                    fields: [
+                      { name: "route_id", label: "Route ID", required: true },
+                      {
+                        name: "amount",
+                        label: "المبلغ",
+                        type: "number",
+                        required: true,
+                      },
+                      { name: "notes", label: "ملاحظات", type: "textarea" },
+                    ],
+                  },
+                ]
+              : [
+                  {
+                    command: "create_route",
+                    label: "إنشاء مسار",
+                    fields: [
+                      {
+                        name: "route_date",
+                        label: "التاريخ",
+                        type: "date",
+                        required: true,
+                      },
+                      {
+                        name: "zone_id",
+                        label: "المنطقة",
+                        type: "select",
+                        lookup: "zone_options",
+                        required: true,
+                      },
+                      {
+                        name: "delivery_window_id",
+                        label: "النافذة",
+                        type: "select",
+                        lookup: "delivery_window_options",
+                        required: true,
+                      },
+                      {
+                        name: "rider_employee_id",
+                        label: "المندوب",
+                        type: "select",
+                        lookup: "employee_options",
+                      },
+                    ],
+                  },
+                ]
+          }
+        />
+      </WorkspaceBoundary>
+    </SecurePage>
+  );
+}

@@ -1,3 +1,31 @@
-import { ModuleWorkspace } from "@/components/module-workspace"; import { SecurePage } from "@/components/secure-page"; import { WorkspaceBoundary } from "@/components/workspace-boundary";
-export const dynamic="force-dynamic";
-export default function Page(){return <SecurePage permission="catalog.read" title="الكتالوج والتسعير" subtitle="نسخ الباكدجات والأسعار والسياسات حسب تاريخ السريان"><WorkspaceBoundary><ModuleWorkspace model="catalog" columns={[{key:"package_code",label:"الكود"},{key:"package_name",label:"الباكدج"},{key:"version_number",label:"النسخة"},{key:"size_code",label:"الحجم"},{key:"service_days",label:"أيام الخدمة",format:"number"},{key:"meal_slots",label:"الوجبات"},{key:"frequency_policy",label:"التكرار"},{key:"price",label:"السعر",format:"money"},{key:"effective_from",label:"ساري من",format:"date"},{key:"status",label:"الحالة",format:"status"}]}/></WorkspaceBoundary></SecurePage>}
+import { ModuleWorkspace } from "@/components/module-workspace";
+import { SecurePage } from "@/components/secure-page";
+import { WorkspaceBoundary } from "@/components/workspace-boundary";
+export const dynamic = "force-dynamic";
+export default function Page() {
+  return (
+    <SecurePage
+      permission="catalog.read"
+      title="الكتالوج والتسعير"
+      subtitle="نسخ الباكدجات والأسعار والسياسات حسب تاريخ السريان"
+    >
+      <WorkspaceBoundary>
+        <ModuleWorkspace
+          model="catalog"
+          columns={[
+            { key: "package_code", label: "الكود" },
+            { key: "package_name", label: "الباكدج" },
+            { key: "version_number", label: "النسخة" },
+            { key: "size_code", label: "الحجم" },
+            { key: "service_days", label: "أيام الخدمة", format: "number" },
+            { key: "meal_slots", label: "الوجبات" },
+            { key: "frequency_policy", label: "التكرار" },
+            { key: "price", label: "السعر", format: "money" },
+            { key: "effective_from", label: "ساري من", format: "date" },
+            { key: "status", label: "الحالة", format: "status" },
+          ]}
+        />
+      </WorkspaceBoundary>
+    </SecurePage>
+  );
+}

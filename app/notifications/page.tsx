@@ -1,3 +1,43 @@
-import { ModuleWorkspace } from "@/components/module-workspace"; import { SecurePage } from "@/components/secure-page"; import { WorkspaceBoundary } from "@/components/workspace-boundary";
-export const dynamic="force-dynamic";
-export default function Page(){return <SecurePage permission="notifications.read" title="المهام والتنبيهات" subtitle="تنبيهات شخصية مرتبطة بعميل أو إجراء وتاريخ استحقاق"><WorkspaceBoundary><ModuleWorkspace model="notifications" allowExport={false} columns={[{key:"title",label:"التنبيه"},{key:"body",label:"التفاصيل"},{key:"priority",label:"الأولوية",format:"status"},{key:"due_at",label:"مطلوب قبل",format:"datetime"},{key:"status",label:"الحالة",format:"status"},{key:"created_at",label:"وصل",format:"datetime"}]} commands={[{command:"mark_notification_read",label:"قرأت",rowAction:true,prefill:{notification_id:"id"},fields:[{name:"notification_id",label:"Notification ID",required:true}]}]}/></WorkspaceBoundary></SecurePage>}
+import { ModuleWorkspace } from "@/components/module-workspace";
+import { SecurePage } from "@/components/secure-page";
+import { WorkspaceBoundary } from "@/components/workspace-boundary";
+export const dynamic = "force-dynamic";
+export default function Page() {
+  return (
+    <SecurePage
+      permission="notifications.read"
+      title="المهام والتنبيهات"
+      subtitle="تنبيهات شخصية مرتبطة بعميل أو إجراء وتاريخ استحقاق"
+    >
+      <WorkspaceBoundary>
+        <ModuleWorkspace
+          model="notifications"
+          allowExport={false}
+          columns={[
+            { key: "title", label: "التنبيه" },
+            { key: "body", label: "التفاصيل" },
+            { key: "priority", label: "الأولوية", format: "status" },
+            { key: "due_at", label: "مطلوب قبل", format: "datetime" },
+            { key: "status", label: "الحالة", format: "status" },
+            { key: "created_at", label: "وصل", format: "datetime" },
+          ]}
+          commands={[
+            {
+              command: "mark_notification_read",
+              label: "قرأت",
+              rowAction: true,
+              prefill: { notification_id: "id" },
+              fields: [
+                {
+                  name: "notification_id",
+                  label: "Notification ID",
+                  required: true,
+                },
+              ],
+            },
+          ]}
+        />
+      </WorkspaceBoundary>
+    </SecurePage>
+  );
+}

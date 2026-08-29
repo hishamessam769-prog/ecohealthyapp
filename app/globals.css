@@ -26,7 +26,8 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--text);
-  font-family: Arial, "Segoe UI", Tahoma, sans-serif;
+  font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+  line-height: 1.55;
 }
 
 :focus-visible {
@@ -108,4 +109,16 @@ a {
 table th,
 table td {
   vertical-align: middle;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+table th { line-height: 1.35; }
+table tbody tr:nth-child(even) { background: #fbfdfc; }
+
+@media (max-width: 767px) {
+  main { overflow-x: hidden; }
+  table { font-size: .78rem; }
+  table th, table td { min-width: 118px; padding: .7rem !important; }
 }

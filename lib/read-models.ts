@@ -5,9 +5,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 type ModelDefinition = { view: string; permission: string; scope?: "employee" | "rider" | "team"; searchColumn?: string; defaultOrder?: string };
 
 export const readModels = {
-  ceo_dashboard: { view: "eco_ceo_dashboard_v", permission: "dashboard.ceo.read" },
-  operations_dashboard: { view: "eco_operations_dashboard_v", permission: "dashboard.operations.read" },
-  finance_dashboard: { view: "eco_finance_dashboard_v", permission: "dashboard.finance.read" },
+  ceo_dashboard: { view: "eco_ceo_dashboard_v", permission: "dashboard.ceo.read", defaultOrder: "freshness" },
+  operations_dashboard: { view: "eco_operations_dashboard_v", permission: "dashboard.operations.read", defaultOrder: "freshness" },
+  finance_dashboard: { view: "eco_finance_dashboard_v", permission: "dashboard.finance.read", defaultOrder: "freshness" },
   sales_agent_dashboard: { view: "eco_sales_agent_dashboard_v", permission: "dashboard.sales.own", scope: "employee" },
   sales_manager_dashboard: { view: "eco_sales_manager_dashboard_v", permission: "dashboard.sales.team", scope: "team" },
   crm_leads: { view: "eco_crm_leads_v", permission: "crm.read", scope: "employee", searchColumn: "search_text", defaultOrder: "created_at" },

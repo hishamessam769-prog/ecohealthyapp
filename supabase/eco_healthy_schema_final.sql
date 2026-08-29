@@ -405,7 +405,7 @@ drop trigger if exists eco_audit_events_immutable on public.eco_audit_events; cr
 drop trigger if exists eco_journal_balance on public.eco_journal_lines; create constraint trigger eco_journal_balance after insert or update or delete on public.eco_journal_lines deferrable initially deferred for each row execute function public.eco_validate_journal_balance();
 
 create or replace function public.eco_begin_idempotent(p_operation text,p_key text,p_actor_id uuid,p_payload jsonb) returns jsonb
-language plpgsql security definer set search_path=public,pg_temp as $$ declare v_row public.eco_idempotency_keys%rowtype; v_hash text:=encode(digest(p_payload::text,'sha256'),'hex'); begin
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$ declare v_row public.eco_idempotency_keys%rowtype; v_hash text:=encode(digest(p_payload::text,'sha256'),'hex'); begin
  select * into v_row from public.eco_idempotency_keys where operation=p_operation and idempotency_key=p_key for update;
  if found then if v_row.request_hash<>v_hash then raise exception 'ECO_IDEMPOTENCY_PAYLOAD_MISMATCH' using errcode='23505'; end if; if v_row.status='COMPLETED' then return v_row.response_snapshot; end if; raise exception 'ECO_IDEMPOTENCY_IN_PROGRESS' using errcode='55P03'; end if;
  insert into public.eco_idempotency_keys(operation,idempotency_key,actor_id,request_hash) values(p_operation,p_key,p_actor_id,v_hash); return null;
@@ -413,7 +413,7 @@ end $$;
 create or replace function public.eco_finish_idempotent(p_operation text,p_key text,p_response jsonb) returns jsonb language plpgsql security definer set search_path=public,pg_temp as $$ begin update public.eco_idempotency_keys set status='COMPLETED',response_snapshot=p_response,completed_at=now() where operation=p_operation and idempotency_key=p_key; return p_response; end $$;
 
 create or replace function public.eco_bootstrap_first_admin(p_auth_user_id uuid,p_email text,p_full_name text,p_secret_fingerprint text) returns jsonb
-language plpgsql security definer set search_path=public,pg_temp as $$ declare v_org uuid;v_branch uuid;v_emp uuid; begin
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$ declare v_org uuid;v_branch uuid;v_emp uuid; begin
  if exists(select 1 from public.eco_employees) then raise exception 'ECO_BOOTSTRAP_ALREADY_COMPLETED' using errcode='23505'; end if;
  insert into public.eco_organizations(legal_name,trade_name) values('ECO Healthy','ECO Healthy') returning id into v_org;
  insert into public.eco_branches(organization_id,code,name) values(v_org,'CAIRO','Cairo Kitchen') returning id into v_branch;
@@ -450,7 +450,7 @@ language plpgsql security definer set search_path=public,pg_temp as $$ declare v
 end $$;
 
 create or replace function public.eco_create_priced_invoice(p_actor_id uuid,p_payload jsonb) returns jsonb
-language plpgsql security definer set search_path=public,pg_temp as $$
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$
 declare v_cached jsonb;v_key text:=p_payload->>'idempotency_key';v_customer public.eco_customers%rowtype;v_address public.eco_customer_addresses%rowtype;v_item record;v_order uuid;v_line uuid;v_invoice uuid;v_payment uuid;v_subtotal numeric(14,2);v_discount numeric(14,2):=0;v_tax numeric(14,2);v_delivery numeric(14,2);v_total numeric(14,2);v_status text;v_branch uuid;v_snapshot jsonb; begin
  perform public.eco_require_actor(p_actor_id,'orders.create'); v_cached:=public.eco_begin_idempotent('CREATE_INVOICE',v_key,p_actor_id,p_payload); if v_cached is not null then return v_cached; end if;
  select * into strict v_customer from public.eco_customers where id=(p_payload->>'customer_id')::uuid and status='ACTIVE'; if not public.eco_customer_in_scope(v_customer.id) and not public.eco_actor_has_permission(p_actor_id,'*') then raise exception 'ECO_CUSTOMER_OUT_OF_SCOPE' using errcode='42501'; end if;

@@ -31,7 +31,7 @@ export const commands: Record<string, CommandDefinition> = {
   },
   create_invoice: {
     permission: "orders.create", schema: createInvoiceSchema,
-    execute: async (payload, principal) => rpc("eco_create_priced_invoice", { p_actor_id: principal.employeeId, p_payload: createInvoiceSchema.parse(payload) }),
+    execute: async (payload, principal) => rpc("eco_create_sales_invoice", { p_actor_id: principal.employeeId, p_payload: createInvoiceSchema.parse(payload) }),
   },
   verify_payment: {
     permission: "payments.verify", schema: verifyPaymentSchema,
@@ -49,6 +49,14 @@ export const commands: Record<string, CommandDefinition> = {
     permission: "subscriptions.change.commit", schema: subscriptionChangeSchema,
     execute: async (payload, principal) => rpc("eco_commit_subscription_change", { p_actor_id: principal.employeeId, p_payload: subscriptionChangeSchema.parse(payload) }),
   },
+  request_cancellation: {
+    permission: "subscriptions.change.preview", schema: genericIdempotency.extend({ subscription_id: z.string().uuid(), reason: z.string().min(3).max(1000) }),
+    execute: async (payload, principal) => rpc("eco_request_cancellation", { p_actor_id: principal.employeeId, p_payload: payload }),
+  },
+  review_cancellation: {
+    permission: "payments.verify", schema: genericIdempotency.extend({ cancellation_id: z.string().uuid(), approved: z.enum(["true", "false"]).transform((value) => value === "true"), review_note: z.string().max(1000).optional() }),
+    execute: async (payload, principal) => rpc("eco_review_cancellation", { p_actor_id: principal.employeeId, p_payload: payload }),
+  },
   create_production_batch: {
     permission: "kitchen.batch.create", schema: genericIdempotency.extend({ service_date: z.string().date(), demand_ids: z.array(z.string().uuid()).min(1) }),
     execute: async (payload, principal) => rpc("eco_create_production_batch", { p_actor_id: principal.employeeId, p_payload: payload }),
@@ -60,6 +68,10 @@ export const commands: Record<string, CommandDefinition> = {
   create_route: {
     permission: "routes.manage", schema: genericIdempotency.extend({ route_date: z.string().date(), zone_id: z.string().uuid(), delivery_window_id: z.string().uuid(), rider_employee_id: z.string().uuid().optional() }),
     execute: async (payload, principal) => rpc("eco_create_route", { p_actor_id: principal.employeeId, p_payload: payload }),
+  },
+  dispatch_route: {
+    permission: "routes.manage", schema: genericIdempotency.extend({ route_id: z.string().uuid() }),
+    execute: async (payload, principal) => rpc("eco_dispatch_route", { p_actor_id: principal.employeeId, p_payload: payload }),
   },
   delivery_event: {
     permission: "route.own.update", schema: deliveryEventSchema,
@@ -74,11 +86,21 @@ export const commands: Record<string, CommandDefinition> = {
     execute: async (payload, principal) => rpc("eco_receive_cash_handover", { p_actor_id: principal.employeeId, p_payload: payload }),
   },
   save_target: {
-    permission: "targets.manage", schema: genericIdempotency.extend({ scope_type: z.enum(["COMPANY", "TEAM", "EMPLOYEE"]), scope_id: z.string().uuid().optional(), period_start: z.string().date(), revenue_target: z.union([z.string(), z.number()]).transform(String), quantity_target: z.coerce.number().int().nonnegative().optional(), status: z.enum(["DRAFT", "APPROVED"]).default("DRAFT") }),
+    permission: "targets.manage", schema: genericIdempotency.extend({ scope_type: z.enum(["COMPANY", "TEAM", "EMPLOYEE"]), scope_id: z.string().uuid().optional().or(z.literal("")), period_start: z.string().date(), revenue_target: z.union([z.string(), z.number()]).transform(String), quantity_target: z.preprocess((value) => value === "" ? undefined : value, z.coerce.number().int().nonnegative().optional()), status: z.enum(["DRAFT", "APPROVED"]).default("DRAFT") }),
     execute: async (payload, principal) => rpc("eco_save_sales_target", { p_actor_id: principal.employeeId, p_payload: payload }),
   },
+  save_catalog_price: {
+    permission: "catalog.manage",
+    schema: genericIdempotency.extend({ program_code: z.enum(["WEIGHT_LOSS", "MUSCLE_GAIN"]), package_type_code: z.enum(["LUNCH_ONLY", "AM", "BM", "FULL_DAY"]), service_days: z.coerce.number().int().refine((value) => [6, 12, 18, 24].includes(value)), size_code: z.enum(["REGULAR", "HERO"]), price: z.union([z.string(), z.number()]).transform(String), tax_rate: z.coerce.number().min(0).max(100).default(0), effective_from: z.string().date() }),
+    execute: async (payload, principal) => rpc("eco_save_catalog_price", { p_actor_id: principal.employeeId, p_payload: payload }),
+  },
+  save_sales_policy: {
+    permission: "catalog.manage",
+    schema: genericIdempotency.extend({ max_sales_discount_percentage: z.coerce.number().min(0).max(100) }),
+    execute: async (payload, principal) => rpc("eco_save_sales_policy", { p_actor_id: principal.employeeId, p_payload: payload }),
+  },
   save_commission_plan: {
-    permission: "commissions.manage", schema: genericIdempotency.extend({ plan_name: z.string().min(3), sale_type: z.string(), effective_from: z.string().date(), effective_to: z.string().date().optional(), maturity_rule: z.string(), fixed_maturity_days: z.coerce.number().int().nonnegative(), minimum_fulfilled_percentage: z.coerce.number().min(0).max(100), month_end_minimum_hold_days: z.coerce.number().int().nonnegative(), manager_gate_percentage: z.coerce.number().min(0).max(100).optional(), tiers: z.array(z.object({ min_percentage: z.coerce.number().min(0), max_percentage: z.coerce.number().positive().optional(), rate_percentage: z.coerce.number().min(0).max(100), fixed_bonus: z.coerce.number().nonnegative().default(0) })).min(1) }),
+    permission: "commissions.manage", schema: genericIdempotency.extend({ plan_name: z.string().min(3), sale_type: z.string(), effective_from: z.string().date(), effective_to: z.preprocess((value) => value === "" ? undefined : value, z.string().date().optional()), maturity_rule: z.string(), fixed_maturity_days: z.coerce.number().int().nonnegative(), minimum_fulfilled_percentage: z.coerce.number().min(0).max(100), month_end_minimum_hold_days: z.coerce.number().int().nonnegative(), manager_gate_percentage: z.preprocess((value) => value === "" ? undefined : value, z.coerce.number().min(0).max(100).optional()), tiers: z.array(z.object({ min_percentage: z.coerce.number().min(0), max_percentage: z.coerce.number().positive().optional(), rate_percentage: z.coerce.number().min(0).max(100), fixed_bonus: z.coerce.number().nonnegative().default(0) })).min(1) }),
     execute: async (payload, principal) => rpc("eco_save_commission_plan", { p_actor_id: principal.employeeId, p_payload: payload }),
   },
   save_menu_day: {
@@ -92,6 +114,10 @@ export const commands: Record<string, CommandDefinition> = {
   mark_notification_read: {
     permission: "notifications.read", schema: z.object({ notification_id: z.string().uuid() }),
     execute: async (payload, principal) => rpc("eco_mark_notification_read", { p_actor_id: principal.employeeId, p_notification_id: payload.notification_id }),
+  },
+  add_notification_comment: {
+    permission: "notifications.read", schema: z.object({ notification_id: z.string().uuid(), body: z.string().min(1).max(2000) }),
+    execute: async (payload, principal) => rpc("eco_add_notification_comment", { p_actor_id: principal.employeeId, p_payload: payload }),
   },
   purge_demo_data: {
     permission: "system.demo.manage", schema: z.object({ confirmation: z.literal("PURGE_DEMO"), idempotency_key: z.string().min(8) }),

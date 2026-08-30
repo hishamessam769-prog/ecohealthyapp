@@ -19,9 +19,21 @@ export default function Page() {
             { key: "priority", label: "الأولوية", format: "status" },
             { key: "due_at", label: "مطلوب قبل", format: "datetime" },
             { key: "status", label: "الحالة", format: "status" },
+            { key: "comment_count", label: "التعليقات", format: "number" },
+            { key: "latest_comment", label: "آخر تعليق" },
             { key: "created_at", label: "وصل", format: "datetime" },
           ]}
           commands={[
+            {
+              command: "add_notification_comment",
+              label: "إضافة تعليق",
+              rowAction: true,
+              prefill: { notification_id: "id" },
+              fields: [
+                { name: "notification_id", label: "رقم التنبيه", required: true },
+                { name: "body", label: "التعليق", type: "textarea", required: true },
+              ],
+            },
             {
               command: "mark_notification_read",
               label: "قرأت",

@@ -16,10 +16,12 @@ export default function Page() {
             rowProofUpload
             metrics={[{ key: "expected_amount", label: "مبالغ تنتظر المراجعة", format: "money" }, { key: "declared_amount", label: "مبالغ معلنة", format: "money" }]}
             columns={[
-              { key: "payment_id", label: "Payment ID" },
               { key: "invoice_number", label: "الفاتورة" },
               { key: "customer_name", label: "العميل" },
+              { key: "invoice_items", label: "الاشتراك / الطلب" },
+              { key: "service_start_date", label: "بدء الاشتراك", format: "date" },
               { key: "method", label: "الطريقة" },
+              { key: "payment_date", label: "تاريخ الدفع", format: "date" },
               { key: "expected_amount", label: "المطلوب", format: "money" },
               { key: "declared_amount", label: "المعلن", format: "money" },
               { key: "reference", label: "المرجع" },
@@ -108,6 +110,33 @@ export default function Page() {
                 ],
               },
             ]}
+          />
+        </WorkspaceBoundary>
+        <WorkspaceBoundary>
+          <ModuleWorkspace
+            model="cancellation_queue"
+            allowExport={false}
+            columns={[
+              { key: "subscription_number", label: "الاشتراك" },
+              { key: "customer_name", label: "العميل" },
+              { key: "remaining_value", label: "القيمة المتبقية", format: "money" },
+              { key: "penalty_amount", label: "غرامة 20%", format: "money" },
+              { key: "delivery_penalty", label: "غرامة التوصيل", format: "money" },
+              { key: "refund_amount", label: "الاسترداد", format: "money" },
+              { key: "reason", label: "سبب الإلغاء" },
+              { key: "created_at", label: "تاريخ الطلب", format: "datetime" },
+            ]}
+            commands={[{
+              command: "review_cancellation",
+              label: "مراجعة طلب الإلغاء",
+              rowAction: true,
+              prefill: { cancellation_id: "cancellation_id" },
+              fields: [
+                { name: "cancellation_id", label: "رقم الطلب", required: true },
+                { name: "approved", label: "القرار", type: "select", required: true, options: [{ value: "true", label: "موافقة وتنفيذ" }, { value: "false", label: "رفض الطلب" }] },
+                { name: "review_note", label: "ملاحظة المحاسب", type: "textarea" },
+              ],
+            }]}
           />
         </WorkspaceBoundary>
         <WorkspaceBoundary>

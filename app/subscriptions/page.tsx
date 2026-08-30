@@ -15,7 +15,6 @@ const fields = [
       { value: "SWAP", label: "تبديل وجبة" },
       { value: "ADDRESS_CHANGE", label: "تغيير عنوان" },
       { value: "WINDOW_CHANGE", label: "تغيير موعد" },
-      { value: "CANCEL", label: "إلغاء" },
     ],
   },
   {
@@ -57,6 +56,14 @@ export default function Page() {
             { key: "pause_until", label: "متوقف حتى", format: "date" },
           ]}
           commands={[
+            {
+              command: "request_cancellation",
+              label: "طلب إلغاء للحسابات",
+              rowAction: true,
+              tone: "danger",
+              prefill: { subscription_id: "subscription_id" },
+              fields: [{ name: "subscription_id", label: "رقم الاشتراك", required: true }, { name: "reason", label: "سبب الإلغاء", type: "textarea", required: true }],
+            },
             {
               command: "preview_subscription_change",
               label: "معاينة تعديل",

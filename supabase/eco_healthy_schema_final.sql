@@ -1,3 +1,9 @@
+-- ECO Healthy ERP — Final integrated Supabase schema
+-- Generated from ordered, rerunnable migrations. Demo data is installed only by the explicit admin command.
+
+-- ============================================================
+-- 202608290001_enterprise_v5.sql
+-- ============================================================
 -- ECO Healthy Enterprise ERP v5.0
 -- Fresh install + versioned, re-runnable migrations for Supabase/PostgreSQL 15+
 -- Production data is never seeded automatically. Demo data is installed only through eco_install_demo_data().
@@ -276,7 +282,7 @@ create table public.eco_commission_plan_versions (
   id uuid primary key default gen_random_uuid(), commission_plan_id uuid not null references public.eco_commission_plans(id), version_number integer not null, effective_from date not null, effective_to date, status text not null default 'DRAFT' check(status in('DRAFT','PENDING_APPROVAL','APPROVED','RETIRED')),
   eligible_sales_types text[] not null default '{}', eligible_payment_methods text[] not null default '{}', include_delivery_fees boolean not null default false, exclude_taxes boolean not null default true, discounts_reduce_value boolean not null default true,
   maturity_rule text not null check(maturity_rule in('FIXED_DAYS_AFTER_PAYMENT','PERCENTAGE_OF_SUBSCRIPTION_FULFILLED','BOTH_CONDITIONS_REQUIRED','EITHER_CONDITION_REQUIRED','DELIVERY_COMPLETED','MANUAL_FINANCE_APPROVAL')),
-  fixed_maturity_days integer not null default 15, minimum_fulfilled_percentage numeric(6,3) not null default 50, minimum_hold_days integer not null default 0, month_end_minimum_hold_days integer not null default 6,
+  fixed_maturity_days integer not null default 5, minimum_fulfilled_percentage numeric(6,3) not null default 50, minimum_hold_days integer not null default 0, month_end_minimum_hold_days integer not null default 6,
   require_no_open_refund boolean not null default true, require_no_open_cancellation boolean not null default true, require_payment_reconciled boolean not null default false, carry_pending_to_next_period boolean not null default true,
   manager_override_permission text, clawback_policy jsonb not null default '{}', payout_day integer check(payout_day between 1 and 31),
   eligibility_target_scope text check(eligibility_target_scope in('COMPANY','TEAM')), minimum_target_achievement_percentage numeric(8,4), commission_base text check(commission_base in('ELIGIBLE_TEAM_SALES','ELIGIBLE_COMPANY_SALES','TEAM_CONTRIBUTION','RENEWAL_VALUE','MANAGER_PERSONAL_SALES')),
@@ -478,7 +484,7 @@ declare v_cached jsonb;v_key text:=p_payload->>'idempotency_key';v_payment publi
  if v_payment.method<>'CASH' and not exists(select 1 from public.eco_payment_proofs where invoice_id=v_invoice.id and status in('UPLOADED','VERIFIED')) then raise exception 'ECO_PAYMENT_PROOF_REQUIRED' using errcode='23514';end if;
  if exists(select 1 from public.eco_payments where id<>v_payment.id and method=v_payment.method and reference=p_payload->>'reference' and status='VERIFIED') then raise exception 'ECO_DUPLICATE_PAYMENT_REFERENCE' using errcode='23505';end if;
  update public.eco_payments set verified_amount=(p_payload->>'amount_received')::numeric,currency=p_payload->>'currency',destination_account_id=(p_payload->>'account_id')::uuid,reference=p_payload->>'reference',payer_name=p_payload->>'payer',received_at=(p_payload->>'receipt_date')::date,verified_at=now(),verified_by=p_actor_id,status='VERIFIED' where id=v_payment.id;
- insert into public.eco_payment_allocations(payment_id,invoice_id,amount,actor_id) values(v_payment.id,v_invoice.id,least((p_payload->>'amount_received')::numeric,v_invoice.total)) on conflict(payment_id,invoice_id) do nothing;
+ insert into public.eco_payment_allocations(payment_id,invoice_id,amount,actor_id) values(v_payment.id,v_invoice.id,least((p_payload->>'amount_received')::numeric,v_invoice.total),p_actor_id) on conflict(payment_id,invoice_id) do nothing;
  select coalesce(sum(amount),0) into v_allocated from public.eco_payment_allocations where invoice_id=v_invoice.id;
  update public.eco_invoices set status=case when v_allocated>=total then 'PAID' else 'PARTIALLY_PAID' end,paid_at=case when v_allocated>=total then now() else null end where id=v_invoice.id;
  if v_allocated<v_invoice.total then return public.eco_finish_idempotent('CONFIRM_PAYMENT',v_key,jsonb_build_object('payment_id',v_payment.id,'invoice_status','PARTIALLY_PAID','activated',false));end if;
@@ -500,7 +506,7 @@ declare v_cached jsonb;v_key text:=p_payload->>'idempotency_key';v_payment publi
      end loop;end if;v_cursor:=v_cursor+1;end loop;update public.eco_subscriptions set expected_end_date=v_cursor-1,renewal_due_date=v_cursor-8 where id=v_subscription;update public.eco_subscription_cycles set expected_end_date=v_cursor-1,renewal_due_date=v_cursor-8 where id=v_cycle;
  end if;
  select cpv.id into v_plan from public.eco_commission_plan_versions cpv where cpv.status='APPROVED' and cpv.effective_from<=current_date and(cpv.effective_to is null or cpv.effective_to>=current_date) and v_order.order_type=any(cpv.eligible_sales_types) order by cpv.version_number desc limit 1;v_period:=date_trunc('month',current_date)::date;
- insert into public.eco_sales_credit_events(employee_id,customer_id,order_id,invoice_id,event_type,lifecycle_state,booked_value,commissionable_value,period_start,maturity_earliest_at,maturity_reason,plan_version_id,idempotency_key) values(v_order.sales_owner_id,v_order.customer_id,v_order.id,v_invoice.id,'PAYMENT_VERIFIED','PAYMENT_VERIFIED_PENDING_MATURITY',v_invoice.total,v_invoice.subtotal-v_invoice.discount_total,v_period,now()+coalesce((select fixed_maturity_days from public.eco_commission_plan_versions where id=v_plan),15)*interval '1 day','بانتظار شروط الاستحقاق: مدة الاحتفاظ ونسبة تنفيذ الاشتراك',v_plan,'credit:'||v_invoice.id) on conflict(invoice_id,event_type) do nothing;
+ insert into public.eco_sales_credit_events(employee_id,customer_id,order_id,invoice_id,event_type,lifecycle_state,booked_value,commissionable_value,period_start,maturity_earliest_at,maturity_reason,plan_version_id,idempotency_key) values(v_order.sales_owner_id,v_order.customer_id,v_order.id,v_invoice.id,'PAYMENT_VERIFIED','PAYMENT_VERIFIED_PENDING_MATURITY',v_invoice.total,v_invoice.subtotal-v_invoice.discount_total,v_period,now()+coalesce((select fixed_maturity_days from public.eco_commission_plan_versions where id=v_plan),5)*interval '1 day','بانتظار شروط الاستحقاق: مدة الاحتفاظ ونسبة تنفيذ الاشتراك',v_plan,'credit:'||v_invoice.id) on conflict(invoice_id,event_type) do nothing;
  insert into public.eco_outbox_events(event_type,aggregate_type,aggregate_id,payload) values('PAYMENT_CONFIRMED','invoice',v_invoice.id::text,jsonb_build_object('invoice_id',v_invoice.id,'subscription_id',v_subscription)) on conflict do nothing;
  v_result:=jsonb_build_object('payment_id',v_payment.id,'invoice_id',v_invoice.id,'order_id',v_order.id,'subscription_id',v_subscription,'activated',true);return public.eco_finish_idempotent('CONFIRM_PAYMENT',v_key,v_result);
 end $$;
@@ -599,6 +605,18 @@ declare v_count integer;v_customer_ids uuid[];v_employee_ids uuid[];begin
  delete from public.eco_employees where id=any(v_employee_ids);
  return jsonb_build_object('deleted_demo_customers',v_count,'idempotency_key',p_idempotency_key);
 end $$;
+
+-- These role-specific projections are deliberately rebuilt on every safe schema
+-- re-run. Later migrations extend their column sets, so PostgreSQL requires the
+-- previous definitions to be dropped before the base definitions are restored.
+drop view if exists public.eco_operations_dashboard_v;
+drop view if exists public.eco_rider_today_route_v;
+drop view if exists public.eco_commissions_v;
+drop view if exists public.eco_targets_v;
+drop view if exists public.eco_catalog_v;
+drop view if exists public.eco_notifications_v;
+drop view if exists public.eco_package_options_v;
+drop view if exists public.eco_accounting_verification_queue_v;
 
 create or replace view public.eco_ceo_dashboard_v with(security_invoker=false) as
 select b.id,
@@ -757,3 +775,810 @@ create table if not exists public.eco_api_rate_limits(bucket_key text primary ke
 alter table public.eco_api_rate_limits enable row level security;revoke all on public.eco_api_rate_limits from public,anon,authenticated;
 create or replace function public.eco_take_rate_limit(p_bucket_key text,p_limit integer,p_window_seconds integer) returns boolean language plpgsql security definer set search_path=public,pg_temp as $$ declare v_count integer;begin if length(p_bucket_key)<>64 or p_limit<1 or p_window_seconds<1 then raise exception 'ECO_INVALID_RATE_LIMIT';end if;insert into public.eco_api_rate_limits(bucket_key,window_started_at,request_count) values(p_bucket_key,now(),1) on conflict(bucket_key) do update set window_started_at=case when public.eco_api_rate_limits.window_started_at+make_interval(secs=>p_window_seconds)<=now() then now() else public.eco_api_rate_limits.window_started_at end,request_count=case when public.eco_api_rate_limits.window_started_at+make_interval(secs=>p_window_seconds)<=now() then 1 else public.eco_api_rate_limits.request_count+1 end,updated_at=now() returning request_count into v_count;return v_count<=p_limit;end $$;
 revoke all on function public.eco_take_rate_limit(text,integer,integer) from public,anon,authenticated;grant execute on function public.eco_take_rate_limit(text,integer,integer) to service_role;
+
+-- ============================================================
+-- 202608290002_runtime_hotfix.sql
+-- ============================================================
+begin;
+
+create extension if not exists pgcrypto with schema extensions;
+
+alter function public.eco_begin_idempotent(text,text,uuid,jsonb)
+  set search_path = public, extensions, pg_temp;
+
+alter function public.eco_bootstrap_first_admin(uuid,text,text,text)
+  set search_path = public, extensions, pg_temp;
+
+alter function public.eco_create_priced_invoice(uuid,jsonb)
+  set search_path = public, extensions, pg_temp;
+
+insert into public.eco_schema_migrations(version,description,checksum)
+values(
+  '006_runtime_hotfix',
+  'Fix pgcrypto resolution used by bootstrap, demo installation and invoice idempotency',
+  'sha256:eco-v5-006-runtime-hotfix'
+)
+on conflict(version) do update
+set description = excluded.description,
+    checksum = excluded.checksum,
+    applied_at = now();
+
+select pg_notify('pgrst','reload schema');
+
+commit;
+
+-- ============================================================
+-- 202608290003_full_demo.sql
+-- ============================================================
+begin;
+
+create extension if not exists pgcrypto with schema extensions;
+alter function public.eco_begin_idempotent(text,text,uuid,jsonb) set search_path=public,extensions,pg_temp;
+alter function public.eco_bootstrap_first_admin(uuid,text,text,text) set search_path=public,extensions,pg_temp;
+alter function public.eco_create_priced_invoice(uuid,jsonb) set search_path=public,extensions,pg_temp;
+
+create or replace function public.eco_enrich_demo_data(p_actor_id uuid) returns jsonb
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$
+declare
+  v_org uuid; v_branch uuid; v_sales uuid; v_customer uuid; v_address uuid;
+  v_package uuid; v_window uuid; v_zone uuid; v_bank uuid; v_meal uuid;
+  v_invoice jsonb; v_payment uuid; v_invoice_id uuid; v_subscription uuid;
+  v_demand uuid; v_batch uuid; v_rider_emp uuid; v_rider uuid; v_route uuid;
+  v_fulfillment uuid; v_invoice_line uuid; v_ingredient uuid; v_source uuid:=gen_random_uuid();
+begin
+  perform public.eco_require_actor(p_actor_id,'system.demo.manage');
+  select organization_id into strict v_org from public.eco_employees where id=p_actor_id;
+  select id into strict v_branch from public.eco_branches where organization_id=v_org and active order by created_at limit 1;
+  select id into strict v_sales from public.eco_employees where organization_id=v_org and is_demo and email='sales.demo@ecohealthy.invalid' limit 1;
+  select id into strict v_package from public.eco_package_versions where status='APPROVED' order by effective_from desc limit 1;
+  select id into strict v_window from public.eco_delivery_windows where branch_id=v_branch and active order by start_time limit 1;
+  select id into strict v_zone from public.eco_zones where branch_id=v_branch and active order by code limit 1;
+  select id into strict v_bank from public.eco_bank_accounts where branch_id=v_branch and active order by code limit 1;
+  select id into strict v_meal from public.eco_meal_versions where status='APPROVED' order by effective_from desc limit 1;
+
+  insert into public.eco_leads(branch_id,full_name,phone,email,source_code,stage,assigned_employee_id,created_by,first_contact_at,first_response_at,last_contact_at,next_action_at,notes,is_demo)
+  select v_branch,x.full_name,x.phone,x.email,x.source_code,x.stage,v_sales,p_actor_id,now()-x.age,now()-x.age+interval '12 minutes',now()-interval '1 day',now()+interval '1 day',x.notes,true
+  from (values
+    ('سارة محمد — Demo','01090000101','sara.demo@ecohealthy.invalid','WHATSAPP','QUALIFIED',interval '4 days','تحتاج عرض باكدج Lunch'),
+    ('محمود حسن — Demo','01090000102','mahmoud.demo@ecohealthy.invalid','META','PROPOSAL_SENT',interval '3 days','تم إرسال عرض السعر'),
+    ('منى أحمد — Demo','01090000103','mona.demo@ecohealthy.invalid','REFERRAL','AWAITING_PAYMENT',interval '2 days','بانتظار تحويل InstaPay'),
+    ('كريم علي — Demo','01090000104','karim.demo@ecohealthy.invalid','WEBSITE','NEW',interval '3 hours','Lead جديد يحتاج اتصال')
+  ) as x(full_name,phone,email,source_code,stage,age,notes)
+  where not exists(select 1 from public.eco_leads l where l.phone=x.phone);
+
+  insert into public.eco_employee_sales_targets(employee_id,period_start,version_number,revenue_target,quantity_target,renewal_target,new_customer_target,status,approved_by,approved_at)
+  values(v_sales,date_trunc('month',current_date)::date,1,120000,30,35000,20,'APPROVED',p_actor_id,now())
+  on conflict(employee_id,period_start,version_number) do update set revenue_target=excluded.revenue_target,status='APPROVED',approved_by=p_actor_id,approved_at=now();
+
+  insert into public.eco_customers(organization_id,customer_number,full_name,normalized_phone,phone_display,email,created_by,is_demo)
+  values(v_org,'DEMO-CUS-002','دينا سامح — اشتراك نشط','01090000002','01090000002','dina.demo@ecohealthy.invalid',p_actor_id,true)
+  on conflict(customer_number) do update set full_name=excluded.full_name
+  returning id into v_customer;
+  select id into v_address from public.eco_customer_addresses where customer_id=v_customer and is_demo limit 1;
+  if v_address is null then
+    insert into public.eco_customer_addresses(customer_id,address_line,zone_id,delivery_window_id,is_demo)
+    values(v_customer,'مدينة نصر — عنوان اشتراك تجريبي',v_zone,v_window,true) returning id into v_address;
+  end if;
+  insert into public.eco_customer_assignments(customer_id,employee_id,assignment_type,effective_from,assigned_by)
+  select v_customer,v_sales,'SALES_OWNER',current_date,p_actor_id
+  where not exists(select 1 from public.eco_customer_assignments where customer_id=v_customer and assignment_type='SALES_OWNER' and effective_to is null);
+
+  select i.id,p.id,s.id into v_invoice_id,v_payment,v_subscription
+  from public.eco_invoices i join public.eco_orders o on o.id=i.order_id
+  left join public.eco_payments p on p.invoice_id=i.id
+  left join public.eco_subscriptions s on s.order_id=o.id
+  where o.customer_id=v_customer order by i.created_at desc limit 1;
+  if v_invoice_id is null then
+    v_invoice:=public.eco_create_priced_invoice(p_actor_id,jsonb_build_object(
+      'customer_id',v_customer,'order_type','SUBSCRIPTION','package_version_id',v_package,
+      'start_date',current_date,'address_id',v_address,'delivery_window_id',v_window,
+      'payment_method','CASH','payment_reference',null,'notes','اشتراك Demo مدفوع ومعتمد',
+      'idempotency_key','demo-full-active-subscription-v1'));
+    v_invoice_id:=(v_invoice->>'invoice_id')::uuid; v_payment:=(v_invoice->>'payment_id')::uuid;
+    update public.eco_orders set sales_owner_id=v_sales,is_demo=true where id=(v_invoice->>'order_id')::uuid;
+    update public.eco_invoices set is_demo=true where id=v_invoice_id;
+    update public.eco_payments set is_demo=true where id=v_payment;
+  end if;
+  if not exists(select 1 from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.customer_id=v_customer) then
+    v_invoice:=public.eco_confirm_payment(p_actor_id,jsonb_build_object(
+      'payment_id',v_payment,'amount_received',(select total from public.eco_invoices where id=v_invoice_id),
+      'currency','EGP','account_id',v_bank,'reference','DEMO-CASH-VERIFIED-001','payer','دينا سامح',
+      'receipt_date',current_date,'idempotency_key','demo-full-confirm-payment-v1'));
+  end if;
+  select s.id into v_subscription from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.customer_id=v_customer limit 1;
+
+  insert into public.eco_production_demand(branch_id,service_date,slot_code,meal_version_id,size_code,required_quantity,source_snapshot)
+  select v_branch,current_date+1,'LUNCH',v_meal,'REGULAR',18,jsonb_build_object('demo',true,'subscriptions',12,'one_off',6)
+  on conflict(branch_id,service_date,slot_code,meal_version_id,size_code) do update set required_quantity=18,source_snapshot=excluded.source_snapshot
+  returning id into v_demand;
+  select id into v_batch from public.eco_production_batches where idempotency_key='demo-full-batch-v1';
+  if v_batch is null then
+    insert into public.eco_production_batches(branch_id,service_date,status,planned_by,started_at,produced_at,qa_released_at,idempotency_key)
+    values(v_branch,current_date+1,'QA_RELEASED',p_actor_id,now()-interval '2 hours',now()-interval '1 hour',now()-interval '30 minutes','demo-full-batch-v1') returning id into v_batch;
+    insert into public.eco_production_batch_items(batch_id,demand_id,planned_quantity,actual_yield,waste_quantity,shortage_quantity)
+    values(v_batch,v_demand,18,18,0,0);
+    insert into public.eco_qa_checks(batch_id,check_type,result,temperature_c,notes,checked_by)
+    values(v_batch,'FINAL_RELEASE','PASSED',4.2,'Demo QA release',p_actor_id);
+  end if;
+
+  insert into public.eco_ingredients(branch_id,code,name_ar,base_unit,min_stock)
+  values(v_branch,'DEMO-CHICKEN','صدور دجاج — Demo','KG',10)
+  on conflict(branch_id,code) do update set name_ar=excluded.name_ar returning id into v_ingredient;
+  insert into public.eco_stock_movements(branch_id,ingredient_id,movement_type,quantity,unit_cost,source_type,source_id,idempotency_key,actor_id,notes)
+  values(v_branch,v_ingredient,'RECEIPT',45,190,'demo_seed',v_source,'demo-stock-receipt-v1',p_actor_id,'رصيد مخزون تجريبي')
+  on conflict(idempotency_key) do nothing;
+
+  insert into public.eco_employees(organization_id,employee_number,full_name,email,status,is_demo)
+  values(v_org,'DEMO-RIDER','أحمد — مندوب Demo','rider.demo@ecohealthy.invalid','ACTIVE',true)
+  on conflict(employee_number) do update set full_name=excluded.full_name returning id into v_rider_emp;
+  insert into public.eco_employee_role_assignments(employee_id,role_code,effective_from,approved,approved_by,approved_at,created_by)
+  select v_rider_emp,'rider',current_date,true,p_actor_id,now(),p_actor_id
+  where not exists(select 1 from public.eco_employee_role_assignments where employee_id=v_rider_emp and role_code='rider' and approved);
+  insert into public.eco_riders(employee_id,vehicle_type,vehicle_plate,capacity_packs)
+  values(v_rider_emp,'MOTORCYCLE','DEMO-01',40)
+  on conflict(employee_id) do update set capacity_packs=40 returning id into v_rider;
+  select id into v_route from public.eco_routes where idempotency_key='demo-full-route-v1';
+  if v_route is null then
+    insert into public.eco_routes(branch_id,route_date,zone_id,delivery_window_id,rider_id,status,assigned_at,idempotency_key,created_by)
+    values(v_branch,current_date+1,v_zone,v_window,v_rider,'READY',now(),'demo-full-route-v1',p_actor_id) returning id into v_route;
+    insert into public.eco_route_stops(route_id,fulfillment_group_key,customer_id,address_id,sequence_no,state,promised_start,promised_end,cod_amount,ready_at,assigned_at)
+    values(v_route,'demo-stop-1',v_customer,v_address,1,'READY',(current_date+1)+time '13:00',(current_date+1)+time '15:00',0,now(),now());
+  end if;
+
+  select f.id into v_fulfillment from public.eco_fulfillments f where f.subscription_id=v_subscription order by f.service_date limit 1;
+  select il.id into v_invoice_line from public.eco_invoice_lines il where il.invoice_id=v_invoice_id order by line_no limit 1;
+  if v_fulfillment is not null and v_invoice_line is not null then
+    insert into public.eco_revenue_schedules(invoice_line_id,fulfillment_id,allocated_consideration,recognized_amount,recognition_date,status)
+    values(v_invoice_line,v_fulfillment,192.83,96.42,current_date,'PARTIALLY_RECOGNIZED')
+    on conflict(invoice_line_id,fulfillment_id) do nothing;
+  end if;
+  insert into public.eco_notifications(employee_id,title,body,priority,entity_type,entity_id,deep_link,due_at)
+  values(p_actor_id,'تم تثبيت Full Demo','أصبح لديك Leads وفاتورة Pending واشتراك نشط ومطبخ وQA ومخزون ومسار توصيل.','HIGH','subscription',v_subscription,'/',now())
+  on conflict(employee_id,entity_type,entity_id,title) do nothing;
+  return jsonb_build_object('installed',true,'mode','FULL_DEMO','active_subscription_id',v_subscription,'production_batch_id',v_batch,'route_id',v_route,'modules',jsonb_build_array('CRM','SALES','ACCOUNTING','SUBSCRIPTIONS','KITCHEN','QA','INVENTORY','DELIVERY'));
+end $$;
+
+revoke all on function public.eco_enrich_demo_data(uuid) from public,anon,authenticated;
+grant execute on function public.eco_enrich_demo_data(uuid) to service_role;
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608290004_payment_allocation_hotfix.sql
+-- ============================================================
+begin;
+
+do $hotfix$
+declare
+  v_definition text;
+  v_old text := 'values(v_payment.id,v_invoice.id,least((p_payload->>''amount_received'')::numeric,v_invoice.total))';
+  v_new text := 'values(v_payment.id,v_invoice.id,least((p_payload->>''amount_received'')::numeric,v_invoice.total),p_actor_id)';
+begin
+  select pg_get_functiondef('public.eco_confirm_payment(uuid,jsonb)'::regprocedure)
+  into v_definition;
+
+  if position(v_new in v_definition) > 0 then
+    null;
+  elsif position(v_old in v_definition) > 0 then
+    execute replace(v_definition,v_old,v_new);
+  else
+    raise exception 'ECO_PAYMENT_HOTFIX_PATTERN_NOT_FOUND';
+  end if;
+end
+$hotfix$;
+
+insert into public.eco_schema_migrations(version,description,checksum)
+values(
+  '008_payment_allocation_hotfix',
+  'Supply actor_id when allocating a verified payment',
+  'sha256:eco-v5-008-payment-allocation-hotfix'
+)
+on conflict(version) do update
+set description=excluded.description,
+    checksum=excluded.checksum,
+    applied_at=now();
+
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608290005_ten_day_demo.sql
+-- ============================================================
+begin;
+
+do $hotfix$
+declare v_definition text; v_old text := 'values(v_payment.id,v_invoice.id,least((p_payload->>''amount_received'')::numeric,v_invoice.total))'; v_new text := 'values(v_payment.id,v_invoice.id,least((p_payload->>''amount_received'')::numeric,v_invoice.total),p_actor_id)';
+begin
+  select pg_get_functiondef('public.eco_confirm_payment(uuid,jsonb)'::regprocedure) into v_definition;
+  if position(v_new in v_definition)>0 then null;
+  elsif position(v_old in v_definition)>0 then execute replace(v_definition,v_old,v_new);
+  else raise exception 'ECO_PAYMENT_HOTFIX_PATTERN_NOT_FOUND'; end if;
+end $hotfix$;
+
+create or replace function public.eco_seed_ten_day_demo(p_actor_id uuid) returns jsonb
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$
+declare
+  v_org uuid; v_branch uuid; v_sales uuid; v_customer uuid; v_address uuid; v_zone uuid; v_window uuid;
+  v_meal uuid; v_rider uuid; v_subscription uuid; v_credit uuid; v_plan uuid; v_version uuid; v_tier uuid;
+  v_demand uuid; v_batch uuid; v_route uuid; v_day date; v_i integer; v_metric record;
+begin
+  perform public.eco_require_actor(p_actor_id,'system.demo.manage');
+  select organization_id into strict v_org from public.eco_employees where id=p_actor_id;
+  select id into strict v_branch from public.eco_branches where organization_id=v_org and active order by created_at limit 1;
+  select id into strict v_sales from public.eco_employees where email='sales.demo@ecohealthy.invalid';
+  select id into strict v_customer from public.eco_customers where customer_number='DEMO-CUS-002';
+  select id into strict v_address from public.eco_customer_addresses where customer_id=v_customer order by created_at limit 1;
+  select zone_id,delivery_window_id into strict v_zone,v_window from public.eco_customer_addresses where id=v_address;
+  select id into strict v_meal from public.eco_meal_versions where status='APPROVED' order by effective_from desc limit 1;
+  select r.id into strict v_rider from public.eco_riders r join public.eco_employees e on e.id=r.employee_id where e.email='rider.demo@ecohealthy.invalid';
+  select s.id into strict v_subscription from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.customer_id=v_customer limit 1;
+
+  insert into public.eco_commission_plans(code,name,plan_scope)
+  values('DEMO-SALES-PLAN','خطة عمولة المبيعات — Demo','INDIVIDUAL')
+  on conflict(code) do update set active=true returning id into v_plan;
+  insert into public.eco_commission_plan_versions(commission_plan_id,version_number,effective_from,status,eligible_sales_types,eligible_payment_methods,maturity_rule,fixed_maturity_days,minimum_fulfilled_percentage,approved_by,approved_at)
+  values(v_plan,1,date_trunc('month',current_date)::date,'APPROVED',array['SUBSCRIPTION','RENEWAL'],array['CASH','INSTAPAY'],'BOTH_CONDITIONS_REQUIRED',5,50,p_actor_id,now())
+  on conflict(commission_plan_id,version_number) do update set status='APPROVED',approved_by=p_actor_id,approved_at=now() returning id into v_version;
+  insert into public.eco_commission_tiers(plan_version_id,min_achievement_percentage,max_achievement_percentage,commission_rate_percentage)
+  values(v_version,0,60,0) on conflict do nothing;
+  insert into public.eco_commission_tiers(plan_version_id,min_achievement_percentage,max_achievement_percentage,commission_rate_percentage)
+  values(v_version,60,85,1.5) on conflict do nothing;
+  insert into public.eco_commission_tiers(plan_version_id,min_achievement_percentage,max_achievement_percentage,commission_rate_percentage)
+  values(v_version,85,100,1.75) on conflict do nothing;
+  insert into public.eco_commission_tiers(plan_version_id,min_achievement_percentage,max_achievement_percentage,commission_rate_percentage)
+  values(v_version,100,null,2) on conflict do nothing;
+  select id into v_tier from public.eco_commission_tiers where plan_version_id=v_version order by min_achievement_percentage limit 1;
+  select id into v_credit from public.eco_sales_credit_events where customer_id=v_customer order by occurred_at limit 1;
+  if v_credit is not null then
+    update public.eco_sales_credit_events set plan_version_id=v_version where id=v_credit and plan_version_id is null;
+    insert into public.eco_commission_accruals(sales_credit_event_id,employee_id,plan_version_id,tier_id,period_start,commissionable_value,rate_percentage,accrued_amount,status)
+    select id,employee_id,v_version,v_tier,period_start,commissionable_value,1.5,round(commissionable_value*.015,2),'PENDING_MATURITY'
+    from public.eco_sales_credit_events where id=v_credit on conflict(sales_credit_event_id) do nothing;
+  end if;
+
+  insert into public.eco_rule_scores(subject_type,subject_id,score_type,rule_version,feature_snapshot,score,top_reasons,recommended_action)
+  select 'subscription',v_subscription,'CHURN_RISK','demo-v1',jsonb_build_object('remaining_days',3,'complaints',1),.72,'["متبقي 3 أيام","شكوى مفتوحة"]','اتصال تجديد خلال 24 ساعة'
+  where not exists(select 1 from public.eco_rule_scores where subject_id=v_subscription and score_type='CHURN_RISK');
+
+  for v_i in 0..9 loop
+    v_day:=current_date-v_i;
+    insert into public.eco_production_demand(branch_id,service_date,slot_code,meal_version_id,size_code,required_quantity,source_snapshot,locked_at)
+    values(v_branch,v_day,'LUNCH',v_meal,'REGULAR',18+v_i,jsonb_build_object('demo',true,'day_index',v_i),v_day+time '17:00')
+    on conflict(branch_id,service_date,slot_code,meal_version_id,size_code) do update set required_quantity=excluded.required_quantity
+    returning id into v_demand;
+    select id into v_batch from public.eco_production_batches where idempotency_key='demo-history-batch-'||v_day;
+    if v_batch is null then
+      insert into public.eco_production_batches(branch_id,service_date,status,planned_by,started_at,produced_at,qa_released_at,closed_at,idempotency_key)
+      values(v_branch,v_day,'CLOSED',p_actor_id,v_day+time '06:30',v_day+time '09:30',v_day+time '10:00',v_day+time '16:00','demo-history-batch-'||v_day) returning id into v_batch;
+      insert into public.eco_production_batch_items(batch_id,demand_id,planned_quantity,actual_yield,waste_quantity,shortage_quantity)
+      values(v_batch,v_demand,18+v_i,17+v_i,case when v_i%3=0 then 1 else 0 end,case when v_i%4=0 then 1 else 0 end);
+      insert into public.eco_qa_checks(batch_id,check_type,result,temperature_c,notes,checked_by)
+      values(v_batch,'FINAL_RELEASE','PASSED',4+(v_i::numeric/10),'سجل QA تجريبي ليوم التشغيل',p_actor_id);
+    end if;
+    select id into v_route from public.eco_routes where idempotency_key='demo-history-route-'||v_day;
+    if v_route is null then
+      insert into public.eco_routes(branch_id,route_date,zone_id,delivery_window_id,rider_id,status,assigned_at,dispatched_at,closed_at,idempotency_key,created_by)
+      values(v_branch,v_day,v_zone,v_window,v_rider,'CLOSED',v_day+time '11:00',v_day+time '12:20',v_day+time '16:10','demo-history-route-'||v_day,p_actor_id) returning id into v_route;
+      insert into public.eco_route_stops(route_id,fulfillment_group_key,customer_id,address_id,sequence_no,state,promised_start,promised_end,cod_amount,ready_at,assigned_at,dispatched_at,arrived_at,delivered_at)
+      values(v_route,'demo-history-stop-'||v_day,v_customer,v_address,1,'DELIVERED',v_day+time '13:00',v_day+time '15:00',0,v_day+time '10:30',v_day+time '11:00',v_day+time '12:20',v_day+time '13:35',v_day+time '13:42');
+    end if;
+    insert into public.eco_audit_events(actor_id,action,entity_type,entity_id,occurred_at,source,reason,event_hash)
+    values(p_actor_id,'DEMO_DAILY_CLOSE','operating_day',v_day::text,v_day+time '18:00','DEMO','إقفال يوم تشغيل تجريبي',encode(digest('demo-audit-'||v_day,'sha256'),'hex'))
+    on conflict(event_hash) do nothing;
+    for v_metric in select id,metric_code,version from public.eco_metric_definitions where metric_code in('MRR','ARR','CONTRIBUTION_MARGIN','DELIVERY_SLA','RENEWAL_RATE') loop
+      insert into public.eco_kpi_snapshots(branch_id,metric_definition_id,period_start,period_end,value,numerator,denominator,definition_version,certification_status,plan_value,forecast_value,calculated_at,certified_by,certified_at)
+      values(v_branch,v_metric.id,v_day,v_day,
+        case v_metric.metric_code when 'MRR' then 185000+v_i*2500 when 'ARR' then (185000+v_i*2500)*12 when 'CONTRIBUTION_MARGIN' then 34.5+v_i/10.0 when 'DELIVERY_SLA' then 94-v_i/5.0 else 68+v_i/3.0 end,
+        case when v_metric.metric_code in('DELIVERY_SLA','RENEWAL_RATE','CONTRIBUTION_MARGIN') then 94-v_i else null end,
+        case when v_metric.metric_code in('DELIVERY_SLA','RENEWAL_RATE','CONTRIBUTION_MARGIN') then 100 else null end,
+        v_metric.version,'CERTIFIED',case when v_metric.metric_code='MRR' then 200000 else null end,null,v_day+time '19:00',p_actor_id,v_day+time '19:05')
+      on conflict(branch_id,metric_definition_id,period_start,certification_status) do nothing;
+    end loop;
+  end loop;
+  insert into public.eco_notifications(employee_id,title,body,priority,entity_type,entity_id,deep_link,due_at)
+  values(p_actor_id,'مراجعة عمولة تحت الاستحقاق','يوجد بيع مدفوع ينتظر اكتمال 50% من الاشتراك ومرور فترة الاحتفاظ.','HIGH','subscription',v_subscription,'/commissions',now()+interval '1 day')
+  on conflict(employee_id,entity_type,entity_id,title) do nothing;
+  return jsonb_build_object('seeded',true,'operating_days',10,'production_days',10,'delivery_days',10,'certified_kpi_days',10,'commission_dashboard',true,'audit_days',10);
+end $$;
+
+revoke all on function public.eco_seed_ten_day_demo(uuid) from public,anon,authenticated;
+grant execute on function public.eco_seed_ten_day_demo(uuid) to service_role;
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300001_customer_master_exports.sql
+-- ============================================================
+begin;
+
+create or replace function public.eco_create_customer(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,pg_temp as $$
+declare
+  v_org uuid;
+  v_customer uuid;
+  v_address uuid;
+  v_phone text;
+  v_owner uuid;
+begin
+  perform public.eco_require_actor(p_actor_id,'customers.create');
+  select organization_id into strict v_org from public.eco_employees where id=p_actor_id and status='ACTIVE';
+  v_phone:=regexp_replace(p_payload->>'phone','[^0-9+]','','g');
+  if length(v_phone)<10 then raise exception 'CUSTOMER_PHONE_INVALID'; end if;
+  if nullif(p_payload->>'zone_id','') is null then raise exception 'CUSTOMER_ZONE_REQUIRED'; end if;
+  v_owner:=coalesce(nullif(p_payload->>'sales_owner_id','')::uuid,p_actor_id);
+  if not exists(select 1 from public.eco_employees where id=v_owner and status='ACTIVE') then raise exception 'SALES_OWNER_INVALID'; end if;
+
+  insert into public.eco_customers(organization_id,customer_number,full_name,normalized_phone,phone_display,email,created_by)
+  values(v_org,'CUS-'||lpad(nextval('public.eco_customer_number_seq')::text,7,'0'),trim(p_payload->>'full_name'),v_phone,trim(p_payload->>'phone'),nullif(trim(p_payload->>'email'),''),p_actor_id)
+  returning id into v_customer;
+
+  insert into public.eco_customer_addresses(customer_id,address_line,zone_id,latitude,longitude,map_url,delivery_window_id)
+  values(
+    v_customer,
+    trim(p_payload->>'address_line'),
+    (p_payload->>'zone_id')::uuid,
+    nullif(p_payload->>'latitude','')::numeric,
+    nullif(p_payload->>'longitude','')::numeric,
+    nullif(trim(p_payload->>'map_url'),''),
+    nullif(p_payload->>'delivery_window_id','')::uuid
+  ) returning id into v_address;
+
+  insert into public.eco_customer_assignments(customer_id,employee_id,assignment_type,effective_from,assigned_by)
+  values(v_customer,v_owner,'SALES_OWNER',current_date,p_actor_id);
+
+  if nullif(trim(p_payload->>'dietary_notes'),'') is not null then
+    insert into public.eco_customer_dietary_rules(customer_id,rule_type,description,created_by)
+    values(v_customer,'NOTE',trim(p_payload->>'dietary_notes'),p_actor_id);
+  end if;
+
+  insert into public.eco_customer_timeline(customer_id,event_type,entity_type,entity_id,summary,actor_id,metadata)
+  values(v_customer,'CUSTOMER_CREATED','customer',v_customer,'تم إنشاء ملف العميل',p_actor_id,jsonb_build_object('address_id',v_address));
+  insert into public.eco_audit_events(actor_id,action,entity_type,entity_id,source,after_redacted,event_hash)
+  values(p_actor_id,'CUSTOMER_CREATED','customer',v_customer::text,'SERVER',jsonb_build_object('customer_number',(select customer_number from public.eco_customers where id=v_customer)),encode(extensions.digest(v_customer::text||clock_timestamp()::text,'sha256'),'hex'));
+  return jsonb_build_object('customer_id',v_customer,'address_id',v_address);
+end $$;
+
+create or replace view public.eco_customer_directory_v with(security_invoker=false) as
+select
+  c.id,
+  c.id customer_id,
+  owner.employee_id scope_employee_id,
+  c.customer_number,
+  c.full_name,
+  c.phone_display phone,
+  c.email,
+  c.status customer_status,
+  address.address_line,
+  z.name_ar zone_name,
+  address.map_url,
+  address.latitude,
+  address.longitude,
+  dw.name_ar delivery_window_name,
+  employee.full_name sales_owner_name,
+  (select count(*) from public.eco_subscriptions s where s.customer_id=c.id and s.status in('ACTIVE','PAUSED')) active_subscription_count,
+  (select p.name_ar from public.eco_subscriptions s join public.eco_package_versions pv on pv.id=s.package_version_id join public.eco_packages p on p.id=pv.package_id where s.customer_id=c.id and s.status in('ACTIVE','PAUSED') order by s.created_at desc limit 1) current_plan_name,
+  (select count(*) from public.eco_orders o where o.customer_id=c.id) total_orders,
+  c.created_at,
+  concat_ws(' ',c.customer_number,c.full_name,c.phone_display,c.email,address.address_line,z.name_ar) search_text
+from public.eco_customers c
+left join lateral(
+  select ca.employee_id from public.eco_customer_assignments ca
+  where ca.customer_id=c.id and ca.assignment_type='SALES_OWNER' and ca.effective_from<=current_date and(ca.effective_to is null or ca.effective_to>=current_date)
+  order by ca.effective_from desc limit 1
+) owner on true
+left join public.eco_employees employee on employee.id=owner.employee_id
+left join lateral(
+  select a.* from public.eco_customer_addresses a where a.customer_id=c.id and a.active order by a.created_at desc limit 1
+) address on true
+left join public.eco_zones z on z.id=address.zone_id
+left join public.eco_delivery_windows dw on dw.id=address.delivery_window_id;
+
+create or replace view public.eco_customer_export_v with(security_invoker=false) as
+select id,customer_id,scope_employee_id,customer_number,full_name,phone,email,address_line,zone_name,map_url,latitude,longitude,delivery_window_name,sales_owner_name,customer_status,current_plan_name,active_subscription_count,total_orders,created_at,search_text
+from public.eco_customer_directory_v;
+
+create or replace view public.eco_delivery_export_v with(security_invoker=false) as
+select
+  st.id,
+  r.route_date,
+  r.route_number,
+  st.sequence_no,
+  c.customer_number,
+  c.full_name customer_name,
+  c.phone_display phone,
+  a.address_line,
+  z.name_ar zone_name,
+  w.name_ar delivery_window,
+  coalesce(a.map_url,'https://maps.google.com/?q='||a.latitude||','||a.longitude) navigation_url,
+  employee.full_name rider_name,
+  (select count(*) from public.eco_stop_pack_units spu where spu.route_stop_id=st.id) pack_count,
+  st.cod_amount,
+  st.state stop_state,
+  st.promised_start,
+  st.promised_end,
+  st.delivered_at
+from public.eco_route_stops st
+join public.eco_routes r on r.id=st.route_id
+join public.eco_customers c on c.id=st.customer_id
+join public.eco_customer_addresses a on a.id=st.address_id
+join public.eco_zones z on z.id=r.zone_id
+join public.eco_delivery_windows w on w.id=r.delivery_window_id
+left join public.eco_riders rider on rider.id=r.rider_id
+left join public.eco_employees employee on employee.id=rider.employee_id;
+
+revoke all on public.eco_customer_directory_v,public.eco_customer_export_v,public.eco_delivery_export_v from public,anon,authenticated;
+grant select on public.eco_customer_directory_v,public.eco_customer_export_v,public.eco_delivery_export_v to service_role;
+revoke all on function public.eco_create_customer(uuid,jsonb) from public,anon,authenticated;
+grant execute on function public.eco_create_customer(uuid,jsonb) to service_role;
+
+insert into public.eco_schema_migrations(version,description,checksum)
+values('009_customer_master_exports','Customer master data, exact addresses and controlled Excel exports','sha256:eco-v5-009-customer-master-exports')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300002_sales_catalog.sql
+-- ============================================================
+begin;
+
+alter table public.eco_packages add column if not exists program_code text not null default 'GENERAL';
+alter table public.eco_packages add column if not exists package_type_code text not null default 'LUNCH_ONLY';
+
+create or replace function public.eco_save_catalog_price(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,pg_temp as $$
+declare
+  v_branch uuid;
+  v_program text:=upper(p_payload->>'program_code');
+  v_type text:=upper(p_payload->>'package_type_code');
+  v_code text;
+  v_name text;
+  v_package uuid;
+  v_version uuid;
+  v_version_no integer;
+  v_book uuid;
+  v_slot text;
+begin
+  perform public.eco_require_actor(p_actor_id,'catalog.manage');
+  if v_program not in('WEIGHT_LOSS','MUSCLE_GAIN') then raise exception 'CATALOG_PROGRAM_INVALID'; end if;
+  if v_type not in('LUNCH_ONLY','AM','BM','FULL_DAY') then raise exception 'CATALOG_PACKAGE_TYPE_INVALID'; end if;
+  if (p_payload->>'service_days')::integer not in(6,12,18,24) then raise exception 'CATALOG_DAYS_INVALID'; end if;
+  if upper(p_payload->>'size_code') not in('REGULAR','HERO') then raise exception 'CATALOG_SIZE_INVALID'; end if;
+  if (p_payload->>'price')::numeric<=0 then raise exception 'CATALOG_PRICE_INVALID'; end if;
+  select b.id into strict v_branch from public.eco_branches b join public.eco_employees e on e.organization_id=b.organization_id where e.id=p_actor_id and b.active order by b.created_at limit 1;
+  v_code:=v_program||'-'||v_type;
+  v_name:=case v_program when 'WEIGHT_LOSS' then 'Weight Loss' else 'Muscle Gain' end||' — '||case v_type when 'LUNCH_ONLY' then 'Lunch Only' when 'FULL_DAY' then 'Full Day' else v_type||' Package' end;
+  insert into public.eco_packages(branch_id,code,name_ar,sale_category,program_code,package_type_code)
+  values(v_branch,v_code,v_name,'SUBSCRIPTION',v_program,v_type)
+  on conflict(branch_id,code) do update set name_ar=excluded.name_ar,program_code=excluded.program_code,package_type_code=excluded.package_type_code,active=true
+  returning id into v_package;
+  select pv.id into v_version from public.eco_package_versions pv where pv.package_id=v_package and pv.service_days=(p_payload->>'service_days')::integer and pv.size_code=upper(p_payload->>'size_code') and pv.status='APPROVED' order by pv.version_number desc limit 1;
+  if v_version is null then
+    select coalesce(max(version_number),0)+1 into v_version_no from public.eco_package_versions where package_id=v_package;
+    insert into public.eco_package_versions(package_id,version_number,size_code,service_days,frequency_policy,effective_from,status,approved_by,approved_at)
+    values(v_package,v_version_no,upper(p_payload->>'size_code'),(p_payload->>'service_days')::integer,'DAILY',(p_payload->>'effective_from')::date,'APPROVED',p_actor_id,now()) returning id into v_version;
+    for v_slot in select unnest(case v_type when 'LUNCH_ONLY' then array['LUNCH'] when 'AM' then array['BREAKFAST','LUNCH'] when 'BM' then array['LUNCH','DINNER'] else array['BREAKFAST','LUNCH','DINNER','SNACK'] end) loop
+      insert into public.eco_package_slots(package_version_id,slot_code,quantity,obligation_weight) values(v_version,v_slot,1,1) on conflict do nothing;
+    end loop;
+  end if;
+  select id into v_book from public.eco_price_books where branch_id=v_branch and code='ECO-LIVE-PRICE' and status='APPROVED' and effective_from<=(p_payload->>'effective_from')::date and(effective_to is null or effective_to>=(p_payload->>'effective_from')::date) order by effective_from desc limit 1;
+  if v_book is null then
+    insert into public.eco_price_books(branch_id,code,name,effective_from,status,approved_by,approved_at) values(v_branch,'ECO-LIVE-PRICE','ECO Healthy Price List',(p_payload->>'effective_from')::date,'APPROVED',p_actor_id,now()) returning id into v_book;
+  end if;
+  insert into public.eco_price_book_items(price_book_id,package_version_id,unit_price,tax_rate)
+  values(v_book,v_version,(p_payload->>'price')::numeric,coalesce(nullif(p_payload->>'tax_rate','')::numeric,0))
+  on conflict(price_book_id,package_version_id) do update set unit_price=excluded.unit_price,tax_rate=excluded.tax_rate;
+  insert into public.eco_audit_events(actor_id,action,entity_type,entity_id,source,after_redacted,event_hash)
+  values(p_actor_id,'CATALOG_PRICE_SAVED','package_version',v_version::text,'SERVER',jsonb_build_object('price',p_payload->>'price','effective_from',p_payload->>'effective_from'),encode(extensions.digest(v_version::text||clock_timestamp()::text,'sha256'),'hex'));
+  return jsonb_build_object('package_id',v_package,'package_version_id',v_version,'price_book_id',v_book);
+end $$;
+
+drop view if exists public.eco_catalog_v;
+create view public.eco_catalog_v with(security_invoker=false) as
+select pv.id,p.code package_code,p.name_ar package_name,p.program_code,p.package_type_code,pv.version_number,pv.size_code,pv.service_days,string_agg(ps.slot_code||'×'||ps.quantity,', ' order by ms.sort_order) meal_slots,pv.frequency_policy,pbi.unit_price price,pv.effective_from,pv.status,concat_ws(' ',p.code,p.name_ar,p.program_code,p.package_type_code,pv.size_code,pv.service_days) search_text
+from public.eco_package_versions pv
+join public.eco_packages p on p.id=pv.package_id
+join public.eco_package_slots ps on ps.package_version_id=pv.id
+join public.eco_meal_slots ms on ms.code=ps.slot_code
+left join lateral(select pbi2.* from public.eco_price_book_items pbi2 join public.eco_price_books pb on pb.id=pbi2.price_book_id where pbi2.package_version_id=pv.id and pb.status='APPROVED' and pb.effective_from<=current_date and(pb.effective_to is null or pb.effective_to>=current_date) order by pb.effective_from desc limit 1)pbi on true
+group by pv.id,p.id,pbi.unit_price;
+
+revoke all on function public.eco_save_catalog_price(uuid,jsonb) from public,anon,authenticated;
+grant execute on function public.eco_save_catalog_price(uuid,jsonb) to service_role;
+revoke all on public.eco_catalog_v from public,anon,authenticated;
+grant select on public.eco_catalog_v to service_role;
+
+insert into public.eco_schema_migrations(version,description,checksum)
+values('010_sales_catalog','Editable ECO package matrix and effective price list','sha256:eco-v5-010-sales-catalog')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300003_sales_invoice.sql
+-- ============================================================
+begin;
+
+create table if not exists public.eco_sales_policies(
+  organization_id uuid primary key references public.eco_organizations(id),
+  max_sales_discount_percentage numeric(8,4) not null default 10 check(max_sales_discount_percentage between 0 and 100),
+  updated_by uuid not null references public.eco_employees(id),
+  updated_at timestamptz not null default now()
+);
+alter table public.eco_sales_policies enable row level security;
+revoke all on public.eco_sales_policies from public,anon,authenticated;
+grant select,insert,update on public.eco_sales_policies to service_role;
+
+create or replace function public.eco_save_sales_policy(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,pg_temp as $$
+declare v_org uuid;begin
+  perform public.eco_require_actor(p_actor_id,'catalog.manage');
+  select organization_id into strict v_org from public.eco_employees where id=p_actor_id and status='ACTIVE';
+  insert into public.eco_sales_policies(organization_id,max_sales_discount_percentage,updated_by)
+  values(v_org,(p_payload->>'max_sales_discount_percentage')::numeric,p_actor_id)
+  on conflict(organization_id) do update set max_sales_discount_percentage=excluded.max_sales_discount_percentage,updated_by=excluded.updated_by,updated_at=now();
+  return jsonb_build_object('max_sales_discount_percentage',p_payload->>'max_sales_discount_percentage');
+end $$;
+
+create or replace function public.eco_create_sales_invoice(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,extensions,pg_temp as $$
+declare
+  v_cached jsonb; v_key text:=p_payload->>'idempotency_key';
+  v_customer public.eco_customers%rowtype; v_address public.eco_customer_addresses%rowtype;
+  v_order uuid; v_line uuid; v_invoice uuid; v_payment uuid; v_branch uuid; v_package uuid; v_package_version uuid; v_price_item uuid;
+  v_description text; v_sale_category text; v_currency char(3):='EGP'; v_subtotal numeric(14,2); v_discount numeric(14,2):=0;
+  v_discount_percentage numeric(8,4):=coalesce(nullif(p_payload->>'discount_percentage','')::numeric,0); v_tax_rate numeric(8,4):=0;
+  v_tax numeric(14,2); v_delivery numeric(14,2); v_total numeric(14,2); v_status text; v_snapshot jsonb; v_max_discount numeric(8,4); v_slot text;
+begin
+  perform public.eco_require_actor(p_actor_id,'orders.create');
+  v_cached:=public.eco_begin_idempotent('CREATE_SALES_INVOICE',v_key,p_actor_id,p_payload); if v_cached is not null then return v_cached; end if;
+  select * into strict v_customer from public.eco_customers where id=(p_payload->>'customer_id')::uuid and status='ACTIVE';
+  if exists(select 1 from public.eco_employee_role_assignments era where era.employee_id=p_actor_id and era.role_code in('sales_agent','cs_agent') and era.approved and era.effective_from<=current_date and(era.effective_to is null or era.effective_to>=current_date))
+     and not exists(select 1 from public.eco_customer_assignments ca where ca.customer_id=v_customer.id and ca.employee_id=p_actor_id and ca.effective_from<=current_date and(ca.effective_to is null or ca.effective_to>=current_date)) then
+    raise exception 'ECO_CUSTOMER_OUT_OF_SCOPE' using errcode='42501';
+  end if;
+  select * into strict v_address from public.eco_customer_addresses where id=(p_payload->>'address_id')::uuid and customer_id=v_customer.id and active;
+  select coalesce(sp.max_sales_discount_percentage,10) into v_max_discount from public.eco_employees e left join public.eco_sales_policies sp on sp.organization_id=e.organization_id where e.id=p_actor_id;
+  if v_discount_percentage>v_max_discount then raise exception 'ECO_DISCOUNT_LIMIT_EXCEEDED: %',v_max_discount using errcode='23514'; end if;
+  if v_discount_percentage>0 and nullif(p_payload->>'promotion_code','') is not null then raise exception 'ECO_ONE_DISCOUNT_METHOD_ONLY' using errcode='23514'; end if;
+
+  if p_payload->>'pricing_mode'='CUSTOM' then
+    select b.id into strict v_branch from public.eco_branches b join public.eco_employees e on e.organization_id=b.organization_id where e.id=p_actor_id and b.active order by b.created_at limit 1;
+    v_description:=trim(p_payload->>'custom_description'); v_subtotal:=(p_payload->>'custom_price')::numeric; v_sale_category:=p_payload->>'order_type';
+    if v_subtotal<=0 or v_description='' then raise exception 'ECO_CUSTOM_PRICE_INVALID'; end if;
+    if p_payload->>'order_type' in('SUBSCRIPTION','RENEWAL','REACTIVATION') then
+      insert into public.eco_packages(branch_id,code,name_ar,sale_category,active,program_code,package_type_code)
+      values(v_branch,'CUSTOM-'||substr(replace(v_key,'-',''),1,22),v_description,'SUBSCRIPTION',false,'CUSTOM',coalesce(nullif(p_payload->>'custom_package_type',''),'LUNCH_ONLY')) returning id into v_package;
+      insert into public.eco_package_versions(package_id,version_number,size_code,service_days,frequency_policy,effective_from,status,approved_by,approved_at)
+      values(v_package,1,'REGULAR',(p_payload->>'custom_service_days')::integer,'DAILY',(p_payload->>'start_date')::date,'APPROVED',p_actor_id,now()) returning id into v_package_version;
+      for v_slot in select unnest(case p_payload->>'custom_package_type' when 'AM' then array['BREAKFAST','LUNCH'] when 'BM' then array['LUNCH','DINNER'] when 'FULL_DAY' then array['BREAKFAST','LUNCH','DINNER','SNACK'] else array['LUNCH'] end) loop
+        insert into public.eco_package_slots(package_version_id,slot_code,quantity,obligation_weight) values(v_package_version,v_slot,1,1);
+      end loop;
+    end if;
+  else
+    select pbi.id,pv.id,p.name_ar,p.sale_category,p.branch_id,pb.currency,pbi.unit_price,pbi.tax_rate
+    into strict v_price_item,v_package_version,v_description,v_sale_category,v_branch,v_currency,v_subtotal,v_tax_rate
+    from public.eco_price_book_items pbi
+    join public.eco_price_books pb on pb.id=pbi.price_book_id and pb.status='APPROVED'
+    join public.eco_package_versions pv on pv.id=pbi.package_version_id and pv.status='APPROVED'
+    join public.eco_packages p on p.id=pv.package_id and p.active
+    where pbi.package_version_id=(p_payload->>'package_version_id')::uuid and pb.effective_from<=current_date and(pb.effective_to is null or pb.effective_to>=current_date)
+    order by pb.effective_from desc limit 1;
+  end if;
+  select default_delivery_fee into v_delivery from public.eco_zones where id=v_address.zone_id;
+  if nullif(p_payload->>'promotion_code','') is not null then
+    select least(case when discount_type='PERCENT' then v_subtotal*discount_value/100 else discount_value end,coalesce(max_discount,v_subtotal)) into v_discount
+    from public.eco_promotions where code=p_payload->>'promotion_code' and active and approval_status='APPROVED' and starts_at<=now() and(ends_at is null or ends_at>=now());
+    if v_discount is null then raise exception 'ECO_PROMOTION_INVALID'; end if;
+  else v_discount:=round(v_subtotal*v_discount_percentage/100,2); end if;
+  v_tax:=round((v_subtotal-v_discount)*v_tax_rate/100,2); v_total:=v_subtotal-v_discount+v_delivery+v_tax;
+  v_status:=case when p_payload->>'payment_method'='CASH' then 'PENDING_PAYMENT' else 'PENDING_VERIFICATION' end;
+  insert into public.eco_orders(branch_id,customer_id,order_type,status,sales_owner_id,service_start_date,address_id,delivery_window_id,notes,created_by)
+  values(v_branch,v_customer.id,p_payload->>'order_type',v_status,p_actor_id,(p_payload->>'start_date')::date,v_address.id,(p_payload->>'delivery_window_id')::uuid,nullif(p_payload->>'notes',''),p_actor_id) returning id into v_order;
+  insert into public.eco_order_lines(order_id,line_no,package_version_id,description,quantity,unit_price,discount_amount,tax_rate,delivery_fee,line_total,source_price_book_item_id)
+  values(v_order,1,v_package_version,v_description,1,v_subtotal,v_discount,v_tax_rate,v_delivery,v_total,v_price_item) returning id into v_line;
+  v_snapshot:=jsonb_build_object('order_id',v_order,'customer_id',v_customer.id,'pricing_mode',p_payload->>'pricing_mode','line',jsonb_build_object('description',v_description,'package_version_id',v_package_version,'unit_price',v_subtotal,'discount_percentage',v_discount_percentage,'discount',v_discount,'tax',v_tax,'delivery',v_delivery),'total',v_total,'created_at',now());
+  insert into public.eco_invoices(branch_id,order_id,customer_id,currency,subtotal,discount_total,delivery_fees,tax_total,total,status,immutable_snapshot,snapshot_sha256)
+  values(v_branch,v_order,v_customer.id,v_currency,v_subtotal,v_discount,v_delivery,v_tax,v_total,'OPEN',v_snapshot,encode(digest(v_snapshot::text,'sha256'),'hex')) returning id into v_invoice;
+  insert into public.eco_invoice_lines(invoice_id,line_no,description,quantity,unit_price,discount_amount,tax_amount,line_total,performance_obligation_type,obligation_weight,source_order_line_id)
+  values(v_invoice,1,v_description,1,v_subtotal,v_discount,v_tax,v_total-v_delivery,v_sale_category,1,v_line);
+  insert into public.eco_payments(customer_id,invoice_id,method,declared_amount,currency,status,reference,received_at,created_by)
+  values(v_customer.id,v_invoice,p_payload->>'payment_method',v_total,v_currency,v_status,nullif(p_payload->>'payment_reference',''),(p_payload->>'payment_date')::date,p_actor_id) returning id into v_payment;
+  insert into public.eco_outbox_events(event_type,aggregate_type,aggregate_id,payload) values('INVOICE_CREATED','invoice',v_invoice::text,jsonb_build_object('invoice_id',v_invoice,'payment_id',v_payment,'status',v_status,'sales_owner_id',p_actor_id));
+  return public.eco_finish_idempotent('CREATE_SALES_INVOICE',v_key,jsonb_build_object('order_id',v_order,'invoice_id',v_invoice,'payment_id',v_payment,'total',v_total,'status',v_status));
+end $$;
+
+drop view if exists public.eco_package_options_v;
+create view public.eco_package_options_v as
+select pv.id value,p.name_ar||' — '||pv.service_days||' يوم — '||pv.size_code||' — '||pbi.unit_price||' ج' label
+from public.eco_package_versions pv join public.eco_packages p on p.id=pv.package_id and p.active
+join lateral(select pbi2.* from public.eco_price_book_items pbi2 join public.eco_price_books pb on pb.id=pbi2.price_book_id where pbi2.package_version_id=pv.id and pb.status='APPROVED' and pb.effective_from<=current_date and(pb.effective_to is null or pb.effective_to>=current_date) order by pb.effective_from desc limit 1)pbi on true
+where pv.status='APPROVED';
+
+drop view if exists public.eco_accounting_verification_queue_v;
+create view public.eco_accounting_verification_queue_v with(security_invoker=false) as
+select p.id payment_id,p.id,i.id invoice_id,i.invoice_number,c.full_name customer_name,o.order_type,o.service_start_date,p.method,i.total expected_amount,p.declared_amount,p.reference,p.received_at payment_date,(select string_agg(il.description,', ' order by il.line_no) from public.eco_invoice_lines il where il.invoice_id=i.id) invoice_items,coalesce((select max(status) from public.eco_payment_proofs pp where pp.invoice_id=i.id),'MISSING') proof_status,exists(select 1 from public.eco_payments p2 where p2.id<>p.id and p2.method=p.method and p2.reference=p.reference and p2.status='VERIFIED') duplicate_reference,p.created_at
+from public.eco_payments p join public.eco_invoices i on i.id=p.invoice_id join public.eco_orders o on o.id=i.order_id join public.eco_customers c on c.id=p.customer_id where p.status in('PENDING_PAYMENT','PENDING_VERIFICATION');
+
+revoke all on function public.eco_save_sales_policy(uuid,jsonb),public.eco_create_sales_invoice(uuid,jsonb) from public,anon,authenticated;
+grant execute on function public.eco_save_sales_policy(uuid,jsonb),public.eco_create_sales_invoice(uuid,jsonb) to service_role;
+revoke all on public.eco_package_options_v,public.eco_accounting_verification_queue_v from public,anon,authenticated;
+grant select on public.eco_package_options_v,public.eco_accounting_verification_queue_v to service_role;
+
+insert into public.eco_schema_migrations(version,description,checksum)
+values('011_sales_invoice','Catalog or custom server-priced invoices, discount guardrails and accounting queue details','sha256:eco-v5-011-sales-invoice')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300004_targets_commissions_views.sql
+-- ============================================================
+begin;
+
+drop view if exists public.eco_targets_v;
+create view public.eco_targets_v with(security_invoker=false) as
+with company_targets as(
+  select distinct on(branch_id,period_start) id,branch_id,period_start,revenue_target,quantity_target from public.eco_company_sales_targets where status='APPROVED' order by branch_id,period_start,version_number desc
+), employee_targets as(
+  select distinct on(employee_id,period_start) id,employee_id,period_start,revenue_target,quantity_target from public.eco_employee_sales_targets where status='APPROVED' order by employee_id,period_start,version_number desc
+), sales as(
+  select employee_id,period_start,sum(booked_value) booked_actual,sum(commissionable_value) filter(where lifecycle_state in('ELIGIBLE_CONFIRMED','COMMISSION_ACCRUED','COMMISSION_PAYABLE','COMMISSION_PAID')) confirmed_actual from public.eco_sales_credit_events group by employee_id,period_start
+)
+select ct.id,ct.period_start,'COMPANY'::text scope_type,'إجمالي الشركة'::text scope_name,ct.revenue_target,coalesce(sum(s.booked_actual),0) booked_actual,coalesce(sum(s.confirmed_actual),0) confirmed_actual,coalesce(sum(s.booked_actual),0)/greatest(extract(day from current_date),1)*extract(day from(date_trunc('month',current_date)+interval '1 month - 1 day')) forecast,coalesce(sum(s.booked_actual),0)-ct.revenue_target variance,case when coalesce(sum(s.booked_actual),0)>=ct.revenue_target then 'GREEN' when coalesce(sum(s.booked_actual),0)>=ct.revenue_target*.8 then 'AMBER' else 'RED' end rag_status
+from company_targets ct left join public.eco_employees e on e.organization_id=(select organization_id from public.eco_branches where id=ct.branch_id) left join sales s on s.employee_id=e.id and s.period_start=ct.period_start group by ct.id,ct.period_start,ct.revenue_target
+union all
+select et.id,et.period_start,'EMPLOYEE'::text,e.full_name,et.revenue_target,coalesce(s.booked_actual,0),coalesce(s.confirmed_actual,0),coalesce(s.booked_actual,0)/greatest(extract(day from current_date),1)*extract(day from(date_trunc('month',current_date)+interval '1 month - 1 day')),coalesce(s.booked_actual,0)-et.revenue_target,case when coalesce(s.booked_actual,0)>=et.revenue_target then 'GREEN' when coalesce(s.booked_actual,0)>=et.revenue_target*.8 then 'AMBER' else 'RED' end
+from employee_targets et join public.eco_employees e on e.id=et.employee_id left join sales s on s.employee_id=et.employee_id and s.period_start=et.period_start;
+
+drop view if exists public.eco_commissions_v;
+create view public.eco_commissions_v with(security_invoker=false) as
+with periods as(
+  select e.id employee_id,e.full_name,date_trunc('month',current_date)::date period_start from public.eco_employees e
+  where e.status='ACTIVE' and exists(select 1 from public.eco_employee_role_assignments era where era.employee_id=e.id and era.role_code in('sales_agent','sales_manager') and era.approved and era.effective_from<=current_date and(era.effective_to is null or era.effective_to>=current_date))
+), target as(
+  select distinct on(employee_id,period_start) employee_id,period_start,revenue_target from public.eco_employee_sales_targets where status='APPROVED' order by employee_id,period_start,version_number desc
+), credit as(
+  select employee_id,period_start,sum(booked_value) booked_value,sum(booked_value) filter(where lifecycle_state='PAYMENT_VERIFIED_PENDING_MATURITY') pending_value,sum(commissionable_value) filter(where lifecycle_state in('ELIGIBLE_CONFIRMED','COMMISSION_ACCRUED','COMMISSION_PAYABLE','COMMISSION_PAID')) eligible_value,max(maturity_reason) filter(where lifecycle_state='PAYMENT_VERIFIED_PENDING_MATURITY') maturity_reason from public.eco_sales_credit_events group by employee_id,period_start
+), accrual as(
+  select employee_id,period_start,sum(accrued_amount) accrued_amount,sum(accrued_amount) filter(where status='PAYABLE') payable_amount,sum(accrued_amount) filter(where status='PAID') paid_amount from public.eco_commission_accruals group by employee_id,period_start
+), reversal as(
+  select ca.employee_id,ca.period_start,sum(cr.amount) clawback_amount from public.eco_commission_reversals cr join public.eco_commission_accruals ca on ca.id=cr.accrual_id group by ca.employee_id,ca.period_start
+)
+select p.employee_id id,p.employee_id scope_employee_id,p.period_start,p.full_name employee_name,coalesce(t.revenue_target,0) target,coalesce(c.booked_value,0) booked_value,coalesce(c.pending_value,0) pending_value,coalesce(c.eligible_value,0) eligible_value,100*coalesce(c.booked_value,0)/nullif(t.revenue_target,0) booked_achievement,100*coalesce(c.eligible_value,0)/nullif(t.revenue_target,0) confirmed_achievement,coalesce(a.accrued_amount,0) accrued_amount,coalesce(a.payable_amount,0) payable_amount,coalesce(a.paid_amount,0) paid_amount,coalesce(r.clawback_amount,0) clawback_amount,c.maturity_reason
+from periods p left join target t on t.employee_id=p.employee_id and t.period_start=p.period_start left join credit c on c.employee_id=p.employee_id and c.period_start=p.period_start left join accrual a on a.employee_id=p.employee_id and a.period_start=p.period_start left join reversal r on r.employee_id=p.employee_id and r.period_start=p.period_start;
+
+revoke all on public.eco_targets_v,public.eco_commissions_v from public,anon,authenticated;
+grant select on public.eco_targets_v,public.eco_commissions_v to service_role;
+insert into public.eco_schema_migrations(version,description,checksum)
+values('012_targets_commissions_views','Company and employee targets with booked, pending and matured commission projections','sha256:eco-v5-012-targets-commissions-views')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300005_coo_dashboard.sql
+-- ============================================================
+begin;
+
+drop view if exists public.eco_operations_dashboard_v;
+create view public.eco_operations_dashboard_v with(security_invoker=false) as
+select
+  b.id,
+  (select count(*) from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and s.status in('ACTIVE','PAUSED')) active_members,
+  (select count(*) from public.eco_customers c where c.organization_id=b.organization_id and c.created_at>=date_trunc('month',current_date)) new_customers,
+  (select count(*) from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and s.status='CANCELED' and s.canceled_at>=date_trunc('month',current_date)) churn_count,
+  100.0*(select count(*) from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and s.status='CANCELED' and s.canceled_at>=date_trunc('month',current_date))/nullif((select count(*) from public.eco_subscriptions s join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and s.activated_at<date_trunc('month',current_date)),0) churn_ratio,
+  100.0*(select count(*) from public.eco_renewal_opportunities ro join public.eco_subscriptions s on s.id=ro.subscription_id join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and ro.status='RENEWED' and ro.due_date>=date_trunc('month',current_date)::date)/nullif((select count(*) from public.eco_renewal_opportunities ro join public.eco_subscriptions s on s.id=ro.subscription_id join public.eco_orders o on o.id=s.order_id where o.branch_id=b.id and ro.due_date>=date_trunc('month',current_date)::date),0) renewal_rate,
+  (select coalesce(avg(customer_total),0) from(select i.customer_id,sum(pa.amount) customer_total from public.eco_payment_allocations pa join public.eco_invoices i on i.id=pa.invoice_id where i.branch_id=b.id group by i.customer_id)x) average_ltv,
+  (select coalesce(sum(rs.deferred_amount),0) from public.eco_revenue_schedules rs join public.eco_invoice_lines il on il.id=rs.invoice_line_id join public.eco_invoices i on i.id=il.invoice_id where i.branch_id=b.id) remaining_subscriber_funds,
+  (select coalesce(sum(pa.amount),0) from public.eco_payment_allocations pa join public.eco_invoices i on i.id=pa.invoice_id where i.branch_id=b.id and pa.allocated_at>=date_trunc('month',current_date)) month_sales,
+  (select coalesce(sum(cp.amount),0) from public.eco_commission_payables cp join public.eco_employees e on e.id=cp.employee_id where e.organization_id=b.organization_id and cp.status='OPEN') commission_liability,
+  (select coalesce(sum(required_quantity),0) from public.eco_production_demand d where d.branch_id=b.id and d.service_date=current_date+1) production_demand,
+  (select least(100,100.0*coalesce(sum(required_quantity),0)/nullif(500,0)) from public.eco_production_demand d where d.branch_id=b.id and d.service_date=current_date+1) kitchen_utilization,
+  (select 100.0*count(*) filter(where st.delivered_at<=st.promised_end)/nullif(count(*) filter(where st.state='DELIVERED'),0) from public.eco_route_stops st join public.eco_routes r on r.id=st.route_id where r.branch_id=b.id and r.route_date=current_date) delivery_sla,
+  (select count(*) from public.eco_planning_exceptions where status='OPEN') open_exceptions,
+  now() freshness
+from public.eco_branches b where b.active;
+
+revoke all on public.eco_operations_dashboard_v from public,anon,authenticated;
+grant select on public.eco_operations_dashboard_v to service_role;
+insert into public.eco_schema_migrations(version,description,checksum)
+values('013_coo_dashboard','Live COO subscriber, retention, LTV, sales, commission and operations dashboard','sha256:eco-v5-013-coo-dashboard')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300006_delivery_workflow.sql
+-- ============================================================
+begin;
+
+create or replace function public.eco_create_route(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,pg_temp as $$
+declare v_cached jsonb;v_key text:=p_payload->>'idempotency_key';v_route uuid;v_rider uuid;v_stop uuid;v_sequence integer:=0;v_cod numeric;v_group record;v_count integer:=0;begin
+  perform public.eco_require_actor(p_actor_id,'routes.manage');
+  v_cached:=public.eco_begin_idempotent('CREATE_ROUTE',v_key,p_actor_id,p_payload);if v_cached is not null then return v_cached;end if;
+  if nullif(p_payload->>'rider_employee_id','') is not null then select id into v_rider from public.eco_riders where employee_id=(p_payload->>'rider_employee_id')::uuid and active;end if;
+  insert into public.eco_routes(branch_id,route_date,zone_id,delivery_window_id,rider_id,status,assigned_at,idempotency_key,created_by)
+  select branch_id,(p_payload->>'route_date')::date,(p_payload->>'zone_id')::uuid,(p_payload->>'delivery_window_id')::uuid,v_rider,case when v_rider is null then 'PLANNED' else 'ASSIGNED' end,case when v_rider is null then null else now() end,v_key,p_actor_id from public.eco_zones where id=(p_payload->>'zone_id')::uuid returning id into v_route;
+  for v_group in
+    select f.customer_id,f.address_id,min(f.created_at) first_created
+    from public.eco_fulfillments f join public.eco_customer_addresses a on a.id=f.address_id
+    where f.delivery_date=(p_payload->>'route_date')::date and a.zone_id=(p_payload->>'zone_id')::uuid and f.delivery_window_id=(p_payload->>'delivery_window_id')::uuid and f.status in('QA_RELEASED','PACKED','READY_FOR_DISPATCH')
+      and exists(select 1 from public.eco_pack_units pu where pu.fulfillment_id=f.id and pu.status in('PLANNED','PACKED','READY'))
+      and not exists(select 1 from public.eco_stop_pack_units spu join public.eco_pack_units pu on pu.id=spu.pack_unit_id where pu.fulfillment_id=f.id)
+    group by f.customer_id,f.address_id order by first_created
+  loop
+    v_sequence:=v_sequence+1;
+    select coalesce(sum(greatest(i.total-coalesce((select sum(pa.amount) from public.eco_payment_allocations pa where pa.invoice_id=i.id),0),0)),0) into v_cod
+    from public.eco_invoices i join public.eco_orders o on o.id=i.order_id
+    where o.id in(select distinct f.order_id from public.eco_fulfillments f where f.customer_id=v_group.customer_id and f.address_id=v_group.address_id and f.delivery_date=(p_payload->>'route_date')::date)
+      and exists(select 1 from public.eco_payments p where p.invoice_id=i.id and p.method='CASH' and p.status in('PENDING_PAYMENT','PENDING_VERIFICATION'));
+    insert into public.eco_route_stops(route_id,fulfillment_group_key,customer_id,address_id,sequence_no,state,cod_amount,assigned_at)
+    values(v_route,(p_payload->>'route_date')||':'||v_group.customer_id||':'||v_group.address_id,v_group.customer_id,v_group.address_id,v_sequence,case when v_rider is null then 'PLANNED' else 'ASSIGNED' end,v_cod,case when v_rider is null then null else now() end) returning id into v_stop;
+    insert into public.eco_stop_pack_units(route_stop_id,pack_unit_id)
+    select v_stop,pu.id from public.eco_pack_units pu join public.eco_fulfillments f on f.id=pu.fulfillment_id
+    where f.customer_id=v_group.customer_id and f.address_id=v_group.address_id and f.delivery_date=(p_payload->>'route_date')::date and f.delivery_window_id=(p_payload->>'delivery_window_id')::uuid and pu.status in('PLANNED','PACKED','READY') on conflict do nothing;
+    update public.eco_fulfillments set status='READY_FOR_DISPATCH' where customer_id=v_group.customer_id and address_id=v_group.address_id and delivery_date=(p_payload->>'route_date')::date and delivery_window_id=(p_payload->>'delivery_window_id')::uuid and status in('QA_RELEASED','PACKED');
+    v_count:=v_count+1;
+  end loop;
+  return public.eco_finish_idempotent('CREATE_ROUTE',v_key,jsonb_build_object('route_id',v_route,'stop_count',v_count,'rider_assigned',v_rider is not null));
+end $$;
+
+create or replace function public.eco_dispatch_route(p_actor_id uuid,p_payload jsonb) returns jsonb
+language plpgsql security definer set search_path=public,pg_temp as $$
+declare v_route uuid:=(p_payload->>'route_id')::uuid;v_count integer;begin
+  perform public.eco_require_actor(p_actor_id,'routes.manage');
+  update public.eco_routes set status='DISPATCHED',dispatched_at=coalesce(dispatched_at,now()) where id=v_route and rider_id is not null and status in('ASSIGNED','READY');
+  if not found then raise exception 'ECO_ROUTE_NOT_READY_TO_DISPATCH'; end if;
+  update public.eco_route_stops set state='DISPATCHED',dispatched_at=coalesce(dispatched_at,now()) where route_id=v_route and state in('PLANNED','ASSIGNED','READY');
+  get diagnostics v_count=row_count;
+  insert into public.eco_outbox_events(event_type,aggregate_type,aggregate_id,payload) values('ROUTE_DISPATCHED','route',v_route::text,jsonb_build_object('route_id',v_route,'stop_count',v_count));
+  return jsonb_build_object('route_id',v_route,'stop_count',v_count,'status','DISPATCHED');
+end $$;
+
+drop view if exists public.eco_rider_today_route_v;
+create view public.eco_rider_today_route_v with(security_invoker=false) as
+select st.id,rd.employee_id rider_employee_id,r.id route_id,st.sequence_no,c.full_name customer_name,c.phone_display phone,a.address_line,w.name_ar delivery_window,(select count(*) from public.eco_stop_pack_units where route_stop_id=st.id) pack_count,st.cod_amount,st.state,coalesce(a.map_url,'https://maps.google.com/?q='||a.latitude||','||a.longitude) navigation_url
+from public.eco_route_stops st join public.eco_routes r on r.id=st.route_id join public.eco_riders rd on rd.id=r.rider_id join public.eco_customers c on c.id=st.customer_id join public.eco_customer_addresses a on a.id=st.address_id join public.eco_delivery_windows w on w.id=r.delivery_window_id where r.route_date=current_date and r.status in('DISPATCHED','IN_PROGRESS','CLOSED');
+
+revoke all on function public.eco_create_route(uuid,jsonb),public.eco_dispatch_route(uuid,jsonb) from public,anon,authenticated;
+grant execute on function public.eco_create_route(uuid,jsonb),public.eco_dispatch_route(uuid,jsonb) to service_role;
+revoke all on public.eco_rider_today_route_v from public,anon,authenticated;
+grant select on public.eco_rider_today_route_v to service_role;
+insert into public.eco_schema_migrations(version,description,checksum)
+values('014_delivery_workflow','Automatic stop creation, COD calculation, dispatch and rider-safe route details','sha256:eco-v5-014-delivery-workflow')
+on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();
+select pg_notify('pgrst','reload schema');
+commit;
+
+-- ============================================================
+-- 202608300007_cancellations_notifications.sql
+-- ============================================================
+begin;
+create table if not exists public.eco_notification_comments(id uuid primary key default gen_random_uuid(),notification_id uuid not null references public.eco_notifications(id) on delete cascade,actor_id uuid not null references public.eco_employees(id),body text not null check(length(body) between 1 and 2000),created_at timestamptz not null default now());
+alter table public.eco_notification_comments enable row level security;
+revoke all on public.eco_notification_comments from public,anon,authenticated;grant select,insert on public.eco_notification_comments to service_role;
+
+create or replace function public.eco_add_notification_comment(p_actor_id uuid,p_payload jsonb) returns jsonb language plpgsql security definer set search_path=public,pg_temp as $$declare v_id uuid;begin perform public.eco_require_actor(p_actor_id,'notifications.read');if not exists(select 1 from public.eco_notifications n where n.id=(p_payload->>'notification_id')::uuid and(n.employee_id=p_actor_id or public.eco_actor_has_permission(p_actor_id,'*'))) then raise exception 'ECO_NOTIFICATION_FORBIDDEN' using errcode='42501';end if;insert into public.eco_notification_comments(notification_id,actor_id,body) values((p_payload->>'notification_id')::uuid,p_actor_id,trim(p_payload->>'body')) returning id into v_id;return jsonb_build_object('comment_id',v_id);end $$;
+
+create or replace function public.eco_request_cancellation(p_actor_id uuid,p_payload jsonb) returns jsonb language plpgsql security definer set search_path=public,pg_temp as $$
+declare v_sub public.eco_subscriptions%rowtype;v_request uuid;v_cancel uuid;v_remaining numeric(14,2);v_consumed numeric(14,2);v_penalty numeric(14,2);v_delivery_days integer;v_delivery_penalty numeric(14,2);v_refund numeric(14,2);begin
+perform public.eco_require_actor(p_actor_id,'subscriptions.change.preview');select * into strict v_sub from public.eco_subscriptions where id=(p_payload->>'subscription_id')::uuid and status in('ACTIVE','PAUSED') for update;
+if exists(select 1 from public.eco_subscription_change_requests where idempotency_key=p_payload->>'idempotency_key') then select id into v_request from public.eco_subscription_change_requests where idempotency_key=p_payload->>'idempotency_key';select id into v_cancel from public.eco_cancellations where change_request_id=v_request;return jsonb_build_object('request_id',v_request,'cancellation_id',v_cancel,'duplicate',true);end if;
+select coalesce(sum((granted_quantity-consumed_quantity-reserved_quantity)*obligation_unit_value),0),coalesce(sum(consumed_quantity*obligation_unit_value),0) into v_remaining,v_consumed from public.eco_entitlements where subscription_id=v_sub.id;select count(distinct service_date) into v_delivery_days from public.eco_fulfillments where subscription_id=v_sub.id and status='DELIVERED';v_penalty:=round(v_consumed*.20,2);v_delivery_penalty:=v_delivery_days*30;v_refund:=greatest(v_remaining-v_penalty-v_delivery_penalty,0);
+insert into public.eco_subscription_change_requests(subscription_id,change_type,requested_payload,preview_snapshot,status,requested_by,idempotency_key,reason) values(v_sub.id,'CANCEL',p_payload,jsonb_build_object('remaining_value',v_remaining,'consumed_value',v_consumed,'consumed_penalty',v_penalty,'delivered_days',v_delivery_days,'delivery_penalty',v_delivery_penalty,'refund_amount',v_refund),'PENDING_APPROVAL',p_actor_id,p_payload->>'idempotency_key',p_payload->>'reason') returning id into v_request;
+insert into public.eco_cancellations(subscription_id,change_request_id,remaining_value,consumed_value,penalty_amount,delivery_penalty,refund_amount,policy_version,status,statement_snapshot) values(v_sub.id,v_request,v_remaining,v_consumed,v_penalty,v_delivery_penalty,v_refund,'ECO-CANCEL-20PCT-30EGP-v1','REQUESTED',jsonb_build_object('remaining_value',v_remaining,'consumed_value',v_consumed,'penalty_20_percent',v_penalty,'delivered_days',v_delivery_days,'delivery_penalty_30_per_day',v_delivery_penalty,'refund_amount',v_refund,'reason',p_payload->>'reason')) returning id into v_cancel;
+insert into public.eco_notifications(employee_id,title,body,priority,entity_type,entity_id,deep_link,due_at) select distinct era.employee_id,'طلب إلغاء يحتاج مراجعة','راجع حسبة الإلغاء والاسترداد للعميل قبل تنفيذ الإلغاء.','HIGH','cancellation',v_cancel,'/accounting',now()+interval '1 day' from public.eco_employee_role_assignments era where era.role_code in('accountant','finance_controller') and era.approved and era.effective_from<=current_date and(era.effective_to is null or era.effective_to>=current_date);
+return jsonb_build_object('request_id',v_request,'cancellation_id',v_cancel,'refund_amount',v_refund,'status','PENDING_ACCOUNTING');end $$;
+
+create or replace function public.eco_review_cancellation(p_actor_id uuid,p_payload jsonb) returns jsonb language plpgsql security definer set search_path=public,pg_temp as $$declare v_cancel public.eco_cancellations%rowtype;v_approved boolean:=(p_payload->>'approved')::boolean;begin perform public.eco_require_actor(p_actor_id,'payments.verify');select * into strict v_cancel from public.eco_cancellations where id=(p_payload->>'cancellation_id')::uuid for update;if v_cancel.status<>'REQUESTED' then return jsonb_build_object('cancellation_id',v_cancel.id,'duplicate',true,'status',v_cancel.status);end if;if not v_approved then update public.eco_cancellations set status='REJECTED',reviewed_by=p_actor_id,reviewed_at=now() where id=v_cancel.id;update public.eco_subscription_change_requests set status='REJECTED',approved_by=p_actor_id,approved_at=now() where id=v_cancel.change_request_id;return jsonb_build_object('cancellation_id',v_cancel.id,'status','REJECTED');end if;update public.eco_cancellations set status='APPROVED',reviewed_by=p_actor_id,reviewed_at=now() where id=v_cancel.id;update public.eco_subscription_change_requests set status='COMMITTED',approved_by=p_actor_id,approved_at=now(),committed_at=now() where id=v_cancel.change_request_id;update public.eco_subscriptions set status='CANCELED',canceled_at=now(),updated_at=now() where id=v_cancel.subscription_id;update public.eco_fulfillments set status='CANCELED',updated_at=now() where subscription_id=v_cancel.subscription_id and service_date>=current_date and status in('PLANNED','READY_FOR_KITCHEN','QA_RELEASED','PACKED','READY_FOR_DISPATCH');update public.eco_sales_credit_events set lifecycle_state=case when lifecycle_state='PAYMENT_VERIFIED_PENDING_MATURITY' then 'CANCELED_BEFORE_MATURITY' else 'REVERSED_AFTER_MATURITY' end where order_id=(select order_id from public.eco_subscriptions where id=v_cancel.subscription_id) and lifecycle_state in('PAYMENT_VERIFIED_PENDING_MATURITY','ELIGIBLE_CONFIRMED');insert into public.eco_subscription_events(subscription_id,event_type,effective_at,actor_id,source_type,source_id,payload,idempotency_key) values(v_cancel.subscription_id,'CANCEL',now(),p_actor_id,'cancellation',v_cancel.id,v_cancel.statement_snapshot,'cancel-approved:'||v_cancel.id) on conflict(idempotency_key) do nothing;insert into public.eco_outbox_events(event_type,aggregate_type,aggregate_id,payload) values('CANCELLATION_APPROVED','cancellation',v_cancel.id::text,jsonb_build_object('subscription_id',v_cancel.subscription_id,'refund_amount',v_cancel.refund_amount));return jsonb_build_object('cancellation_id',v_cancel.id,'status','APPROVED','refund_amount',v_cancel.refund_amount);end $$;
+
+create or replace view public.eco_cancellation_queue_v with(security_invoker=false) as select ca.id,ca.id cancellation_id,s.subscription_number,c.full_name customer_name,ca.remaining_value,ca.consumed_value,ca.penalty_amount,ca.delivery_penalty,ca.refund_amount,ca.policy_version,ca.status,cr.reason,ca.created_at from public.eco_cancellations ca join public.eco_subscriptions s on s.id=ca.subscription_id join public.eco_customers c on c.id=s.customer_id join public.eco_subscription_change_requests cr on cr.id=ca.change_request_id where ca.status='REQUESTED';
+drop view if exists public.eco_notifications_v;
+create view public.eco_notifications_v with(security_invoker=false) as select n.id,n.employee_id scope_employee_id,n.title,n.body,n.priority,n.due_at,n.status,n.created_at,(select count(*) from public.eco_notification_comments nc where nc.notification_id=n.id) comment_count,(select nc.body from public.eco_notification_comments nc where nc.notification_id=n.id order by nc.created_at desc limit 1) latest_comment from public.eco_notifications n;
+revoke all on function public.eco_add_notification_comment(uuid,jsonb),public.eco_request_cancellation(uuid,jsonb),public.eco_review_cancellation(uuid,jsonb) from public,anon,authenticated;grant execute on function public.eco_add_notification_comment(uuid,jsonb),public.eco_request_cancellation(uuid,jsonb),public.eco_review_cancellation(uuid,jsonb) to service_role;
+revoke all on public.eco_cancellation_queue_v,public.eco_notifications_v from public,anon,authenticated;grant select on public.eco_cancellation_queue_v,public.eco_notifications_v to service_role;
+insert into public.eco_schema_migrations(version,description,checksum) values('015_cancellations_notifications','Accounting-approved cancellation calculator and notification comments','sha256:eco-v5-015-cancellations-notifications') on conflict(version) do update set description=excluded.description,checksum=excluded.checksum,applied_at=now();select pg_notify('pgrst','reload schema');commit;

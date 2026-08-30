@@ -19,16 +19,19 @@ export default async function Page() {
       <WorkspaceBoundary>
         <ModuleWorkspace
           model={rider ? "rider_route" : "dispatcher_routes"}
+          exportModel={rider ? undefined : "delivery_export"}
           columns={
             rider
               ? [
                   { key: "sequence_no", label: "#", format: "number" },
                   { key: "customer_name", label: "العميل" },
+                  { key: "phone", label: "الهاتف" },
                   { key: "address_line", label: "العنوان" },
+                  { key: "delivery_window", label: "موعد التوصيل" },
                   { key: "pack_count", label: "العبوات", format: "number" },
                   { key: "cod_amount", label: "COD", format: "money" },
                   { key: "state", label: "الحالة", format: "status" },
-                  { key: "navigation_url", label: "الخريطة" },
+                  { key: "navigation_url", label: "الخريطة", format: "link" },
                 ]
               : [
                   { key: "route_date", label: "التاريخ", format: "date" },
@@ -108,6 +111,13 @@ export default async function Page() {
                   },
                 ]
               : [
+                  {
+                    command: "dispatch_route",
+                    label: "إرسال للمندوب",
+                    rowAction: true,
+                    prefill: { route_id: "id" },
+                    fields: [{ name: "route_id", label: "رقم المسار", required: true }],
+                  },
                   {
                     command: "create_route",
                     label: "إنشاء مسار",

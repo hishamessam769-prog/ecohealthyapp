@@ -16,14 +16,17 @@ export default function Page() {
           columns={[
             { key: "period_start", label: "الشهر", format: "date" },
             { key: "employee_name", label: "الموظف" },
-            { key: "plan_name", label: "الخطة" },
+            { key: "target", label: "التارجت", format: "money" },
             { key: "booked_value", label: "مدفوع", format: "money" },
-            { key: "pending_value", label: "Pending", format: "money" },
-            { key: "eligible_value", label: "مؤهل", format: "money" },
+            { key: "pending_value", label: "منتظر الاستحقاق", format: "money" },
+            { key: "eligible_value", label: "مؤهل نهائي", format: "money" },
+            { key: "booked_achievement", label: "تحقيق مدفوع", format: "percent" },
+            { key: "confirmed_achievement", label: "تحقيق مؤهل", format: "percent" },
             { key: "accrued_amount", label: "متراكم", format: "money" },
             { key: "payable_amount", label: "مستحق", format: "money" },
             { key: "paid_amount", label: "مدفوع", format: "money" },
             { key: "clawback_amount", label: "Clawback", format: "money" },
+            { key: "maturity_reason", label: "سبب الانتظار" },
           ]}
           commands={[
             {
@@ -80,7 +83,7 @@ export default function Page() {
                   name: "fixed_maturity_days",
                   label: "أيام الانتظار",
                   type: "number",
-                  defaultValue: "15",
+                  defaultValue: "5",
                 },
                 {
                   name: "minimum_fulfilled_percentage",
@@ -102,11 +105,9 @@ export default function Page() {
                 },
                 {
                   name: "tiers",
-                  label: "الشرائح JSON",
-                  type: "textarea",
+                  label: "شرائح التحقيق والعمولة",
+                  type: "tiers",
                   required: true,
-                  defaultValue:
-                    '[{"min_percentage":0,"max_percentage":60,"rate_percentage":0,"fixed_bonus":0},{"min_percentage":60,"max_percentage":85,"rate_percentage":1.5,"fixed_bonus":0},{"min_percentage":85,"max_percentage":100,"rate_percentage":1.75,"fixed_bonus":0},{"min_percentage":100,"rate_percentage":2,"fixed_bonus":0}]',
                 },
               ],
             },

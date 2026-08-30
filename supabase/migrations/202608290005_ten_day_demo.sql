@@ -31,7 +31,7 @@ begin
   values('DEMO-SALES-PLAN','خطة عمولة المبيعات — Demo','INDIVIDUAL')
   on conflict(code) do update set active=true returning id into v_plan;
   insert into public.eco_commission_plan_versions(commission_plan_id,version_number,effective_from,status,eligible_sales_types,eligible_payment_methods,maturity_rule,fixed_maturity_days,minimum_fulfilled_percentage,approved_by,approved_at)
-  values(v_plan,1,date_trunc('month',current_date)::date,'APPROVED',array['SUBSCRIPTION','RENEWAL'],array['CASH','INSTAPAY'],'BOTH_CONDITIONS_REQUIRED',15,50,p_actor_id,now())
+  values(v_plan,1,date_trunc('month',current_date)::date,'APPROVED',array['SUBSCRIPTION','RENEWAL'],array['CASH','INSTAPAY'],'BOTH_CONDITIONS_REQUIRED',5,50,p_actor_id,now())
   on conflict(commission_plan_id,version_number) do update set status='APPROVED',approved_by=p_actor_id,approved_at=now() returning id into v_version;
   insert into public.eco_commission_tiers(plan_version_id,min_achievement_percentage,max_achievement_percentage,commission_rate_percentage)
   values(v_version,0,60,0) on conflict do nothing;
@@ -97,6 +97,5 @@ end $$;
 
 revoke all on function public.eco_seed_ten_day_demo(uuid) from public,anon,authenticated;
 grant execute on function public.eco_seed_ten_day_demo(uuid) to service_role;
-select public.eco_seed_ten_day_demo((select id from public.eco_employees where lower(email)='hishamessam769@gmail.com' limit 1));
 select pg_notify('pgrst','reload schema');
 commit;

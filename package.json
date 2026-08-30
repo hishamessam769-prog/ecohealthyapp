@@ -11,6 +11,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:sql": "node scripts/test-schema.mjs",
+    "schema:build": "node scripts/build-final-schema.mjs",
     "test:all": "npm run typecheck && npm run test && npm run test:sql && npm run build"
   },
   "dependencies": {

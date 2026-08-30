@@ -276,7 +276,7 @@ create table public.eco_commission_plan_versions (
   id uuid primary key default gen_random_uuid(), commission_plan_id uuid not null references public.eco_commission_plans(id), version_number integer not null, effective_from date not null, effective_to date, status text not null default 'DRAFT' check(status in('DRAFT','PENDING_APPROVAL','APPROVED','RETIRED')),
   eligible_sales_types text[] not null default '{}', eligible_payment_methods text[] not null default '{}', include_delivery_fees boolean not null default false, exclude_taxes boolean not null default true, discounts_reduce_value boolean not null default true,
   maturity_rule text not null check(maturity_rule in('FIXED_DAYS_AFTER_PAYMENT','PERCENTAGE_OF_SUBSCRIPTION_FULFILLED','BOTH_CONDITIONS_REQUIRED','EITHER_CONDITION_REQUIRED','DELIVERY_COMPLETED','MANUAL_FINANCE_APPROVAL')),
-  fixed_maturity_days integer not null default 15, minimum_fulfilled_percentage numeric(6,3) not null default 50, minimum_hold_days integer not null default 0, month_end_minimum_hold_days integer not null default 6,
+  fixed_maturity_days integer not null default 5, minimum_fulfilled_percentage numeric(6,3) not null default 50, minimum_hold_days integer not null default 0, month_end_minimum_hold_days integer not null default 6,
   require_no_open_refund boolean not null default true, require_no_open_cancellation boolean not null default true, require_payment_reconciled boolean not null default false, carry_pending_to_next_period boolean not null default true,
   manager_override_permission text, clawback_policy jsonb not null default '{}', payout_day integer check(payout_day between 1 and 31),
   eligibility_target_scope text check(eligibility_target_scope in('COMPANY','TEAM')), minimum_target_achievement_percentage numeric(8,4), commission_base text check(commission_base in('ELIGIBLE_TEAM_SALES','ELIGIBLE_COMPANY_SALES','TEAM_CONTRIBUTION','RENEWAL_VALUE','MANAGER_PERSONAL_SALES')),
@@ -500,7 +500,7 @@ declare v_cached jsonb;v_key text:=p_payload->>'idempotency_key';v_payment publi
      end loop;end if;v_cursor:=v_cursor+1;end loop;update public.eco_subscriptions set expected_end_date=v_cursor-1,renewal_due_date=v_cursor-8 where id=v_subscription;update public.eco_subscription_cycles set expected_end_date=v_cursor-1,renewal_due_date=v_cursor-8 where id=v_cycle;
  end if;
  select cpv.id into v_plan from public.eco_commission_plan_versions cpv where cpv.status='APPROVED' and cpv.effective_from<=current_date and(cpv.effective_to is null or cpv.effective_to>=current_date) and v_order.order_type=any(cpv.eligible_sales_types) order by cpv.version_number desc limit 1;v_period:=date_trunc('month',current_date)::date;
- insert into public.eco_sales_credit_events(employee_id,customer_id,order_id,invoice_id,event_type,lifecycle_state,booked_value,commissionable_value,period_start,maturity_earliest_at,maturity_reason,plan_version_id,idempotency_key) values(v_order.sales_owner_id,v_order.customer_id,v_order.id,v_invoice.id,'PAYMENT_VERIFIED','PAYMENT_VERIFIED_PENDING_MATURITY',v_invoice.total,v_invoice.subtotal-v_invoice.discount_total,v_period,now()+coalesce((select fixed_maturity_days from public.eco_commission_plan_versions where id=v_plan),15)*interval '1 day','بانتظار شروط الاستحقاق: مدة الاحتفاظ ونسبة تنفيذ الاشتراك',v_plan,'credit:'||v_invoice.id) on conflict(invoice_id,event_type) do nothing;
+ insert into public.eco_sales_credit_events(employee_id,customer_id,order_id,invoice_id,event_type,lifecycle_state,booked_value,commissionable_value,period_start,maturity_earliest_at,maturity_reason,plan_version_id,idempotency_key) values(v_order.sales_owner_id,v_order.customer_id,v_order.id,v_invoice.id,'PAYMENT_VERIFIED','PAYMENT_VERIFIED_PENDING_MATURITY',v_invoice.total,v_invoice.subtotal-v_invoice.discount_total,v_period,now()+coalesce((select fixed_maturity_days from public.eco_commission_plan_versions where id=v_plan),5)*interval '1 day','بانتظار شروط الاستحقاق: مدة الاحتفاظ ونسبة تنفيذ الاشتراك',v_plan,'credit:'||v_invoice.id) on conflict(invoice_id,event_type) do nothing;
  insert into public.eco_outbox_events(event_type,aggregate_type,aggregate_id,payload) values('PAYMENT_CONFIRMED','invoice',v_invoice.id::text,jsonb_build_object('invoice_id',v_invoice.id,'subscription_id',v_subscription)) on conflict do nothing;
  v_result:=jsonb_build_object('payment_id',v_payment.id,'invoice_id',v_invoice.id,'order_id',v_order.id,'subscription_id',v_subscription,'activated',true);return public.eco_finish_idempotent('CONFIRM_PAYMENT',v_key,v_result);
 end $$;
@@ -599,6 +599,18 @@ declare v_count integer;v_customer_ids uuid[];v_employee_ids uuid[];begin
  delete from public.eco_employees where id=any(v_employee_ids);
  return jsonb_build_object('deleted_demo_customers',v_count,'idempotency_key',p_idempotency_key);
 end $$;
+
+-- These role-specific projections are deliberately rebuilt on every safe schema
+-- re-run. Later migrations extend their column sets, so PostgreSQL requires the
+-- previous definitions to be dropped before the base definitions are restored.
+drop view if exists public.eco_operations_dashboard_v;
+drop view if exists public.eco_rider_today_route_v;
+drop view if exists public.eco_commissions_v;
+drop view if exists public.eco_targets_v;
+drop view if exists public.eco_catalog_v;
+drop view if exists public.eco_notifications_v;
+drop view if exists public.eco_package_options_v;
+drop view if exists public.eco_accounting_verification_queue_v;
 
 create or replace view public.eco_ceo_dashboard_v with(security_invoker=false) as
 select b.id,

@@ -5,33 +5,26 @@ export const dynamic = "force-dynamic";
 export default function Page() {
   return (
     <SecurePage
-      permission="subscribers.read"
-      title="دليل المشتركين"
-      subtitle="ملف 360° والاستحقاقات والتجديد والمخاطر"
+      permission="customers.read"
+      title="سجل العملاء والمشتركين"
+      subtitle="المصدر الموحد لبيانات العميل قبل إنشاء أي اشتراك أو فاتورة"
     >
       <WorkspaceBoundary>
         <ModuleWorkspace
-          model="subscribers"
-          metrics={[{ key: "remaining_entitlements", label: "إجمالي الوجبات المتبقية", format: "number" }, { key: "churn_risk_score", label: "متوسط خطر الإلغاء", format: "percent" }]}
+          model="customer_directory"
+          exportModel="customer_export"
+          metrics={[{ key: "active_subscription_count", label: "اشتراكات نشطة", format: "number" }, { key: "total_orders", label: "إجمالي الطلبات", format: "number" }]}
           columns={[
             { key: "customer_number", label: "رقم العميل" },
             { key: "full_name", label: "العميل" },
-            { key: "phone_masked", label: "الهاتف" },
-            { key: "sales_owner_name", label: "مسؤول المبيعات" },
-            { key: "subscription_status", label: "الحالة", format: "status" },
-            { key: "plan_name", label: "الباكدج" },
-            {
-              key: "remaining_entitlements",
-              label: "الرصيد",
-              format: "number",
-            },
-            { key: "renewal_due_date", label: "موعد التجديد", format: "date" },
+            { key: "phone", label: "الهاتف" },
+            { key: "address_line", label: "العنوان" },
             { key: "zone_name", label: "المنطقة" },
-            {
-              key: "churn_risk_score",
-              label: "خطر الإلغاء",
-              format: "percent",
-            },
+            { key: "delivery_window_name", label: "موعد التوصيل", hiddenMobile: true },
+            { key: "sales_owner_name", label: "مسؤول المبيعات" },
+            { key: "current_plan_name", label: "الاشتراك الحالي" },
+            { key: "active_subscription_count", label: "نشط", format: "number" },
+            { key: "map_url", label: "اللوكيشن", format: "link", hiddenMobile: true },
           ]}
           commands={[
             {
@@ -49,6 +42,15 @@ export default function Page() {
                   required: true,
                 },
                 { name: "address_line", label: "العنوان", required: true },
+                { name: "map_url", label: "رابط Google Maps", placeholder: "https://maps.google.com/..." },
+                { name: "latitude", label: "خط العرض", type: "number", placeholder: "30.0444" },
+                { name: "longitude", label: "خط الطول", type: "number", placeholder: "31.2357" },
+                {
+                  name: "delivery_window_id",
+                  label: "موعد التوصيل المفضل",
+                  type: "select",
+                  lookup: "delivery_window_options",
+                },
                 {
                   name: "sales_owner_id",
                   label: "مسؤول المبيعات",

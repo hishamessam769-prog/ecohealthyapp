@@ -118,8 +118,28 @@ try {
   if (!secondSetupBlocked) throw new Error("Second setup attempt was not blocked.");
 
   await db.exec(await read("outputs/02_install_demo_data.sql"));
+  await db.exec(await read("outputs/04_install_subscription_acceptance_demo.sql"));
+  const operationFixture = await db.query(`
+    select s.id as subscription_id,d.id as day_id,si.installed_by
+    from public.subscriptions s
+    join public.planned_service_days d on d.subscription_id=s.id and d.status='planned'
+    cross join public.system_installations si
+    where s.is_demo and s.status='active'
+      and not exists(select 1 from public.refunds r where r.subscription_id=s.id)
+    order by s.subscription_number,d.service_date limit 1
+  `);
+  const operation = operationFixture.rows[0];
+  const plannedBefore = await db.query("select count(*)::integer as count from public.planned_service_days where subscription_id=$1 and status='planned'", [operation.subscription_id]);
+  await db.query("select public.apply_service_day_action(array[$1::uuid],'skip',1,'Embedded acceptance test',$2)", [operation.day_id, operation.installed_by]);
+  const skipCheck = await db.query("select status from public.planned_service_days where id=$1", [operation.day_id]);
+  const plannedAfter = await db.query("select count(*)::integer as count from public.planned_service_days where subscription_id=$1 and status='planned'", [operation.subscription_id]);
+  if (skipCheck.rows[0]?.status !== "not_delivered" || plannedAfter.rows[0]?.count !== plannedBefore.rows[0]?.count) throw new Error("Skip day did not create a replacement service day.");
+  await db.query("select public.request_calculated_subscription_refund($1,'TRAVEL','Embedded acceptance test','instapay','Acceptance Customer','01000000000',$2)", [operation.subscription_id, operation.installed_by]);
+  const refundCheck = await db.query("select amount,calculation_basis from public.refunds where subscription_id=$1 order by requested_at desc limit 1", [operation.subscription_id]);
+  if (!refundCheck.rows[0] || Number(refundCheck.rows[0].amount) <= 0 || Number(refundCheck.rows[0].calculation_basis?.remaining_days || 0) <= 0) throw new Error("Calculated refund acceptance check failed.");
+  const subscriptionOperationChecks = { skipCreatesReplacement: true, calculatedRefundUsesRemainingDays: true };
   const installedDemo = await countDemoRows();
-  if (installedDemo.total < 25) throw new Error(`Demo installer created too few rows: ${installedDemo.total}`);
+  if (installedDemo.total < 350) throw new Error(`Demo installer created too few rows: ${installedDemo.total}`);
 
   await db.exec(await read("outputs/03_remove_demo_data.sql"));
   const remainingDemo = await countDemoRows();
@@ -162,6 +182,7 @@ try {
     demoRowsInstalled: installedDemo.total,
     demoTables: installedDemo.tableCount,
     demoRowsAfterCleanup: remainingDemo.total,
+    subscriptionOperationChecks,
     pgTap,
     ...counts.rows[0],
   };

@@ -4,16 +4,35 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { requirePermission } from "@/lib/auth/require-permission";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "الرئيسية" };
 
 export default async function DashboardPage() {
   const viewer = await requirePermission("dashboard.view");
+  let confirmedCash = 0; let activeSubscriptions = 0; let joinedSubscriptions = 0; let overdueTasks = 0; let todaySessions = 0;
+  if (!viewer.preview) {
+    const supabase = await createClient();
+    const currentTime = new Date();
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Cairo" }).format(currentTime);
+    const monthAgoDate = new Date(currentTime);
+    monthAgoDate.setUTCDate(monthAgoDate.getUTCDate() - 30);
+    const monthAgo = monthAgoDate.toISOString();
+    const [cashResult, activeResult, joinedResult, taskResult, sessionResult] = await Promise.all([
+      viewer.permissions.includes("payments.review") ? supabase.from("payment_transactions").select("amount").in("transaction_type", ["collection", "refund", "reversal"]) : Promise.resolve({ data: [] }),
+      viewer.permissions.includes("subscriptions.view") ? supabase.from("subscriptions").select("id", { count: "exact", head: true }).eq("status", "active") : Promise.resolve({ count: 0 }),
+      viewer.permissions.includes("subscriptions.view") ? supabase.from("subscriptions").select("id", { count: "exact", head: true }).gte("created_at", monthAgo) : Promise.resolve({ count: 0 }),
+      viewer.permissions.some((permission) => permission.startsWith("tasks.view_")) ? supabase.from("tasks").select("id", { count: "exact", head: true }).lt("due_at", new Date().toISOString()).not("status", "in", "(completed,cancelled)") : Promise.resolve({ count: 0 }),
+      viewer.permissions.includes("sessions.view_own") || viewer.permissions.includes("sessions.view_team") ? supabase.from("doctor_sessions").select("id", { count: "exact", head: true }).gte("scheduled_start", `${today}T00:00:00+02:00`).lt("scheduled_start", `${today}T23:59:59+02:00`) : Promise.resolve({ count: 0 }),
+    ]);
+    confirmedCash = ((cashResult as { data?: Array<{ amount: number }> }).data || []).reduce((sum, row) => sum + Number(row.amount), 0);
+    activeSubscriptions = activeResult.count || 0; joinedSubscriptions = joinedResult.count || 0; overdueTasks = taskResult.count || 0; todaySessions = sessionResult.count || 0;
+  }
   const cards = [
-    { label: "Confirmed Cash", value: "362K", detail: "+12.4% هذا الشهر", icon: Banknote, href: "/finance/payments", permission: "payments.review" },
-    { label: "الاشتراكات النشطة", value: "311", detail: "27 تجديد قريب", icon: Users, href: "/subscriptions", permission: "subscriptions.view" },
-    { label: "المهام المتأخرة", value: "13", detail: "3 حرجة", icon: CircleAlert, href: "/tasks", permission: "tasks.view_own" },
-    { label: "جلسات اليوم", value: "17", detail: "4 بانتظار الدفع", icon: CalendarClock, href: "/doctors/sessions", permission: "sessions.view_own" },
+    { label: "Confirmed Cash", value: viewer.preview ? "362K" : `${confirmedCash.toLocaleString("en-US")} EGP`, detail: "من الحركات المالية المؤكدة فقط", icon: Banknote, href: "/finance/payments", permission: "payments.review" },
+    { label: "الاشتراكات النشطة", value: viewer.preview ? "311" : String(activeSubscriptions), detail: `${joinedSubscriptions} انضموا آخر 30 يوم`, icon: Users, href: "/subscriptions", permission: "subscriptions.view" },
+    { label: "المهام المتأخرة", value: viewer.preview ? "13" : String(overdueTasks), detail: "حسب الصلاحية ونطاق الفرع", icon: CircleAlert, href: "/tasks", permission: "tasks.view_own" },
+    { label: "جلسات اليوم", value: viewer.preview ? "17" : String(todaySessions), detail: "حسب نطاق المستخدم", icon: CalendarClock, href: "/doctors/sessions", permission: "sessions.view_own" },
   ].filter((card) => viewer.preview || viewer.permissions.includes(card.permission));
   const apps = [
     { title: "المشروعات والمهام", description: "متابعة التنفيذ والردود والأدلة", href: "/projects", icon: FolderKanban, permission: "projects.view" },

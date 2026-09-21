@@ -1,0 +1,46 @@
+{
+  "upgradedFrom": 11,
+  "version": 12,
+  "price_options": 32,
+  "menu_days": 31,
+  "demo_subscriptions": 12,
+  "zones": 6,
+  "demo_tasks": 8,
+  "validation": [
+    {
+      "check_name": "commercial_cycle",
+      "passed": true,
+      "details": "Transactional hosted commercial RPCs"
+    },
+    {
+      "check_name": "permission_catalog",
+      "passed": true,
+      "details": "Permissions: 85"
+    },
+    {
+      "check_name": "rls_core",
+      "passed": true,
+      "details": "Core RLS tables checked"
+    },
+    {
+      "check_name": "schema_versions",
+      "passed": true,
+      "details": "Installed versions: 12"
+    },
+    {
+      "check_name": "storage_bucket",
+      "passed": true,
+      "details": "Private attachment bucket"
+    },
+    {
+      "check_name": "subscription_operations",
+      "passed": true,
+      "details": "Daily operations and calculated refunds"
+    },
+    {
+      "check_name": "system_roles",
+      "passed": true,
+      "details": "System roles: 15"
+    }
+  ]
+}

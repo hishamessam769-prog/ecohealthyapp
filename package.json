@@ -20,13 +20,16 @@
     "sql:build": "node scripts/build-master-sql.mjs",
     "sql:validate": "python3 scripts/validate-sql.py",
     "sql:test:embedded": "node scripts/test-master-pglite.mjs",
+    "sql:test:v12-upgrade": "node scripts/test-v12-upgrade-pglite.mjs",
     "staging:prepare": "node --env-file=.env.staging scripts/prepare-hosted-staging.mjs",
     "staging:install-master": "sh -c 'set -a; . ./.env.staging; set +a; sh scripts/install-hosted-master.sh'",
     "staging:verify": "node --env-file=.env.staging scripts/verify-hosted-staging.mjs",
     "test:watch": "vitest",
     "bootstrap:admin": "node --env-file-if-exists=.env.local scripts/bootstrap-admin.mjs",
     "seed:foundation-demo": "node --env-file-if-exists=.env.local scripts/seed-foundation-demo.mjs",
-    "cleanup:foundation-demo": "node --env-file-if-exists=.env.local scripts/cleanup-foundation-demo.mjs"
+    "seed:acceptance-users": "node --env-file-if-exists=.env.local scripts/seed-acceptance-users.mjs",
+    "cleanup:foundation-demo": "node --env-file-if-exists=.env.local scripts/cleanup-foundation-demo.mjs",
+    "cleanup:acceptance-users": "node --env-file-if-exists=.env.local scripts/cleanup-acceptance-users.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

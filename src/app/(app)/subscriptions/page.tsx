@@ -1,4 +1,4 @@
-import { activateSubscriptionAction } from "@/app/actions/commercial";
+import { activateSubscriptionAction, freezeSubscriptionAction, requestCalculatedRefundAction } from "@/app/actions/commercial";
 import { ActionNotice } from "@/components/ui/action-notice";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,38 +10,59 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "الاشتراكات والإيراد المؤجل" };
 const field = "mt-2 h-11 w-full rounded-xl border border-[var(--border)] bg-white px-3 text-sm";
-type Subscription = { id: string; subscription_number: number; status: string; starts_on: string; purchased_service_days: number; delivered_service_days: number; contract_value: number; deferred_balance: number; recognized_revenue: number; customers: { full_name: string } | null; invoices: { invoice_number: number } | null };
+type Subscription = { id: string; subscription_number: number; status: string; starts_on: string; ends_on: string | null; purchased_service_days: number; delivered_service_days: number; remaining_service_days: number; contract_value: number; deferred_balance: number; recognized_revenue: number; daily_value: number; daily_portions: number; customer_name: string; mobile: string | null; package_name: string; zone_name: string | null; address_line: string | null; delivery_window_start: string | null; delivery_window_end: string | null };
 type PaidInvoice = { id: string; invoice_number: number; customers: { full_name: string } | null; invoice_lines: Array<{ package_version_id: string; description: string }> };
+type Reason = { code: string; name: string };
+type CatalogItem = { id: string; code: string; name: string; program_code: string | null; meal_plan_code: string | null; package_versions: Array<{ price: number; service_days: number; meals_per_day: number }> };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ saved?: string; error?: string }> }) {
   const viewer = await requireAnyPermission(["subscriptions.view"]);
   const params = await searchParams;
-  let subscriptions: Subscription[] = []; let paidInvoices: PaidInvoice[] = [];
+  let subscriptions: Subscription[] = []; let paidInvoices: PaidInvoice[] = []; let reasons: Reason[] = []; let catalog: CatalogItem[] = [];
   if (viewer.preview) {
-    subscriptions = [{ id: "66666666-6666-4666-8666-666666666666", subscription_number: 1402, status: "active", starts_on: "2026-09-17", purchased_service_days: 30, delivered_service_days: 1, contract_value: 5700, deferred_balance: 5510, recognized_revenue: 190, customers: { full_name: "أحمد محمد" }, invoices: { invoice_number: 2088 } }];
+    subscriptions = [{ id: "66666666-6666-4666-8666-666666666666", subscription_number: 1402, status: "active", starts_on: "2026-09-17", ends_on: "2026-10-16", purchased_service_days: 30, delivered_service_days: 1, remaining_service_days: 29, contract_value: 5700, deferred_balance: 5510, recognized_revenue: 190, daily_value: 190, daily_portions: 1, customer_name: "أحمد محمد", mobile: "01000000000", package_name: "Eco 30", zone_name: "Zone 1", address_line: "التجمع الخامس", delivery_window_start: "10:00", delivery_window_end: "12:00" }];
     paidInvoices = [{ id: "33333333-3333-4333-8333-333333333333", invoice_number: 2088, customers: { full_name: "أحمد محمد" }, invoice_lines: [{ package_version_id: "11111111-1111-4111-8111-111111111111", description: "Eco 30 V3" }] }];
   } else {
     const supabase = await createClient();
-    const [{ data: subscriptionRows }, { data: invoiceRows }] = await Promise.all([
-      supabase.from("subscriptions").select("id,subscription_number,status,starts_on,purchased_service_days,delivered_service_days,contract_value,deferred_balance,recognized_revenue,customers(full_name),invoices(invoice_number)").order("created_at", { ascending: false }).limit(50),
+    const [subscriptionResult, invoiceResult, reasonResult, catalogResult] = await Promise.all([
+      supabase.from("subscriber_operations_v").select("*").order("subscription_number", { ascending: false }).limit(100),
       supabase.from("invoices").select("id,invoice_number,customers(full_name),invoice_lines(package_version_id,description)").eq("status", "paid").order("issued_at", { ascending: false }),
+      supabase.from("cancellation_reasons").select("code,name").eq("is_active", true).order("name"),
+      supabase.from("packages").select("id,code,name,program_code,meal_plan_code,package_versions(price,service_days,meals_per_day)").eq("status", "active").order("code"),
     ]);
-    subscriptions = (subscriptionRows || []) as unknown as Subscription[];
-    paidInvoices = (invoiceRows || []).filter((invoice) => Array.isArray(invoice.invoice_lines) && invoice.invoice_lines.length) as unknown as PaidInvoice[];
+    const loadError = subscriptionResult.error || invoiceResult.error || reasonResult.error || catalogResult.error;
+    if (loadError) throw new Error(`Subscriptions load failed: ${loadError.message}`);
+    subscriptions = (subscriptionResult.data || []) as Subscription[];
+    paidInvoices = (invoiceResult.data || []).filter((invoice) => Array.isArray(invoice.invoice_lines) && invoice.invoice_lines.length) as unknown as PaidInvoice[];
+    reasons = (reasonResult.data || []) as Reason[];
+    catalog = (catalogResult.data || []) as unknown as CatalogItem[];
   }
   const canManage = viewer.preview || viewer.permissions.includes("subscriptions.manage");
+  const canOperate = !viewer.preview && viewer.permissions.includes("subscriptions.operate_daily");
+  const canRequestRefund = !viewer.preview && viewer.permissions.includes("refunds.request");
+  const active = subscriptions.filter((item) => item.status === "active").length;
+  const frozen = subscriptions.filter((item) => item.status === "frozen").length;
+  const currentDate = new Date();
+  const joinedCutoff = new Date(currentDate);
+  joinedCutoff.setUTCDate(joinedCutoff.getUTCDate() - 30);
+  const joinedLast30 = subscriptions.filter((item) => new Date(item.starts_on) >= joinedCutoff).length;
+  const remainingValue = subscriptions.reduce((sum, item) => sum + Number(item.deferred_balance || 0), 0);
   return <div className="space-y-7">
-    <PageHeader eyebrow="Revenue control" title="الاشتراكات والإيراد المؤجل" description="التفعيل متاح فقط لفاتورة Paid، وPackage Version يجب أن يكون بندًا في الفاتورة نفسها." />
+    <PageHeader eyebrow="Revenue & subscriber control" title="الاشتراكات والمتابعة" description="الأيام والرصيد المتبقي، Freeze وRefund المحسوب، وربط التشغيل اليومي بالإيراد المؤجل." />
     <ActionNotice saved={params.saved} error={params.error} />
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">الاشتراكات النشطة</span><strong className="mt-2 block text-3xl">{active}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">Frozen</span><strong className="mt-2 block text-3xl">{frozen}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">انضموا آخر 30 يوم</span><strong className="mt-2 block text-3xl">{joinedLast30}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">إجمالي الرصيد المؤجل</span><strong className="mt-2 block text-3xl">{remainingValue.toLocaleString("en-US")} EGP</strong></Card></div>
     {canManage ? <Card><CardHeader title="تفعيل Subscription من فاتورة" description="ينشئ الاشتراك، Deferred Revenue Entry، وجدول أيام الخدمة في معاملة واحدة." /><form action={activateSubscriptionAction} className="grid gap-4 p-5 md:grid-cols-3"><label className="text-sm font-bold">الفاتورة *<select name="invoiceId" required className={field}><option value="">اختر فاتورة Paid</option>{paidInvoices.map((invoice) => <option key={invoice.id} value={invoice.id}>INV-{invoice.invoice_number} · {invoice.customers?.full_name}</option>)}</select></label><label className="text-sm font-bold">Package Version من الفاتورة *<select name="packageVersionId" required className={field}><option value="">اختر البند</option>{paidInvoices.flatMap((invoice) => invoice.invoice_lines.map((line) => <option key={`${invoice.id}-${line.package_version_id}`} value={line.package_version_id}>INV-{invoice.invoice_number} · {line.description}</option>))}</select></label><label className="text-sm font-bold">تاريخ البداية *<input name="startsOn" type="date" required className={field} /></label><Button type="submit" className="md:col-span-3">تفعيل وإنشاء Deferred Revenue</Button></form></Card> : null}
+    {canOperate || canRequestRefund ? <div className="grid gap-5 xl:grid-cols-2">{canOperate ? <Card><CardHeader title="Freeze اشتراك" description="يجمّد الأيام المحددة ويضيف نفس العدد تلقائيًا في نهاية الاشتراك." /><form action={freezeSubscriptionAction} className="grid gap-4 p-5 sm:grid-cols-2"><label className="text-sm font-bold sm:col-span-2">الاشتراك *<select name="subscriptionId" required className={field}><option value="">اختر</option>{subscriptions.filter((item) => item.status === "active").map((item) => <option key={item.id} value={item.id}>SUB-{item.subscription_number} · {item.customer_name}</option>)}</select></label><label className="text-sm font-bold">من *<input name="startsOn" type="date" required className={field} /></label><label className="text-sm font-bold">إلى *<input name="endsOn" type="date" required className={field} /></label><label className="text-sm font-bold sm:col-span-2">السبب *<input name="reason" minLength={3} required className={field} /></label><label className="flex items-center gap-2 text-sm font-bold sm:col-span-2"><input name="confirm" type="checkbox" value="yes" required />أؤكد تجميد الأيام وإنشاء أيام بديلة.</label><Button type="submit" className="sm:col-span-2">تنفيذ Freeze</Button></form></Card> : null}
+    {canRequestRefund ? <Card><CardHeader title="طلب Refund محسوب تلقائيًا" description="المبلغ = الأقل من قيمة الأيام المتبقية، Deferred Balance، وConfirmed Cash المتاح." /><form action={requestCalculatedRefundAction} className="grid gap-4 p-5 sm:grid-cols-2"><label className="text-sm font-bold sm:col-span-2">الاشتراك *<select name="subscriptionId" required className={field}><option value="">اختر</option>{subscriptions.filter((item) => ["active", "frozen"].includes(item.status)).map((item) => <option key={item.id} value={item.id}>SUB-{item.subscription_number} · {item.customer_name} · متبقي {item.remaining_service_days} يوم / {item.deferred_balance} EGP</option>)}</select></label><label className="text-sm font-bold">السبب *<select name="reasonCode" required className={field}><option value="">اختر</option>{reasons.map((reason) => <option key={reason.code} value={reason.code}>{reason.name}</option>)}</select></label><label className="text-sm font-bold">تفاصيل<input name="reasonDetails" className={field} /></label><label className="text-sm font-bold">طريقة الاسترداد *<select name="recipientMethod" required className={field}><option value="instapay">InstaPay</option><option value="mobile_wallet">Mobile Wallet</option><option value="bank_transfer">Bank Transfer</option><option value="cash">Cash</option></select></label><label className="text-sm font-bold">اسم صاحب الحساب *<input name="recipientAccountName" required className={field} /></label><label className="text-sm font-bold sm:col-span-2">رقم InstaPay / Wallet / IBAN *<input name="recipientAccountReference" required className={field} /></label><label className="flex items-center gap-2 text-sm font-bold sm:col-span-2"><input name="confirm" type="checkbox" value="yes" required />أؤكد إرسال الطلب المحسوب إلى Finance للمراجعة.</label><Button type="submit" className="sm:col-span-2" variant="danger">إنشاء طلب Refund</Button></form></Card> : null}</div> : null}
     <Card><CardHeader title="الاشتراكات الفعلية" description="Deferred + Recognized يجب أن يساويا قيمة العقد بعد كل حركة." /><ResponsiveTable rows={subscriptions} getKey={(row) => row.id} emptyTitle="لا توجد اشتراكات" emptyDescription="فعّل اشتراكًا من فاتورة مدفوعة." columns={[
       { key: "number", label: "الاشتراك", primary: true, render: (row: Subscription) => `SUB-${row.subscription_number}` },
-      { key: "customer", label: "العميل", render: (row: Subscription) => row.customers?.full_name || "—" },
-      { key: "invoice", label: "الفاتورة", render: (row: Subscription) => `INV-${row.invoices?.invoice_number || "—"}` },
-      { key: "days", label: "الأيام", render: (row: Subscription) => `${row.delivered_service_days}/${row.purchased_service_days}` },
-      { key: "deferred", label: "Deferred", render: (row: Subscription) => row.deferred_balance },
-      { key: "recognized", label: "Recognized", render: (row: Subscription) => row.recognized_revenue },
-      { key: "status", label: "الحالة", render: (row: Subscription) => <Badge tone="success">{row.status}</Badge> },
+      { key: "customer", label: "العميل", render: (row: Subscription) => <div><strong>{row.customer_name}</strong><span className="block text-xs font-normal text-[var(--text-muted)]">{row.mobile} · {row.zone_name}</span></div> },
+      { key: "package", label: "الباقة", render: (row: Subscription) => row.package_name },
+      { key: "days", label: "الأيام", render: (row: Subscription) => <div><strong>{row.remaining_service_days} متبقي</strong><span className="block text-xs font-normal text-[var(--text-muted)]">{row.delivered_service_days}/{row.purchased_service_days} تم</span></div> },
+      { key: "money", label: "الرصيد", render: (row: Subscription) => <div><strong>{Number(row.deferred_balance).toLocaleString("en-US")} EGP</strong><span className="block text-xs font-normal text-[var(--text-muted)]">{row.daily_value} / يوم</span></div> },
+      { key: "delivery", label: "التوصيل", render: (row: Subscription) => <div><span>{row.address_line || "—"}</span><span className="block text-xs text-[var(--text-muted)]">{row.delivery_window_start?.slice(0, 5)}–{row.delivery_window_end?.slice(0, 5)}</span></div> },
+      { key: "status", label: "الحالة", render: (row: Subscription) => <Badge tone={row.status === "active" ? "success" : row.status === "cancelled" ? "danger" : "warning"}>{row.status}</Badge> },
     ]} /></Card>
+    <Card><CardHeader title="كتالوج الأسعار التجريبي المعتمد" description="32 بديلًا من صور Muscles Gain وWeight Loss؛ أي تعديل لاحق ينشئ Version جديدة." /><div className="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-4">{catalog.map((item) => { const version = item.package_versions?.[0]; return <div key={item.id} className="rounded-xl border border-[var(--border)] p-4"><Badge tone={item.program_code === "muscles_gain" ? "info" : "success"}>{item.program_code}</Badge><strong className="mt-3 block text-sm">{item.name}</strong><span className="mt-2 block text-xl font-black">{Number(version?.price || 0).toLocaleString("en-US")} EGP</span><span className="text-xs text-[var(--text-muted)]">{version?.service_days} يوم · {version?.meals_per_day} وجبة/يوم</span></div>; })}{!catalog.length ? <p className="text-sm text-[var(--text-muted)]">سيظهر الكتالوج بعد تشغيل Demo SQL.</p> : null}</div></Card>
   </div>;
 }

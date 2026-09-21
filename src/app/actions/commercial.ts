@@ -20,6 +20,39 @@ function fail(path: string, code: string): never {
   redirect(`${path}?error=${encodeURIComponent(code)}`);
 }
 
+export async function createCustomerDeliveryProfileAction(formData: FormData) {
+  const path = "/crm/customers";
+  const viewer = await actor("customers.manage", path);
+  const parsed = z.object({
+    branchId: uuid, fullName: z.string().trim().min(2).max(160), mobile: z.string().trim().min(8).max(40),
+    email: z.union([z.string().trim().email(), z.literal("")]), addressLine: z.string().trim().min(8).max(500),
+    area: z.string().trim().min(2).max(120), city: z.string().trim().min(2).max(120), latitude: z.coerce.number().min(-90).max(90),
+    longitude: z.coerce.number().min(-180).max(180), gpsUrl: z.string().trim().url().max(1000), zoneId: uuid,
+    deliveryNotes: z.string().trim().max(1000).optional(), deliveryWindowStart: z.string().regex(/^\d{2}:\d{2}$/),
+    deliveryWindowEnd: z.string().regex(/^\d{2}:\d{2}$/), deliveryContactName: z.string().trim().max(160).optional(),
+    deliveryContactMobile: z.string().trim().max(40).optional(), confirmed: z.literal("yes"),
+  }).safeParse({
+    branchId: formData.get("branchId"), fullName: formData.get("fullName"), mobile: formData.get("mobile"), email: formData.get("email") || "",
+    addressLine: formData.get("addressLine"), area: formData.get("area"), city: formData.get("city"), latitude: formData.get("latitude"),
+    longitude: formData.get("longitude"), gpsUrl: formData.get("gpsUrl"), zoneId: formData.get("zoneId"), deliveryNotes: formData.get("deliveryNotes"),
+    deliveryWindowStart: formData.get("deliveryWindowStart"), deliveryWindowEnd: formData.get("deliveryWindowEnd"),
+    deliveryContactName: formData.get("deliveryContactName"), deliveryContactMobile: formData.get("deliveryContactMobile"), confirmed: formData.get("confirmed"),
+  });
+  if (!parsed.success) fail(path, "customer-delivery-validation");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("create_customer_delivery_profile", {
+    p_branch_id: parsed.data.branchId, p_full_name: parsed.data.fullName, p_mobile: parsed.data.mobile, p_email: parsed.data.email,
+    p_address_line: parsed.data.addressLine, p_area: parsed.data.area, p_city: parsed.data.city, p_latitude: parsed.data.latitude,
+    p_longitude: parsed.data.longitude, p_gps_url: parsed.data.gpsUrl, p_zone_id: parsed.data.zoneId, p_delivery_notes: parsed.data.deliveryNotes || "",
+    p_delivery_window_start: parsed.data.deliveryWindowStart, p_delivery_window_end: parsed.data.deliveryWindowEnd,
+    p_delivery_contact_name: parsed.data.deliveryContactName || parsed.data.fullName,
+    p_delivery_contact_mobile: parsed.data.deliveryContactMobile || parsed.data.mobile, p_actor_user_id: viewer.id,
+  });
+  if (error) fail(path, error.message);
+  revalidatePath(path);
+  redirect(`${path}?saved=customer-created`);
+}
+
 export async function createCustomerQuotationAction(formData: FormData) {
   const path = "/sales";
   const viewer = await actor("sales.quote", path);
@@ -167,6 +200,64 @@ export async function confirmDeliveryAction(formData: FormData) {
   redirect(`${path}?saved=delivered`);
 }
 
+export async function freezeSubscriptionAction(formData: FormData) {
+  const path = "/subscriptions";
+  const viewer = await actor("subscriptions.operate_daily", path);
+  const parsed = z.object({ subscriptionId: uuid, startsOn: z.coerce.date(), endsOn: z.coerce.date(), reason: z.string().trim().min(3).max(500), confirm: z.literal("yes") }).safeParse({
+    subscriptionId: formData.get("subscriptionId"), startsOn: formData.get("startsOn"), endsOn: formData.get("endsOn"), reason: formData.get("reason"), confirm: formData.get("confirm"),
+  });
+  if (!parsed.success || parsed.data.endsOn < parsed.data.startsOn) fail(path, "freeze-validation");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("freeze_subscription_period", {
+    p_subscription_id: parsed.data.subscriptionId, p_starts_on: parsed.data.startsOn.toISOString().slice(0, 10),
+    p_ends_on: parsed.data.endsOn.toISOString().slice(0, 10), p_reason: parsed.data.reason, p_actor_user_id: viewer.id,
+  });
+  if (error) fail(path, error.message);
+  revalidatePath(path); revalidatePath("/operations/subscribers");
+  redirect(`${path}?saved=frozen`);
+}
+
+export async function applyServiceDayBulkAction(formData: FormData) {
+  const path = "/operations/subscribers";
+  const operation = z.enum(["skip", "set_portions", "confirm_delivered"]).safeParse(formData.get("operation"));
+  if (!operation.success) fail(path, "operation");
+  const permission = operation.data === "confirm_delivered" ? "service.confirm_delivery" : "subscriptions.operate_daily";
+  const viewer = await actor(permission, path);
+  const parsed = z.object({ dayIds: z.array(uuid).min(1).max(100), portions: z.coerce.number().int().min(1).max(20).default(1), reason: z.string().trim().max(500).optional(), confirm: z.literal("yes") }).safeParse({
+    dayIds: formData.getAll("dayIds"), portions: formData.get("portions") || 1, reason: formData.get("reason"), confirm: formData.get("confirm"),
+  });
+  if (!parsed.success || (operation.data === "skip" && !parsed.data.reason)) fail(path, "daily-action-validation");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("apply_service_day_action", { p_day_ids: parsed.data.dayIds, p_action: operation.data, p_portions: parsed.data.portions, p_reason: parsed.data.reason || "", p_actor_user_id: viewer.id });
+  if (error) fail(path, error.message);
+  revalidatePath(path); revalidatePath("/subscriptions");
+  redirect(`${path}?saved=${operation.data}`);
+}
+
+export async function requestCalculatedRefundAction(formData: FormData) {
+  const path = "/subscriptions";
+  const viewer = await actor("refunds.request", path);
+  const parsed = z.object({
+    subscriptionId: uuid, reasonCode: z.string().trim().min(2).max(80), reasonDetails: z.string().trim().max(500).optional(),
+    recipientMethod: z.enum(["instapay", "mobile_wallet", "bank_transfer", "cash"]), recipientAccountName: z.string().trim().min(2).max(160),
+    recipientAccountReference: z.string().trim().min(3).max(160), confirm: z.literal("yes"),
+  }).safeParse({
+    subscriptionId: formData.get("subscriptionId"), reasonCode: formData.get("reasonCode"), reasonDetails: formData.get("reasonDetails"),
+    recipientMethod: formData.get("recipientMethod"), recipientAccountName: formData.get("recipientAccountName"),
+    recipientAccountReference: formData.get("recipientAccountReference"), confirm: formData.get("confirm"),
+  });
+  if (!parsed.success) fail(path, "refund-validation");
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("request_calculated_subscription_refund", {
+    p_subscription_id: parsed.data.subscriptionId, p_reason_code: parsed.data.reasonCode, p_reason_details: parsed.data.reasonDetails || "",
+    p_recipient_method: parsed.data.recipientMethod, p_recipient_account_name: parsed.data.recipientAccountName,
+    p_recipient_account_reference: parsed.data.recipientAccountReference, p_actor_user_id: viewer.id,
+  });
+  if (error) fail(path, error.message);
+  revalidatePath(path); revalidatePath("/finance/payments");
+  redirect(`${path}?saved=refund-requested`);
+}
+
 export async function requestRefundAction(formData: FormData) {
   const path = "/finance/payments";
   const viewer = await actor("refunds.request", path);
@@ -193,8 +284,8 @@ export async function approveRefundAction(formData: FormData) {
 
 export async function payRefundAction(formData: FormData) {
   const path = "/finance/payments";
-  const viewer = await actor("refunds.approve", path);
-  const parsed = z.object({ refundId: uuid, proofReference: z.string().trim().min(3).max(1000) }).safeParse({ refundId: formData.get("refundId"), proofReference: formData.get("proofReference") });
+  const viewer = await actor("refunds.pay", path);
+  const parsed = z.object({ refundId: uuid, proofReference: z.string().trim().min(3).max(1000), confirm: z.literal("yes") }).safeParse({ refundId: formData.get("refundId"), proofReference: formData.get("proofReference"), confirm: formData.get("confirm") });
   if (!parsed.success) fail(path, "refund-proof");
   const supabase = await createClient();
   const { error } = await supabase.rpc("pay_refund_and_clawback", { p_refund_id: parsed.data.refundId, p_actor_user_id: viewer.id, p_proof_reference: parsed.data.proofReference, p_idempotency_key: `refund:${parsed.data.refundId}:${crypto.randomUUID()}` });

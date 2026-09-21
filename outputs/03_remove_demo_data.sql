@@ -1,6 +1,7 @@
 -- Removes only records explicitly marked is_demo = true.
 begin;
 
+delete from public.subscription_operation_events where is_demo;
 delete from public.notification_attempts where is_demo;
 delete from public.notification_messages where is_demo;
 delete from public.retry_queue where is_demo;
@@ -70,6 +71,8 @@ delete from public.customer_notes where is_demo;
 delete from public.customer_allergies where is_demo;
 delete from public.customer_preferences where is_demo;
 delete from public.customer_addresses where is_demo;
+delete from public.meal_menu_days where is_demo;
+delete from public.delivery_zones where is_demo;
 delete from public.customers where is_demo;
 delete from public.leads where is_demo;
 delete from public.staff_directory where is_demo;

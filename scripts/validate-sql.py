@@ -14,6 +14,7 @@ FILES = sorted((ROOT / "supabase" / "migrations").glob("*.sql")) + [
     ROOT / "outputs" / "00_RESET_AND_INSTALL_COMPLETE_DATABASE.sql",
     ROOT / "outputs" / "02_install_demo_data.sql",
     ROOT / "outputs" / "03_remove_demo_data.sql",
+    ROOT / "outputs" / "04_install_subscription_acceptance_demo.sql",
 ]
 
 for path in FILES:

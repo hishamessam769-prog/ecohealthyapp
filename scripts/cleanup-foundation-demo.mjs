@@ -12,6 +12,8 @@ const emails = [
   process.env.DEMO_SALES_MANAGER_EMAIL,
   process.env.DEMO_SALES_REP_EMAIL,
   process.env.DEMO_FINANCE_EMAIL,
+  process.env.DEMO_OPERATIONS_EMAIL,
+  process.env.DEMO_TASK_USER_EMAIL,
 ].filter(Boolean).map((email) => email.toLowerCase());
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
   auth: { autoRefreshToken: false, persistSession: false },

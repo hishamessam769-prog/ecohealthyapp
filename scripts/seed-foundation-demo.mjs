@@ -15,6 +15,10 @@ const required = [
   "DEMO_SALES_REP_PASSWORD",
   "DEMO_FINANCE_EMAIL",
   "DEMO_FINANCE_PASSWORD",
+  "DEMO_OPERATIONS_EMAIL",
+  "DEMO_OPERATIONS_PASSWORD",
+  "DEMO_TASK_USER_EMAIL",
+  "DEMO_TASK_USER_PASSWORD",
 ];
 const missing = required.filter((name) => !process.env[name]);
 if (missing.length) throw new Error(`Missing demo variables: ${missing.join(", ")}`);
@@ -24,6 +28,8 @@ const accounts = [
   { key: "salesManager", name: "Sales Manager Demo", email: process.env.DEMO_SALES_MANAGER_EMAIL, password: process.env.DEMO_SALES_MANAGER_PASSWORD, role: "sales_manager" },
   { key: "salesRep", name: "Sales Representative Demo", email: process.env.DEMO_SALES_REP_EMAIL, password: process.env.DEMO_SALES_REP_PASSWORD, role: "sales_representative" },
   { key: "finance", name: "Finance Accountant Demo", email: process.env.DEMO_FINANCE_EMAIL, password: process.env.DEMO_FINANCE_PASSWORD, role: "finance_accountant" },
+  { key: "operations", name: "Operations Manager Demo", email: process.env.DEMO_OPERATIONS_EMAIL, password: process.env.DEMO_OPERATIONS_PASSWORD, role: "operations_manager" },
+  { key: "taskUser", name: "Task Action User Demo", email: process.env.DEMO_TASK_USER_EMAIL, password: process.env.DEMO_TASK_USER_PASSWORD, role: "customer_service" },
 ];
 
 for (const account of accounts) {
@@ -114,6 +120,9 @@ const branchGrants = [
   ["salesManager", main, "manage"], ["salesManager", second, "manage"],
   ["salesRep", main, "operate"],
   ["finance", second, "operate"],
+  ["finance", main, "operate"],
+  ["operations", main, "manage"], ["operations", second, "manage"],
+  ["taskUser", main, "operate"],
 ];
 for (const [key, branch, accessLevel] of branchGrants) {
   const account = accounts.find((item) => item.key === key);

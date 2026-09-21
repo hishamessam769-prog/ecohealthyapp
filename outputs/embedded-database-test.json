@@ -11,7 +11,7 @@
     {
       "check_name": "permission_catalog",
       "passed": true,
-      "details": "Permissions: 83"
+      "details": "Permissions: 85"
     },
     {
       "check_name": "rls_core",
@@ -21,12 +21,17 @@
     {
       "check_name": "schema_versions",
       "passed": true,
-      "details": "Installed versions: 11"
+      "details": "Installed versions: 12"
     },
     {
       "check_name": "storage_bucket",
       "passed": true,
       "details": "Private attachment bucket"
+    },
+    {
+      "check_name": "subscription_operations",
+      "passed": true,
+      "details": "Daily operations and calculated refunds"
     },
     {
       "check_name": "system_roles",
@@ -36,9 +41,13 @@
   ],
   "setupCreated": true,
   "secondSetupBlocked": true,
-  "demoRowsInstalled": 141,
-  "demoTables": 83,
+  "demoRowsInstalled": 824,
+  "demoTables": 86,
   "demoRowsAfterCleanup": 0,
+  "subscriptionOperationChecks": {
+    "skipCreatesReplacement": true,
+    "calculatedRefundUsesRemainingDays": true
+  },
   "pgTap": [
     {
       "file": "supabase/tests/database/0001_foundation_rls.sql",
@@ -62,6 +71,6 @@
     }
   ],
   "system_roles": 15,
-  "permissions": 83,
-  "public_tables": 98
+  "permissions": 85,
+  "public_tables": 101
 }

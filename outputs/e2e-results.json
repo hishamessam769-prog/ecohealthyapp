@@ -1,0 +1,178 @@
+{
+  "config": {
+    "argv": [
+      "/Users/hishamessam/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test"
+    ],
+    "configFile": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/playwright.config.ts",
+    "rootDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-chromium",
+        "name": "desktop-chromium",
+        "testDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/tests/e2e",
+        "testIgnore": [
+          "hosted-commercial.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chromium",
+        "name": "mobile-chromium",
+        "testDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/tests/e2e",
+        "testIgnore": [
+          "hosted-commercial.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "outputs/e2e-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": {
+      "command": "NEXT_PUBLIC_APP_PREVIEW_MODE=true ./node_modules/.bin/next start -p 3100",
+      "url": "http://127.0.0.1:3100/dashboard",
+      "timeout": 120000,
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "final.spec.ts",
+      "file": "final.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all final routes render, protect navigation, and capture responsive evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chromium",
+              "projectName": "desktop-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-17T06:30:07.348Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e79988ea38e06fc41059-425568d13187d9dc053f",
+          "file": "final.spec.ts",
+          "line": 32,
+          "column": 5
+        },
+        {
+          "title": "all final routes render, protect navigation, and capture responsive evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16605,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-17T06:30:22.497Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e79988ea38e06fc41059-9309c8e4d68a4efe75e2",
+          "file": "final.spec.ts",
+          "line": 32,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-17T06:30:06.636Z",
+    "duration": 32697.027000000002,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

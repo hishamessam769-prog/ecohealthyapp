@@ -1,0 +1,13 @@
+{
+  "preparedAt": "2026-09-17T06:53:57.179Z",
+  "supabaseUrlHost": "vsqjpzsstgarxlcuxrjm.supabase.co",
+  "organizationId": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+  "branchId": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+  "packageVersionId": "eed6637c-e79e-4b88-b3f4-f9b0c7b66f0d",
+  "users": {
+    "sales": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+    "finance": "8863abfe-b8df-4683-82e1-382221dfb900",
+    "operations": "adcbf0d1-f7cd-4359-858d-dbeef1860f6e"
+  },
+  "secretsWritten": false
+}

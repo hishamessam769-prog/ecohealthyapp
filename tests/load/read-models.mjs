@@ -1,2 +1,0 @@
-const base=process.env.LOAD_BASE_URL;if(!base)throw new Error("LOAD_BASE_URL is required");const requests=Number(process.env.LOAD_REQUESTS??100);const concurrency=Number(process.env.LOAD_CONCURRENCY??10);let cursor=0;let failures=0;await Promise.all(Array.from({length:concurrency},async()=>{while(cursor<requests){cursor+=1;const response=await fetch(`${base}/api/v1/read-models/notifications?pageSize=25`,{headers:{cookie:process.env.LOAD_COOKIE??""}});if(!response.ok)failures+=1}}));console.log({requests,concurrency,failures});if(failures)process.exit(1);
-

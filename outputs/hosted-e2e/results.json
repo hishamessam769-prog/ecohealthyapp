@@ -1,0 +1,131 @@
+{
+  "config": {
+    "argv": [
+      "/Users/hishamessam/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config=playwright.hosted.config.ts"
+    ],
+    "configFile": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/playwright.hosted.config.ts",
+    "rootDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/outputs/hosted-e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "hosted-commercial.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "outputs/hosted-e2e/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "hosted-commercial.spec.ts",
+      "file": "hosted-commercial.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real hosted commercial cycle through Sales, Finance and Operations UI",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 54227,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-17T21:47:24.865Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/outputs/hosted-e2e/artifacts/hosted-commercial-real-hos-4217f-s-Finance-and-Operations-UI/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/Users/hishamessam/Documents/Codex/2026-09-16/files-pasted-by-the-user-senior/outputs/hosted-e2e/artifacts/hosted-commercial-real-hos-4217f-s-Finance-and-Operations-UI/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "454234223e8a66aed51c-19c177c0e4cf683689db",
+          "file": "hosted-commercial.spec.ts",
+          "line": 73,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-17T21:47:24.476Z",
+    "duration": 55408.119,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

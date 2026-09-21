@@ -1,8 +1,16 @@
-import path from "node:path";
 import { defineConfig } from "vitest/config";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
-  resolve: { alias: { "@": path.resolve(__dirname, ".") } },
-  test: { include: ["tests/unit/**/*.test.ts", "tests/integration/**/*.test.ts"], exclude: ["tests/e2e/**"] },
+  test: {
+    environment: "node",
+    include: ["src/**/*.test.{ts,tsx}"],
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "./src"),
+      "server-only": path.resolve(fileURLToPath(new URL(".", import.meta.url)), "./src/test/server-only.ts"),
+    },
+  },
 });
-

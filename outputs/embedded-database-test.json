@@ -1,0 +1,67 @@
+{
+  "engine": "PGlite PostgreSQL WASM with Supabase auth/storage contract stubs",
+  "masterSqlExecutedFromEmptyDatabase": true,
+  "resetInstallerReplacedLegacyPublicSchema": true,
+  "validation": [
+    {
+      "check_name": "commercial_cycle",
+      "passed": true,
+      "details": "Transactional hosted commercial RPCs"
+    },
+    {
+      "check_name": "permission_catalog",
+      "passed": true,
+      "details": "Permissions: 83"
+    },
+    {
+      "check_name": "rls_core",
+      "passed": true,
+      "details": "Core RLS tables checked"
+    },
+    {
+      "check_name": "schema_versions",
+      "passed": true,
+      "details": "Installed versions: 11"
+    },
+    {
+      "check_name": "storage_bucket",
+      "passed": true,
+      "details": "Private attachment bucket"
+    },
+    {
+      "check_name": "system_roles",
+      "passed": true,
+      "details": "System roles: 15"
+    }
+  ],
+  "setupCreated": true,
+  "secondSetupBlocked": true,
+  "demoRowsInstalled": 141,
+  "demoTables": 83,
+  "demoRowsAfterCleanup": 0,
+  "pgTap": [
+    {
+      "file": "supabase/tests/database/0001_foundation_rls.sql",
+      "passed": true
+    },
+    {
+      "file": "supabase/tests/database/0002_permission_behavior.sql",
+      "passed": true
+    },
+    {
+      "file": "supabase/tests/database/0003_foundation_security.sql",
+      "passed": true
+    },
+    {
+      "file": "supabase/tests/database/0004_erp_modules.sql",
+      "passed": true
+    },
+    {
+      "file": "supabase/tests/database/0005_commercial_cycle.sql",
+      "passed": true
+    }
+  ],
+  "system_roles": 15,
+  "permissions": 83,
+  "public_tables": 98
+}

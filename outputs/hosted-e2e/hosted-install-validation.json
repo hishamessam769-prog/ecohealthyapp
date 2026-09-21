@@ -1,0 +1,94 @@
+{
+  "verifiedAt": "2026-09-17T06:53:46.417Z",
+  "hostedProjectHost": "vsqjpzsstgarxlcuxrjm.supabase.co",
+  "validation": [
+    {
+      "check_name": "schema_versions",
+      "passed": true,
+      "details": "Installed versions: 11"
+    },
+    {
+      "check_name": "rls_core",
+      "passed": true,
+      "details": "Core RLS tables checked"
+    },
+    {
+      "check_name": "system_roles",
+      "passed": true,
+      "details": "System roles: 15"
+    },
+    {
+      "check_name": "permission_catalog",
+      "passed": true,
+      "details": "Permissions: 83"
+    },
+    {
+      "check_name": "storage_bucket",
+      "passed": true,
+      "details": "Private attachment bucket"
+    },
+    {
+      "check_name": "commercial_cycle",
+      "passed": true,
+      "details": "Transactional hosted commercial RPCs"
+    }
+  ],
+  "schemaVersions": [
+    {
+      "version": 1,
+      "name": "foundation_identity_access",
+      "installed_at": "2026-09-17T06:53:31.918056+00:00"
+    },
+    {
+      "version": 2,
+      "name": "audit_settings_financial_periods",
+      "installed_at": "2026-09-17T06:53:31.918056+00:00"
+    },
+    {
+      "version": 3,
+      "name": "foundation_security_hardening",
+      "installed_at": "2026-09-17T06:53:31.918056+00:00"
+    },
+    {
+      "version": 4,
+      "name": "shared_events_notifications",
+      "installed_at": "2026-09-17T06:53:09.137744+00:00"
+    },
+    {
+      "version": 5,
+      "name": "projects_tasks_followups",
+      "installed_at": "2026-09-17T06:53:12.293192+00:00"
+    },
+    {
+      "version": 6,
+      "name": "crm_customers_complaints",
+      "installed_at": "2026-09-17T06:53:16.24045+00:00"
+    },
+    {
+      "version": 7,
+      "name": "sales_finance_subscriptions",
+      "installed_at": "2026-09-17T06:53:20.215594+00:00"
+    },
+    {
+      "version": 8,
+      "name": "targets_sales_commissions",
+      "installed_at": "2026-09-17T06:53:25.156369+00:00"
+    },
+    {
+      "version": 9,
+      "name": "doctors_sessions_accounting",
+      "installed_at": "2026-09-17T06:53:26.917689+00:00"
+    },
+    {
+      "version": 10,
+      "name": "integrations_setup_validation",
+      "installed_at": "2026-09-17T06:53:31.918056+00:00"
+    },
+    {
+      "version": 11,
+      "name": "hosted_commercial_cycle",
+      "installed_at": "2026-09-17T06:53:34.776037+00:00"
+    }
+  ],
+  "serviceRoleKeyWritten": false
+}

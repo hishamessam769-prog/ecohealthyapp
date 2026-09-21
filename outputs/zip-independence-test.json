@@ -1,0 +1,10 @@
+{
+  "archive": "eco-healthy-erp-final.zip",
+  "extractedToCleanTemporaryDirectory": true,
+  "dependenciesInstalledFromLockfile": true,
+  "productionBuildPassed": true,
+  "productionServerStarted": true,
+  "dashboardHttpStatus": 200,
+  "testedAt": "2026-09-16T22:57:14+03:00",
+  "secretsUsed": false
+}

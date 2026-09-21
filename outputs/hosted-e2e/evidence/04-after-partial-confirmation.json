@@ -1,0 +1,339 @@
+{
+  "stage": "04-after-partial-confirmation",
+  "capturedAt": "2026-09-17T21:47:45.492Z",
+  "customer": {
+    "id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+    "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+    "home_branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+    "customer_number": 7,
+    "full_name": "Hosted E2E 1789681644858",
+    "mobile": "01081644858",
+    "email": null,
+    "gender": null,
+    "birth_date": null,
+    "status": "active",
+    "source_lead_id": null,
+    "owner_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+    "created_by": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+    "created_at": "2026-09-17T21:47:29.103759+00:00",
+    "updated_at": "2026-09-17T21:47:29.103759+00:00",
+    "is_demo": false
+  },
+  "quotations": [
+    {
+      "id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "quotation_number": 5,
+      "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+      "status": "converted",
+      "currency": "EGP",
+      "subtotal": 6000,
+      "discount_amount": 300,
+      "total_amount": 5700,
+      "valid_until": "2026-09-24",
+      "notes": "",
+      "created_by": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "accepted_at": "2026-09-17T21:47:31.729429+00:00",
+      "created_at": "2026-09-17T21:47:29.103759+00:00",
+      "updated_at": "2026-09-17T21:47:33.127029+00:00",
+      "is_demo": false
+    }
+  ],
+  "invoices": [
+    {
+      "id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "invoice_number": 4,
+      "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+      "quotation_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "status": "partially_paid",
+      "currency": "EGP",
+      "total_amount": 5700,
+      "confirmed_paid_amount": 500,
+      "issued_at": "2026-09-17T21:47:33.127029+00:00",
+      "due_at": "2026-09-24T21:47:33.127029+00:00",
+      "created_by": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "created_at": "2026-09-17T21:47:33.127029+00:00",
+      "updated_at": "2026-09-17T21:47:42.567605+00:00",
+      "is_demo": false
+    }
+  ],
+  "invoiceLines": [
+    {
+      "id": "6e7db404-a711-4eb4-814e-143136b3184e",
+      "invoice_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "package_version_id": "eed6637c-e79e-4b88-b3f4-f9b0c7b66f0d",
+      "description": "Eco 30 Hosted E2E",
+      "quantity": 1,
+      "unit_price": 6000,
+      "line_total": 5700,
+      "source_snapshot": {
+        "currency": "EGP",
+        "package_id": "6fb6dbed-9ef0-47f9-bfe4-2cd2062eb584",
+        "unit_price": 6000,
+        "quotation_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+        "version_number": 1,
+        "quotation_line_id": "a18ae83f-de12-4b32-9d88-c16c76a05c11",
+        "package_version_id": "eed6637c-e79e-4b88-b3f4-f9b0c7b66f0d"
+      },
+      "is_demo": false
+    }
+  ],
+  "submissions": [
+    {
+      "id": "cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "submission_number": 5,
+      "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+      "invoice_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "claimed_amount": 1000,
+      "currency": "EGP",
+      "payment_method": "bank_transfer",
+      "external_reference": "E2E-1789681656318-ONE",
+      "status": "partially_confirmed",
+      "submitted_by": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "submitted_at": "2026-09-17T21:47:37.251642+00:00",
+      "reviewed_by": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "reviewed_at": "2026-09-17T21:47:42.567605+00:00",
+      "confirmed_amount": 500,
+      "rejection_reason": null,
+      "is_demo": false,
+      "proof_reference": "[stored proof]"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+      "submission_id": "cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "transaction_type": "collection",
+      "amount": 500,
+      "currency": "EGP",
+      "confirmed_by": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "confirmed_at": "2026-09-17T21:47:42.567605+00:00",
+      "reversal_of_id": null,
+      "idempotency_key": "finance:cdcaeb2e-2919-40df-9436-638afd7b7613:fe2ef8af-276b-4ede-a033-e48128ed8bd9",
+      "is_demo": false
+    }
+  ],
+  "allocations": [
+    {
+      "id": "57764f2b-0b52-46e7-bd8a-3201286ee68d",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "transaction_id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "invoice_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "subscription_id": null,
+      "allocation_type": "invoice",
+      "amount": 500,
+      "allocated_by": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "allocated_at": "2026-09-17T21:47:42.567605+00:00",
+      "reversed_at": null,
+      "is_demo": false
+    }
+  ],
+  "subscriptions": [],
+  "plannedDays": [],
+  "revenueEntries": [],
+  "deferredEntries": [],
+  "refunds": [],
+  "commissions": [
+    {
+      "id": "459578cd-40f1-4d38-8f0c-d12735ea3cd7",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "beneficiary_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "source_transaction_id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "refund_id": null,
+      "policy_version_id": "ab4aa923-853c-4815-844b-4066d0439b42",
+      "entry_type": "commission",
+      "basis_amount": 500,
+      "amount": 15,
+      "status": "eligible",
+      "created_at": "2026-09-17T21:47:42.567605+00:00",
+      "reviewed_by": null,
+      "approved_by": null,
+      "approved_at": null,
+      "is_demo": false
+    }
+  ],
+  "targetActuals": [
+    {
+      "id": "a6d64aba-4469-44da-991b-558e06265d29",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "target_id": "7b7bdb86-2a70-47a7-a9da-80b7025e26e0",
+      "payment_transaction_id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "salesperson_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "amount": 500,
+      "occurred_on": "2026-09-17",
+      "created_at": "2026-09-17T21:47:42.567605+00:00",
+      "is_demo": false
+    }
+  ],
+  "domainEvents": [
+    {
+      "id": "06b476a8-02a3-44d2-8716-aea683319dcc",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "event_type": "quotation.created",
+      "aggregate_type": "quotation",
+      "aggregate_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "payload": {
+        "total": 5700,
+        "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+        "package_version_id": "eed6637c-e79e-4b88-b3f4-f9b0c7b66f0d"
+      },
+      "occurred_at": "2026-09-17T21:47:29.103759+00:00",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "idempotency_key": "quotation.created:1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "published_at": null,
+      "is_demo": false
+    },
+    {
+      "id": "506a3222-60ec-4be3-a9e9-c4d7d3eadc0c",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "event_type": "quotation.accepted",
+      "aggregate_type": "quotation",
+      "aggregate_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "payload": {},
+      "occurred_at": "2026-09-17T21:47:31.729429+00:00",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "idempotency_key": "quotation.accepted:1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "published_at": null,
+      "is_demo": false
+    },
+    {
+      "id": "4c27f601-f7a9-4b35-ac6d-5910e2c62502",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "event_type": "invoice.created",
+      "aggregate_type": "invoice",
+      "aggregate_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "payload": {
+        "total": 5700,
+        "customer_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+        "quotation_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9"
+      },
+      "occurred_at": "2026-09-17T21:47:33.127029+00:00",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "idempotency_key": "invoice.created:ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "published_at": null,
+      "is_demo": false
+    },
+    {
+      "id": "e22b5333-aff3-43bd-9667-cb97aa2bdfd5",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "event_type": "payment_proof.submitted",
+      "aggregate_type": "payment_submission",
+      "aggregate_id": "cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "payload": {
+        "amount": 1000,
+        "invoice_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e"
+      },
+      "occurred_at": "2026-09-17T21:47:37.251642+00:00",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "idempotency_key": "payment_proof.submitted:cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "published_at": null,
+      "is_demo": false
+    },
+    {
+      "id": "b1236ec8-6e5b-469f-969f-b507422466ed",
+      "organization_id": "f1d48e59-7013-44c5-ae5a-8ab3fa99b159",
+      "branch_id": "b09e0e76-2697-4304-a350-5d4f50b9c945",
+      "event_type": "payment.confirmed",
+      "aggregate_type": "payment_transaction",
+      "aggregate_id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "payload": {
+        "amount": 500,
+        "invoice_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+        "submission_id": "cdcaeb2e-2919-40df-9436-638afd7b7613"
+      },
+      "occurred_at": "2026-09-17T21:47:42.567605+00:00",
+      "actor_user_id": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "idempotency_key": "payment.confirmed:7f987647-31a9-491a-936a-2d2c774d915f",
+      "published_at": null,
+      "is_demo": false
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "d3352a84-e4ee-46f3-981a-870d5329ac1b",
+      "action": "insert",
+      "entity_type": "customers",
+      "entity_id": "680bd71d-7b2e-422b-93f7-e174437b508c",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:29.103759+00:00"
+    },
+    {
+      "id": "091b9320-4749-46f4-be63-c33555012d06",
+      "action": "insert",
+      "entity_type": "quotations",
+      "entity_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:29.103759+00:00"
+    },
+    {
+      "id": "0a7475ee-6895-448b-8643-443935ba7509",
+      "action": "update",
+      "entity_type": "quotations",
+      "entity_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:31.729429+00:00"
+    },
+    {
+      "id": "b9afe57b-6e4c-4b0f-aff2-1038bb99e4ed",
+      "action": "insert",
+      "entity_type": "invoices",
+      "entity_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:33.127029+00:00"
+    },
+    {
+      "id": "92238707-f870-4261-96e6-9833be16d442",
+      "action": "update",
+      "entity_type": "quotations",
+      "entity_id": "1c86bac8-159f-4eae-b4ce-c728ed6957d9",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:33.127029+00:00"
+    },
+    {
+      "id": "fca5ae1d-a369-4262-be82-8c6d7d2d2d10",
+      "action": "insert",
+      "entity_type": "payment_submissions",
+      "entity_id": "cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "actor_user_id": "f9883587-58ae-43cf-9a7d-7fb7363ad0e9",
+      "occurred_at": "2026-09-17T21:47:37.251642+00:00"
+    },
+    {
+      "id": "2f58f19b-881a-424d-b91e-573aef5e1eb4",
+      "action": "insert",
+      "entity_type": "payment_transactions",
+      "entity_id": "7f987647-31a9-491a-936a-2d2c774d915f",
+      "actor_user_id": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "occurred_at": "2026-09-17T21:47:42.567605+00:00"
+    },
+    {
+      "id": "14c149bb-539b-4d71-8db7-751b18d8019d",
+      "action": "update",
+      "entity_type": "payment_submissions",
+      "entity_id": "cdcaeb2e-2919-40df-9436-638afd7b7613",
+      "actor_user_id": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "occurred_at": "2026-09-17T21:47:42.567605+00:00"
+    },
+    {
+      "id": "3e65be7f-baa4-4232-975a-35cbed6a332b",
+      "action": "update",
+      "entity_type": "invoices",
+      "entity_id": "ed498008-9bf8-4a2c-b664-ac9dbaf0cf4e",
+      "actor_user_id": "8863abfe-b8df-4683-82e1-382221dfb900",
+      "occurred_at": "2026-09-17T21:47:42.567605+00:00"
+    }
+  ]
+}

@@ -5,13 +5,13 @@ const root = new URL("..", import.meta.url).pathname;
 const migrationsDir = join(root, "supabase", "migrations");
 const output = join(root, "outputs", "01_install_complete_database.sql");
 const resetOutput = join(root, "outputs", "00_RESET_AND_INSTALL_COMPLETE_DATABASE.sql");
-const incrementalOutput = join(root, "deliverables", "SUPABASE_UPDATE_V12_AND_DEMO.sql");
+const incrementalOutput = join(root, "deliverables", "SUPABASE_UPDATE_V13.sql");
 const migrations = (await readdir(migrationsDir))
   .filter((name) => /^\d{4}_.+\.sql$/.test(name))
   .sort();
 
-if (migrations.length !== 12) {
-  throw new Error(`Expected 12 numbered migrations, found ${migrations.length}.`);
+if (migrations.length !== 13) {
+  throw new Error(`Expected 13 numbered migrations, found ${migrations.length}.`);
 }
 
 const parts = [
@@ -70,16 +70,13 @@ select * from public.validate_eco_healthy_installation();
 
 await writeFile(resetOutput, resetPreamble + masterSql + resetPostamble, "utf8");
 await mkdir(join(root, "deliverables"), { recursive: true });
-const migration12 = await readFile(join(migrationsDir, "0012_subscription_operations_acceptance.sql"), "utf8");
-const acceptanceDemo = await readFile(join(root, "outputs", "04_install_subscription_acceptance_demo.sql"), "utf8");
+const migration13 = await readFile(join(migrationsDir, "0013_operational_usability_refund_policy.sql"), "utf8");
 await writeFile(incrementalOutput, [
-  "-- Eco Healthy ERP V12 — incremental subscription operations update + safe demo data",
-  "-- Run this ONLY after V11 is already installed (your validator previously showed Installed versions: 11).",
+  "-- Eco Healthy ERP V13 — operational usability and refund-policy update",
+  "-- Run this ONLY after V12 is installed (the validator must show Installed versions: 12).",
   "-- This file does not delete non-demo records and contains no passwords or API keys.",
   "",
-  migration12.trim(),
-  "",
-  acceptanceDemo.trim(),
+  migration13.trim(),
   "",
   "-- Every row below must show passed = true.",
   "select * from public.validate_eco_healthy_installation();",
@@ -87,4 +84,4 @@ await writeFile(incrementalOutput, [
 ].join("\n"), "utf8");
 console.log(`Wrote ${output} from ${migrations.length} migrations.`);
 console.log(`Wrote ${resetOutput} for an approved destructive replacement install.`);
-console.log(`Wrote ${incrementalOutput} for the current V11 staging database.`);
+console.log(`Wrote ${incrementalOutput} for the current V12 staging database.`);

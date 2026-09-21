@@ -135,9 +135,11 @@ try {
   const plannedAfter = await db.query("select count(*)::integer as count from public.planned_service_days where subscription_id=$1 and status='planned'", [operation.subscription_id]);
   if (skipCheck.rows[0]?.status !== "not_delivered" || plannedAfter.rows[0]?.count !== plannedBefore.rows[0]?.count) throw new Error("Skip day did not create a replacement service day.");
   await db.query("select public.request_calculated_subscription_refund($1,'TRAVEL','Embedded acceptance test','instapay','Acceptance Customer','01000000000',$2)", [operation.subscription_id, operation.installed_by]);
-  const refundCheck = await db.query("select amount,calculation_basis from public.refunds where subscription_id=$1 order by requested_at desc limit 1", [operation.subscription_id]);
-  if (!refundCheck.rows[0] || Number(refundCheck.rows[0].amount) <= 0 || Number(refundCheck.rows[0].calculation_basis?.remaining_days || 0) <= 0) throw new Error("Calculated refund acceptance check failed.");
-  const subscriptionOperationChecks = { skipCreatesReplacement: true, calculatedRefundUsesRemainingDays: true };
+  const refundCheck = await db.query("select amount,policy_mode,consumed_service_days,deduction_amount,refund_due_on,calculation_basis from public.refunds where subscription_id=$1 order by requested_at desc limit 1", [operation.subscription_id]);
+  const refundRow = refundCheck.rows[0];
+  if (!refundRow || Number(refundRow.amount) <= 0 || !["early_six_day", "finance_review"].includes(refundRow.policy_mode) || !refundRow.refund_due_on) throw new Error("V13 refund-policy acceptance check failed.");
+  if (refundRow.policy_mode === "early_six_day" && Number(refundRow.deduction_amount) !== Number(refundRow.consumed_service_days) * 600) throw new Error("Early cancellation must deduct EGP 600 per confirmed delivered day.");
+  const subscriptionOperationChecks = { skipCreatesReplacement: true, refundPolicyV13: true };
   const installedDemo = await countDemoRows();
   if (installedDemo.total < 350) throw new Error(`Demo installer created too few rows: ${installedDemo.total}`);
 

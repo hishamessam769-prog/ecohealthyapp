@@ -24,11 +24,18 @@ function meals(row: DailyRow) {
 
 export function DailyOperationsTable({ rows, canOperate, canConfirm }: { rows: DailyRow[]; canOperate: boolean; canConfirm: boolean }) {
   const [selected, setSelected] = useState<string[]>([]);
+  const [printMode, setPrintMode] = useState<"kitchen" | "delivery" | null>(null);
   const allSelected = rows.length > 0 && selected.length === rows.length;
+  const printSheet = (mode: "kitchen" | "delivery") => {
+    setPrintMode(mode);
+    window.setTimeout(() => window.print(), 50);
+    window.setTimeout(() => setPrintMode(null), 700);
+  };
+  const overrideText = (value: Record<string, unknown>) => Object.entries(value || {}).map(([key, item]) => `${key}: ${String(item)}`).join(" · ");
   return <div>
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] p-4 print:hidden">
       <label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={allSelected} onChange={(event) => setSelected(event.target.checked ? rows.map((row) => row.id) : [])} />تحديد الكل ({selected.length})</label>
-      <Button type="button" variant="secondary" size="sm" onClick={() => window.print()}><Printer size={16} />طباعة كشف الإنتاج والتوصيل</Button>
+      <div className="flex flex-wrap gap-2"><Button type="button" variant="secondary" size="sm" onClick={() => printSheet("kitchen")}><Printer size={16} />كشف المطبخ</Button><Button type="button" variant="secondary" size="sm" onClick={() => printSheet("delivery")}><Printer size={16} />كشف التوصيل</Button></div>
     </div>
     <form action={applyServiceDayBulkAction} className="print:hidden">
       {selected.map((id) => <input key={id} type="hidden" name="dayIds" value={id} />)}
@@ -41,15 +48,14 @@ export function DailyOperationsTable({ rows, canOperate, canConfirm }: { rows: D
     </form>
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1100px] text-sm">
-        <thead className="bg-[var(--surface-muted)] text-xs text-[var(--text-muted)]"><tr><th className="p-3 print:hidden">اختيار</th><th className="p-3 text-start">المشترك</th><th className="p-3 text-start">الباقة والوجبات</th><th className="p-3 text-start">الحصص</th><th className="p-3 text-start">العنوان/Zone</th><th className="p-3 text-start">موعد التوصيل</th><th className="p-3 text-start">ملاحظات</th><th className="p-3 text-start">الحالة</th></tr></thead>
+        <thead className="bg-[var(--surface-muted)] text-xs text-[var(--text-muted)]"><tr><th className="p-3 print:hidden">اختيار</th><th className="p-3 text-start">المشترك</th>{printMode !== "delivery" ? <th className="p-3 text-start">الباقة والوجبات</th> : null}<th className="p-3 text-start">الحصص</th>{printMode !== "kitchen" ? <><th className="p-3 text-start">العنوان/Zone</th><th className="p-3 text-start">موعد التوصيل</th></> : null}<th className="p-3 text-start">ملاحظات</th><th className="p-3 text-start">الحالة</th></tr></thead>
         <tbody className="divide-y divide-[var(--border)]">{rows.map((row) => <tr key={row.id} className={selected.includes(row.id) ? "bg-emerald-50/60" : ""}>
           <td className="p-3 print:hidden"><input type="checkbox" checked={selected.includes(row.id)} onChange={(event) => setSelected((current) => event.target.checked ? [...current, row.id] : current.filter((id) => id !== row.id))} /></td>
-          <td className="p-3"><strong>{row.customer_name}</strong><span className="block text-xs text-[var(--text-muted)]">SUB-{row.subscription_number} · {row.mobile}</span></td>
-          <td className="p-3"><strong>{row.package_name}</strong><span className="block max-w-72 text-xs leading-5 text-[var(--text-muted)]">{meals(row).filter(Boolean).join(" · ") || "المنيو غير مسجل"}</span></td>
+          <td className="p-3"><strong>{row.customer_name}</strong><span className="block text-xs text-[var(--text-muted)]">SUB-{row.subscription_number}{printMode !== "kitchen" ? ` · ${row.mobile || ""}` : ""}</span></td>
+          {printMode !== "delivery" ? <td className="p-3"><strong>{row.package_name}</strong><span className="block max-w-72 text-xs leading-5 text-[var(--text-muted)]">{meals(row).filter(Boolean).join(" · ") || "المنيو غير مسجل"}</span></td> : null}
           <td className="p-3 text-lg font-black">×{row.portion_multiplier}</td>
-          <td className="p-3"><span>{row.address_line || "—"}</span><span className="block text-xs text-[var(--text-muted)]">{row.area} · {row.zone_name}</span>{row.gps_url ? <a href={row.gps_url} target="_blank" rel="noreferrer" className="text-xs text-[var(--primary)] underline print:hidden">GPS</a> : null}</td>
-          <td className="p-3">{row.delivery_window_start?.slice(0, 5)}–{row.delivery_window_end?.slice(0, 5)}</td>
-          <td className="max-w-64 p-3 text-xs leading-5">{[row.operations_note, row.delivery_notes, Object.keys(row.meal_override || {}).length ? JSON.stringify(row.meal_override) : null].filter(Boolean).join(" · ") || "—"}</td>
+          {printMode !== "kitchen" ? <><td className="p-3"><span>{row.address_line || "—"}</span><span className="block text-xs text-[var(--text-muted)]">{row.area} · {row.zone_name}</span>{row.gps_url ? <a href={row.gps_url} target="_blank" rel="noreferrer" className="text-xs text-[var(--primary)] underline print:hidden">GPS</a> : null}</td><td className="p-3">{row.delivery_window_start?.slice(0, 5)}–{row.delivery_window_end?.slice(0, 5)}</td></> : null}
+          <td className="max-w-64 p-3 text-xs leading-5">{[row.operations_note, printMode !== "kitchen" ? row.delivery_notes : null, Object.keys(row.meal_override || {}).length ? overrideText(row.meal_override) : null].filter(Boolean).join(" · ") || "—"}</td>
           <td className="p-3"><Badge tone={row.status === "confirmed_delivered" ? "success" : row.status === "planned" ? "info" : "warning"}>{row.status}</Badge></td>
         </tr>)}{!rows.length ? <tr><td colSpan={8} className="p-10 text-center text-[var(--text-muted)]">لا توجد توصيلات في هذا اليوم.</td></tr> : null}</tbody>
       </table>

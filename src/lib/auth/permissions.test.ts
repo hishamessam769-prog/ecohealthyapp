@@ -10,6 +10,7 @@ const viewer: Viewer = {
   roleNames: ["Sales Representative"],
   permissions: ["dashboard.view", "notifications.view"],
   branches: [{ id: "branch-1", name: "Main", code: "MAIN" }],
+  activeBranchId: "branch-1",
   preview: false,
 };
 

@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   } else {
     const supabase = await createClient();
     const [{ data: quoteRows }, { data: versionRows }] = await Promise.all([
-      supabase.from("quotations").select("id,quotation_number,status,subtotal,discount_amount,total_amount,valid_until,customers(full_name)").order("created_at", { ascending: false }).limit(30),
+      supabase.from("quotations").select("id,quotation_number,status,subtotal,discount_amount,total_amount,valid_until,customers(full_name)").eq("branch_id", viewer.activeBranchId!).order("created_at", { ascending: false }).limit(30),
       supabase.from("package_versions").select("id,version_number,price,currency,service_days,packages(name)").eq("status", "active").order("effective_from", { ascending: false }),
     ]);
     quotes = (quoteRows || []) as unknown as Quote[];
@@ -35,17 +35,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   return <div className="space-y-7">
     <PageHeader eyebrow="Sales execution" title="العميل → عرض السعر → الفاتورة" description="اختر نسخة سعر محددة؛ الخصم والصلاحية والبنود تحفظ Snapshot تاريخيًا." />
     <ActionNotice saved={params.saved} error={params.error} />
-    {canQuote ? <Card><CardHeader title="عميل وعرض سعر جديد" description="ينشئ Customer ثم Quotation ببند Package Version المختار داخل معاملة واحدة." />
+    {canQuote ? <Card><CardHeader title="عميل جديد أوعميل مسجل" description="اكتب رقم الموبايل المصري؛ إذا كان موجودًا يستخدم ملف العميل نفسه، وإذا كان جديدًا ينشئه مرة واحدة ثم يصدر العرض." />
       <form action={createCustomerQuotationAction} className="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
         <label className="text-sm font-bold">الفرع *<select name="branchId" required className={field}>{viewer.branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</select></label>
         <label className="text-sm font-bold">اسم العميل *<input name="customerName" required className={field} /></label>
-        <label className="text-sm font-bold">الهاتف<input name="mobile" className={field} /></label>
+        <label className="text-sm font-bold">الموبايل المصري الفريد *<input name="mobile" required inputMode="tel" placeholder="01012345678" className={field} /><span className="mt-1 block text-xs font-normal text-[var(--text-muted)]">يُقبل 010 / 011 / 012 / 015 ويُوحّد تلقائيًا لمنع التكرار.</span></label>
         <label className="text-sm font-bold">Package Version *<select name="packageVersionId" required className={field}><option value="">اختر النسخة</option>{versions.map((version) => <option key={version.id} value={version.id}>{version.packages?.name} · V{version.version_number} · {version.price} {version.currency}</option>)}</select></label>
         <label className="text-sm font-bold">الكمية *<input name="quantity" type="number" min="0.01" step="0.01" defaultValue="1" required className={field} /></label>
         <label className="text-sm font-bold">الخصم %<input name="discountPercent" type="number" min="0" max="100" step="0.01" defaultValue="0" className={field} /></label>
         <label className="text-sm font-bold">صالح حتى *<input name="validUntil" type="date" required className={field} /></label>
         <label className="text-sm font-bold">ملاحظات<input name="notes" className={field} /></label>
-        <Button type="submit" className="md:col-span-2 xl:col-span-4">إنشاء العميل وعرض السعر</Button>
+        <Button type="submit" className="md:col-span-2 xl:col-span-4">حفظ العميل وإصدار عرض السعر</Button>
       </form></Card> : null}
     <Card><CardHeader title="عروض الأسعار" description="Accept منفصل عن Convert لضمان انتقال الحالة الواضح وتسجيل الـTimeline." />
       <ResponsiveTable rows={quotes} getKey={(row) => row.id} emptyTitle="لا توجد عروض" emptyDescription="أنشئ أول عميل وعرض سعر من النموذج أعلاه." columns={[

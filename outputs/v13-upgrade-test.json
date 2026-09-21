@@ -1,7 +1,7 @@
 {
-  "engine": "PGlite PostgreSQL WASM with Supabase auth/storage contract stubs",
-  "masterSqlExecutedFromEmptyDatabase": true,
-  "resetInstallerReplacedLegacyPublicSchema": true,
+  "upgradedFrom": 12,
+  "version": 13,
+  "canonicalMobile": "01012345678",
   "validation": [
     {
       "check_name": "commercial_cycle",
@@ -48,39 +48,5 @@
       "passed": true,
       "details": "System roles: 15"
     }
-  ],
-  "setupCreated": true,
-  "secondSetupBlocked": true,
-  "demoRowsInstalled": 824,
-  "demoTables": 86,
-  "demoRowsAfterCleanup": 0,
-  "subscriptionOperationChecks": {
-    "skipCreatesReplacement": true,
-    "refundPolicyV13": true
-  },
-  "pgTap": [
-    {
-      "file": "supabase/tests/database/0001_foundation_rls.sql",
-      "passed": true
-    },
-    {
-      "file": "supabase/tests/database/0002_permission_behavior.sql",
-      "passed": true
-    },
-    {
-      "file": "supabase/tests/database/0003_foundation_security.sql",
-      "passed": true
-    },
-    {
-      "file": "supabase/tests/database/0004_erp_modules.sql",
-      "passed": true
-    },
-    {
-      "file": "supabase/tests/database/0005_commercial_cycle.sql",
-      "passed": true
-    }
-  ],
-  "system_roles": 15,
-  "permissions": 85,
-  "public_tables": 101
+  ]
 }

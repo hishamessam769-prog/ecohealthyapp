@@ -32,7 +32,7 @@ export async function erpWorkflowAction(formData: FormData) {
   if (viewer.preview) redirect(`${path}?saved=preview`);
 
   const admin = createAdminClient();
-  const branchId = viewer.branches[0]?.id;
+  const branchId = viewer.activeBranchId;
   if (!branchId && !["notification"].includes(parsed.data.workflow)) redirect(`${path}?error=branch`);
   const common = { organization_id: viewer.organizationId, branch_id: branchId, is_demo: false };
   let error: { message: string } | null = null;

@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
     const supabase = await createClient();
     const [zoneResult, customerResult] = await Promise.all([
       supabase.from("delivery_zones").select("id,name,branch_id").eq("is_active", true).order("sort_order"),
-      supabase.from("customers").select("id,customer_number,full_name,mobile,status,created_at,customer_addresses(address_line,area,city,gps_url,delivery_window_start,delivery_window_end,delivery_time_confirmed,delivery_zones(name))").order("created_at", { ascending: false }).limit(100),
+      supabase.from("customers").select("id,customer_number,full_name,mobile,status,created_at,customer_addresses(address_line,area,city,gps_url,delivery_window_start,delivery_window_end,delivery_time_confirmed,delivery_zones(name))").eq("home_branch_id", viewer.activeBranchId!).order("created_at", { ascending: false }).limit(100),
     ]);
     if (zoneResult.error) throw new Error(`Delivery zones load failed: ${zoneResult.error.message}`);
     if (customerResult.error) throw new Error(`Customers load failed: ${customerResult.error.message}`);
@@ -35,7 +35,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
     <ActionNotice saved={params.saved} error={params.error} />
     {canManage ? <Card><CardHeader title="إضافة عميل جاهز للاشتراك" description="تُحفظ معلومات التوصيل مرة واحدة ويمكن استخدامها في الاشتراكات التالية." /><form action={createCustomerDeliveryProfileAction} className="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
       <label className="text-sm font-bold">الاسم الكامل *<input name="fullName" required minLength={2} className={field} /></label>
-      <label className="text-sm font-bold">الموبايل الفريد *<input name="mobile" required minLength={8} inputMode="tel" className={field} /></label>
+      <label className="text-sm font-bold">الموبايل المصري الفريد *<input name="mobile" required minLength={10} inputMode="tel" placeholder="01012345678" className={field} /><span className="mt-1 block text-xs font-normal text-[var(--text-muted)]">يتم توحيد +20 و0020 ومنع أي نسخة مكررة من الرقم نفسه.</span></label>
       <label className="text-sm font-bold">البريد الإلكتروني<input name="email" type="email" className={field} /></label>
       <label className="text-sm font-bold">الفرع *<select name="branchId" required className={field}><option value="">اختر</option>{viewer.branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}</select></label>
       <label className="text-sm font-bold md:col-span-2">العنوان التفصيلي بالعربي *<input name="addressLine" required minLength={8} className={field} /></label>

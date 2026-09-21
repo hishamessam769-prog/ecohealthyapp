@@ -56,6 +56,27 @@ export async function getModuleView(viewer: Viewer, key: ModuleKey) {
   const config = moduleConfigs[key];
   if (viewer.preview) return { ...config, rows: config.previewRows };
   const supabase = await createClient();
-  const { data } = await supabase.from(config.table).select("*").limit(25);
-  return { ...config, rows: (data || []).map((row) => normalizeRow(row as Record<string, unknown>, config)) };
+  const branchFields: Partial<Record<ModuleKey, "branch_id" | "home_branch_id">> = {
+    projects: "branch_id", tasks: "branch_id", leads: "branch_id", customers: "home_branch_id",
+    sales: "branch_id", invoices: "branch_id", finance: "branch_id", subscriptions: "branch_id",
+    operations: "branch_id", complaints: "branch_id", performance: "branch_id", calendar: "branch_id",
+    sessions: "branch_id", doctorAccounting: "branch_id", notifications: "branch_id",
+  };
+  let query = supabase.from(config.table).select("*").limit(25);
+  const branchField = branchFields[key];
+  if (branchField && viewer.activeBranchId) query = query.eq(branchField, viewer.activeBranchId);
+  const { data, error } = await query;
+  if (error) throw new Error(`${config.title} load failed: ${error.message}`);
+  const rawRows = (data || []) as Record<string, unknown>[];
+  const openStates = new Set(["active", "open", "assigned", "accepted", "in_progress", "requested", "pending", "under_review", "planned", "scheduled", "queued"]);
+  const attentionStates = new Set(["at_risk", "blocked", "overdue", "rejected", "failed", "exception", "waiting_for_approval", "waiting_for_feedback"]);
+  const closedStates = new Set(["completed", "closed", "paid", "confirmed", "delivered", "cancelled", "resolved"]);
+  const statuses = rawRows.map((row) => String(row[config.statusField] || "").toLowerCase());
+  const liveKpis: ModuleConfig["kpis"] = [
+    { label: "إجمالي السجلات", value: String(rawRows.length), tone: "blue" },
+    { label: "مفتوحة / نشطة", value: String(statuses.filter((status) => openStates.has(status)).length), tone: "green" },
+    { label: "تحتاج متابعة", value: String(statuses.filter((status) => attentionStates.has(status)).length), tone: "red" },
+    { label: "مغلقة / مكتملة", value: String(statuses.filter((status) => closedStates.has(status)).length), tone: "amber" },
+  ];
+  return { ...config, kpis: liveKpis, rows: rawRows.map((row) => normalizeRow(row, config)) };
 }

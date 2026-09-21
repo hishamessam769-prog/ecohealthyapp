@@ -1,6 +1,7 @@
 import "server-only";
 
 import { cache } from "react";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabaseBrowserConfig, isPreviewMode } from "@/lib/supabase/config";
 
@@ -14,6 +15,7 @@ export type Viewer = {
   roleNames: string[];
   permissions: string[];
   branches: ViewerBranch[];
+  activeBranchId: string | null;
   preview: boolean;
 };
 
@@ -86,6 +88,7 @@ const previewViewer: Viewer = {
     { id: "preview-main", name: "الفرع الرئيسي", code: "MAIN" },
     { id: "preview-second", name: "فرع التجمع", code: "NCA" },
   ],
+  activeBranchId: "preview-main",
   preview: true,
 };
 
@@ -134,6 +137,13 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
 
   if (!profile?.is_active) return null;
 
+  const branches = (branchRows || []) as ViewerBranch[];
+  const cookieBranchId = (await cookies()).get("eco_active_branch")?.value;
+  const preferredBranch = branches.find((branch) => branch.id === cookieBranchId)
+    || branches.find((branch) => branch.code.toUpperCase() === "MAIN")
+    || branches[0]
+    || null;
+
   return {
     id: user.id,
     name: profile?.full_name || user.email || "User",
@@ -147,7 +157,8 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
         return role?.is_active ? role.name : null;
       })
       .filter((name): name is string => Boolean(name)),
-    branches: (branchRows || []) as ViewerBranch[],
+    branches,
+    activeBranchId: preferredBranch?.id || null,
     preview: false,
   };
 });

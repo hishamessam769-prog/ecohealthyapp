@@ -21,30 +21,23 @@ create or replace function extensions.gen_random_uuid() returns uuid language sq
 
 try {
   await db.exec(bootstrap);
-  const migrationNames = (await readdir(join(root, "supabase", "migrations"))).filter((name) => /^\d{4}_.+\.sql$/.test(name) && !name.startsWith("0012_") && !name.startsWith("0013_")).sort();
+  const migrationNames = (await readdir(join(root, "supabase", "migrations")))
+    .filter((name) => /^\d{4}_.+\.sql$/.test(name) && !name.startsWith("0013_"))
+    .sort();
   for (const name of migrationNames) {
     let sql = await readFile(join(root, "supabase", "migrations", name), "utf8");
     sql = sql.replace("create extension if not exists pgcrypto with schema extensions;", "-- pgcrypto provided by PostgreSQL core in the embedded test harness");
     await db.exec(sql);
   }
   const before = await db.query("select max(version)::integer as version from public.schema_versions");
-  if (before.rows[0]?.version !== 11) throw new Error(`Expected V11 before upgrade, received ${before.rows[0]?.version}`);
-  const adminId = "91111111-1111-4111-8111-111111111111";
-  await db.query("insert into auth.users(id,email,raw_user_meta_data) values($1,$2,$3::jsonb)", [adminId, "upgrade-test@example.invalid", JSON.stringify({ full_name: "Upgrade Test Admin" })]);
-  await db.query("select * from public.claim_initial_setup($1,$2,$3,$4)", [adminId, "Eco Healthy Upgrade Test", "ECO_UPGRADE", "Upgrade Test Admin"]);
-  await db.exec(await readFile(join(root, "deliverables", "SUPABASE_UPDATE_V12_AND_DEMO.sql"), "utf8"));
+  if (before.rows[0]?.version !== 12) throw new Error(`Expected V12 before upgrade, received ${before.rows[0]?.version}`);
+  await db.exec(await readFile(join(root, "deliverables", "SUPABASE_UPDATE_V13.sql"), "utf8"));
   const validation = await db.query("select * from public.validate_eco_healthy_installation() order by check_name");
-  if (validation.rows.some((row) => !row.passed)) throw new Error(`V12 validation failed: ${JSON.stringify(validation.rows)}`);
-  const counts = await db.query(`select
-    (select max(version)::integer from public.schema_versions) as version,
-    (select count(*)::integer from public.packages where is_demo and program_code is not null) as price_options,
-    (select count(*)::integer from public.meal_menu_days where is_demo) as menu_days,
-    (select count(*)::integer from public.subscriptions where is_demo) as demo_subscriptions,
-    (select count(*)::integer from public.delivery_zones where is_demo) as zones,
-    (select count(*)::integer from public.tasks where is_demo) as demo_tasks`);
-  const evidence = { upgradedFrom: before.rows[0].version, ...counts.rows[0], validation: validation.rows };
-  if (evidence.version !== 12 || evidence.price_options !== 32 || evidence.menu_days !== 31 || evidence.demo_subscriptions < 12 || evidence.zones !== 6) throw new Error(`Unexpected V12 demo counts: ${JSON.stringify(evidence)}`);
-  await writeFile(join(root, "outputs", "v12-upgrade-test.json"), JSON.stringify(evidence, null, 2) + "\n");
+  if (validation.rows.some((row) => !row.passed)) throw new Error(`V13 validation failed: ${JSON.stringify(validation.rows)}`);
+  const mobile = await db.query("select public.normalize_egypt_mobile('+20 101 234 5678') as canonical");
+  if (mobile.rows[0]?.canonical !== "01012345678") throw new Error("Egyptian mobile normalization failed");
+  const evidence = { upgradedFrom: 12, version: 13, canonicalMobile: mobile.rows[0].canonical, validation: validation.rows };
+  await writeFile(join(root, "outputs", "v13-upgrade-test.json"), JSON.stringify(evidence, null, 2) + "\n");
   console.log(JSON.stringify(evidence, null, 2));
 } finally {
   await db.close();

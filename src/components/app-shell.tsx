@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppWindow,
   Bell,
@@ -42,6 +42,7 @@ import { useLocale } from "@/components/providers/locale-provider";
 import { cn, initials } from "@/lib/utils";
 import type { Viewer } from "@/lib/auth/viewer";
 import { logoutAction } from "@/app/actions/auth";
+import { setActiveBranchAction } from "@/app/actions/preferences";
 
 const navItems = [
   { href: "/dashboard", key: "dashboard", icon: Gauge, permission: "dashboard.view" },
@@ -73,8 +74,13 @@ export function AppShell({ viewer, children }: { viewer: Viewer; children: React
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navigating, setNavigating] = useState(false);
   const { locale, setLocale, dictionary } = useLocale();
   const visibleItems = navItems.filter((item) => viewer.permissions.includes(item.permission));
+  useEffect(() => {
+    const reset = window.setTimeout(() => setNavigating(false), 0);
+    return () => window.clearTimeout(reset);
+  }, [pathname]);
 
   const sidebar = (
     <aside className={cn("flex h-full flex-col border-e border-white/10 bg-[var(--primary)] text-white transition-[width] duration-200", collapsed ? "w-[84px]" : "w-[270px]")}>
@@ -91,7 +97,7 @@ export function AppShell({ viewer, children }: { viewer: Viewer; children: React
           const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           const Icon = item.icon;
           return (
-            <Link key={item.href} href={item.href} title={collapsed ? dictionary.nav[item.key] : undefined} onClick={() => setMobileOpen(false)} className={cn("flex h-12 items-center gap-3 rounded-xl px-3 text-sm font-bold transition", active ? "bg-white text-[var(--primary)] shadow-lg" : "text-white/70 hover:bg-white/10 hover:text-white", collapsed && "justify-center px-0")}>
+            <Link key={item.href} href={item.href} title={collapsed ? dictionary.nav[item.key] : undefined} onClick={() => { setMobileOpen(false); if (!active) setNavigating(true); }} className={cn("flex h-12 items-center gap-3 rounded-xl px-3 text-sm font-bold transition", active ? "bg-white text-[var(--primary)] shadow-lg" : "text-white/70 hover:bg-white/10 hover:text-white", collapsed && "justify-center px-0")}>
               <Icon size={20} />
               {!collapsed ? <span>{dictionary.nav[item.key]}</span> : null}
             </Link>
@@ -125,9 +131,12 @@ export function AppShell({ viewer, children }: { viewer: Viewer; children: React
             <input aria-label={dictionary.common.search} placeholder={dictionary.common.search} className="h-11 w-full rounded-xl border border-transparent bg-[var(--surface-muted)] ps-10 pe-4 text-sm outline-none focus:border-[var(--border)] focus:bg-white" />
           </div>
           <div className="ms-auto flex items-center gap-1 sm:gap-2">
-            <select aria-label="Branch" className="hidden h-10 max-w-44 rounded-xl border border-[var(--border)] bg-white px-3 text-xs font-bold sm:block">
-              {viewer.branches.length ? viewer.branches.map((branch) => <option key={branch.id}>{branch.name}</option>) : <option>كل الفروع</option>}
-            </select>
+            <form action={setActiveBranchAction} className="hidden sm:block">
+              <input type="hidden" name="returnPath" value={pathname} />
+              <select name="branchId" aria-label="Branch" defaultValue={viewer.activeBranchId || ""} onChange={(event) => { setNavigating(true); event.currentTarget.form?.requestSubmit(); }} className="h-10 max-w-44 rounded-xl border border-[var(--border)] bg-white px-3 text-xs font-bold">
+                {viewer.branches.length ? viewer.branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>) : <option value="">كل الفروع</option>}
+              </select>
+            </form>
             <button title={dictionary.common.approvals} className="relative grid size-10 place-items-center rounded-xl hover:bg-[var(--surface-muted)]"><ClipboardCheck size={20} /><span className="absolute end-1 top-1 grid size-4 place-items-center rounded-full bg-[var(--primary)] text-[9px] font-black text-white">0</span></button>
             <button title={dictionary.common.notifications} className="relative grid size-10 place-items-center rounded-xl hover:bg-[var(--surface-muted)]"><Bell size={20} /><span className="absolute end-1 top-1 grid size-4 place-items-center rounded-full bg-amber-500 text-[9px] font-black text-white">0</span></button>
             <button onClick={() => setLocale(locale === "ar" ? "en" : "ar")} className="flex h-10 items-center gap-2 rounded-xl px-2 text-xs font-black hover:bg-[var(--surface-muted)]" aria-label="Change language"><Languages size={19} /><span>{locale === "ar" ? "EN" : "ع"}</span></button>
@@ -136,7 +145,8 @@ export function AppShell({ viewer, children }: { viewer: Viewer; children: React
         </header>
 
         {viewer.preview ? <div className="flex items-center justify-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-bold text-amber-800"><ShieldCheck size={15} />{dictionary.preview} — لا توجد بيانات إنتاجية</div> : null}
-        <main className="mx-auto w-full max-w-[1500px] p-4 pb-24 sm:p-6 lg:p-8">{children}</main>
+        {navigating ? <div className="fixed inset-x-0 top-0 z-[100] h-1 overflow-hidden bg-emerald-100"><div className="h-full w-2/3 animate-pulse bg-[var(--primary)]" /></div> : null}
+        <main aria-busy={navigating} className={cn("mx-auto w-full max-w-[1500px] p-4 pb-24 transition-opacity sm:p-6 lg:p-8", navigating && "opacity-60")}>{children}</main>
 
         <nav className="fixed inset-x-3 bottom-3 z-30 flex justify-around rounded-2xl border border-[var(--border)] bg-white/95 p-2 shadow-2xl backdrop-blur lg:hidden" aria-label="Mobile navigation">
           {visibleItems.slice(0, 4).map((item) => { const Icon = item.icon; const active = pathname.startsWith(item.href); return <Link key={item.href} href={item.href} className={cn("flex min-w-16 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[10px] font-bold", active ? "bg-[var(--primary-soft)] text-[var(--primary)]" : "text-[var(--text-muted)]")}><Icon size={19} /><span>{dictionary.nav[item.key]}</span></Link>; })}

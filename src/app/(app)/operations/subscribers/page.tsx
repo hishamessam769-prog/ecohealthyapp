@@ -13,7 +13,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   let days: DailyRow[] = [];
   if (!viewer.preview) {
     const supabase = await createClient();
-    const { data, error } = await supabase.from("daily_subscriber_list_v").select("*").eq("service_date", selectedDate).order("zone_name").order("delivery_window_start").limit(250);
+    const { data, error } = await supabase.from("daily_subscriber_list_v").select("*").eq("branch_id", viewer.activeBranchId!).eq("service_date", selectedDate).order("zone_name").order("delivery_window_start").limit(250);
     if (error) throw new Error(`Daily subscriber list failed: ${error.message}`);
     days = (data || []) as DailyRow[];
   }
@@ -35,6 +35,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
     <Card className="print:hidden"><form method="get" className="flex flex-wrap items-end gap-3 p-4"><label className="text-sm font-bold">يوم التشغيل<input name="date" type="date" defaultValue={selectedDate} className="mt-2 h-10 rounded-xl border border-[var(--border)] bg-white px-3" /></label><button className="h-10 rounded-xl bg-[var(--primary)] px-4 text-sm font-bold text-white">عرض اليوم</button></form></Card>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">مشتركو اليوم</span><strong className="mt-2 block text-3xl">{days.length}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">Planned</span><strong className="mt-2 block text-3xl">{planned.length}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">إجمالي الحصص</span><strong className="mt-2 block text-3xl">{portions}</strong></Card><Card className="p-5"><span className="text-sm text-[var(--text-muted)]">Zones</span><strong className="mt-2 block text-3xl">{new Set(days.map((day) => day.zone_name).filter(Boolean)).size}</strong></Card></div>
     <Card><CardHeader title={`ملخص إنتاج ${selectedDate}`} description="محسوب آليًا من نوع النظام وعدد الحصص، قبل الاستثناءات المكتوبة في الملاحظات." /><div className="grid gap-2 p-5 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(production).sort((a, b) => b[1] - a[1]).map(([meal, count]) => <div key={meal} className="rounded-xl bg-[var(--surface-muted)] px-4 py-3"><strong className="block">{meal}</strong><span className="text-sm text-[var(--text-muted)]">{count} حصة</span></div>)}{!Object.keys(production).length ? <p className="text-sm text-[var(--text-muted)]">لا يوجد إنتاج مخطط لهذا اليوم.</p> : null}</div></Card>
-    <Card><CardHeader title="كشف التوصيل والتأكيد" description="لا يدخل أي يوم Revenue إلا بعد Confirm Delivered؛ Skip ينشئ يومًا بديلًا في نهاية الاشتراك." /><DailyOperationsTable rows={days} canOperate={canOperate} canConfirm={canConfirm} /></Card>
+    <Card><CardHeader title="كشوف التشغيل والتأكيد" description="زر مستقل لكشف المطبخ وآخر للتوصيل. لا يدخل أي يوم Revenue إلا بعد Confirm Delivered؛ Skip ينشئ يومًا بديلًا في نهاية الاشتراك." /><DailyOperationsTable rows={days} canOperate={canOperate} canConfirm={canConfirm} /></Card>
   </div>;
 }

@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
     { id: "44444444-4444-4444-8444-444444444444", invoice_number: 2089, status: "issued", total_amount: 8400, confirmed_paid_amount: 0, currency: "EGP", customers: { full_name: "نور خالد" } },
   ]; else {
     const supabase = await createClient();
-    const { data } = await supabase.from("invoices").select("id,invoice_number,status,total_amount,confirmed_paid_amount,currency,customers(full_name)").order("issued_at", { ascending: false }).limit(50);
+    const { data } = await supabase.from("invoices").select("id,invoice_number,status,total_amount,confirmed_paid_amount,currency,customers(full_name)").eq("branch_id", viewer.activeBranchId!).order("issued_at", { ascending: false }).limit(50);
     invoices = (data || []) as unknown as Invoice[];
   }
   const payable = invoices.filter((invoice) => ["issued", "partially_paid"].includes(invoice.status) && invoice.confirmed_paid_amount < invoice.total_amount);
